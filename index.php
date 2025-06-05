@@ -1,3 +1,14 @@
+<?php 
+
+namespace App;
+
+require_once "./autoload.php";
+
+use App\Dal\Connection;
+
+$conn = Connection::getConnection();
+var_dump($conn);
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
