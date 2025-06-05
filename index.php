@@ -13,22 +13,22 @@
 
 <body>
   <?php
-  require_once("./view/components/header.php");
+  require_once("./views/components/header.php");
 
   $page = $_GET['page'] ?? 'menu';
 
   match ($page) {
-    'home'    => require './view/pages/home.php',
-    'menu'    => require './view/pages/menu.php',
-    'about'   => require './view/pages/about.php',
-    'contact' => require './view/pages/contact.php',
-    'deliver' => require './view/pages/deliver.php',
-    'register' => require './view/pages/register.php',
-    'login' => require './view/pages/login.php',
-    default   => require './view/pages/404.php',
+    'home'    => require './views/pages/home.php',
+    'menu'    => require './views/pages/menu.php',
+    'about'   => require './views/pages/about.php',
+    'contact' => require './views/pages/contact.php',
+    'deliver' => require './views/pages/deliver.php',
+    'register' => require './views/pages/register.php',
+    'login' => require './views/pages/login.php',
+    default   => require './views/pages/404.php',
   };
 
-  require_once("./view/components/footer.php");
+  require_once("./views/components/footer.php");
   ?>
 </body>
 
