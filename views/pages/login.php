@@ -2,7 +2,10 @@
 
 use App\Controllers\UserController;
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (isset($_SESSION['user_id'])) {
     header("Location: ?page=dashboard");
     exit;

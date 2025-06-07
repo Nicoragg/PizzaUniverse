@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <main class="dashboard">
     <div class="dashboard-header">
         <h1>Página Não Encontrada</h1>
