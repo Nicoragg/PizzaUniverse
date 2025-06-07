@@ -13,5 +13,5 @@ match ($action) {
     'create' => require __DIR__ . '/create.php',
     'edit' => require __DIR__ . '/edit.php',
     'delete' => UserController::delete(),
-    default => UserController::findAll($_GET['del'] ?? null)
+    default => UserController::delete()
 };

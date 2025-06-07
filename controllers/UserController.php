@@ -68,14 +68,25 @@ abstract class UserController
 
     public static function delete(): void
     {
-        if (isset($_GET["del"])) {
-            self::findAll((int) $_GET["del"]);
+        if (isset($_GET["confirm"])) {
+            $deleteId = (int) $_GET["confirm"];
+            self::findAll($deleteId);
+            return;
         }
-        if (isset($_GET["delete"])) {
-            UserDao::delete((int) $_GET["delete"]);
-            header("Location: ?page=users");
-            exit;
+
+        if (isset($_GET["action"]) && $_GET["action"] === "delete" && isset($_GET["id"])) {
+            try {
+                UserDao::delete((int) $_GET["id"]);
+                header("Location: ?page=users");
+                exit;
+            } catch (\Exception $e) {
+                self::$msg = $e->getMessage();
+                self::findAll();
+            }
+            return;
         }
+
+        self::findAll();
     }
 
     public static function findAll(?int $deleteId = null): void

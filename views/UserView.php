@@ -110,7 +110,7 @@ abstract class UserView
                 <div class="delete-confirmation" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
                     <p>Tem certeza que deseja excluir este usuário?</p>
                     <div style="margin-top: 1rem;">
-                        <a href="?page=users&delete=<?= $deleteId ?>" class="btn-danger" style="background: #dc3545; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none; margin-right: 1rem;">Confirmar Exclusão</a>
+                        <a href="?page=users&action=delete&id=<?= $deleteId ?>" class="btn-danger" style="background: #dc3545; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none; margin-right: 1rem;">Confirmar Exclusão</a>
                         <a href="?page=users" class="btn-secondary">Cancelar</a>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ abstract class UserView
                                     <td style="padding: 1rem;"><?= htmlspecialchars($user->email) ?></td>
                                     <td style="padding: 1rem;">
                                         <a href="?page=users&action=edit&edit=<?= $user->id ?>" class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 0.5rem;">Editar</a>
-                                        <a href="?page=users&del=<?= $user->id ?>" class="btn-danger" style="background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 0.8rem;">Excluir</a>
+                                        <a href="?page=users&confirm=<?= $user->id ?>" class="btn-danger" style="background: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 0.8rem;">Excluir</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
