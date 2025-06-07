@@ -20,7 +20,6 @@ require_once "./autoload.php";
   <?php
   $page = $_GET['page'] ?? 'login';
 
-  // Se não for login ou dashboard, verifica se está logado
   if (!in_array($page, ['login']) && session_status() === PHP_SESSION_NONE) {
     session_start();
   }
@@ -30,7 +29,6 @@ require_once "./autoload.php";
     exit;
   }
 
-  // Exibe header apenas se não for login
   if ($page !== 'login') {
     require_once("./views/components/header.php");
   }

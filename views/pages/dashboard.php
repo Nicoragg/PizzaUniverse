@@ -2,13 +2,6 @@
 
 use App\Controllers\UserController;
 
-// Verifica se está logado
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ?page=login");
-    exit;
-}
-
 // Processa logout se solicitado
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     UserController::logout();
