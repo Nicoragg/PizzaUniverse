@@ -11,4 +11,4 @@ spl_autoload_register(function ($namespace) {
     }
 });
 
-require_once __DIR__ . '/helpers/functions.php';
+require_once __DIR__ . '/helpers/Functions.php';
