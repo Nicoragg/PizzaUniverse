@@ -2,7 +2,7 @@
 
 namespace App;
 
-require_once "./autoload.php";
+require_once "../autoload.php";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -11,9 +11,9 @@ require_once "./autoload.php";
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pizza Universe</title>
-  <link rel="stylesheet" href="./assets/stylesheets/style.css">
-  <link rel="stylesheet" href="./assets/stylesheets/auth.css">
-  <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/stylesheets/style.css">
+  <link rel="stylesheet" href="../assets/stylesheets/auth.css">
+  <link rel="shortcut icon" href="../assets/images/logo.png" type="image/x-icon">
 </head>
 
 
@@ -29,8 +29,6 @@ require_once "./autoload.php";
     'about'   => require './views/pages/about.php',
     'contact' => require './views/pages/contact.php',
     'deliver' => require './views/pages/deliver.php',
-    'register' => require './views/pages/register.php',
-    'login' => require './views/pages/login.php',
     default   => require './views/pages/404.php',
   };
 

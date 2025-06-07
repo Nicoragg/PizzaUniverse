@@ -151,40 +151,6 @@ footer p {
   padding: 20px;
 }
 
-.auth-header {
-  background-color: #050505;
-  padding: 60px;
-}
-
-.auth-header a {
-  font-weight: 500;
-  font-size: 1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  letter-spacing: 1.5px;
-  margin-right: 20px;
-  padding: 0px 0px 0px 40px;
-  color: #ffb400;
-  position: relative;
-  transition: all 0.3s ease-in-out;
-}
-
-.auth-header a::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: #000000;
-  transition: width 0.3s ease-in-out;
-}
-
-.auth-header a:hover {
-  color: #ffffff;
-}
-
-
 button {
   background: linear-gradient(135deg, #000000, #333333);
   color: #fff;
