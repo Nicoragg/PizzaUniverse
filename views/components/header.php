@@ -12,8 +12,6 @@
       <ul class="nav-list">
         <li><a href="?page=home" class="nav-link">Página Inicial</a></li>
         <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
-        <li><a href="?page=about" class="nav-link">Sobre</a></li>
-        <li><a href="?page=contact" class="nav-link">Contato</a></li>
         <li><a href="?page=deliver" class="nav-link cta-button">Peça Agora</a></li>
       </ul>
     </nav>

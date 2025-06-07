@@ -38,8 +38,6 @@ require_once "./autoload.php";
     'dashboard' => require './views/pages/dashboard.php',
     'home'      => require './views/pages/home.php',
     'menu'      => require './views/pages/menu.php',
-    'about'     => require './views/pages/about.php',
-    'contact'   => require './views/pages/contact.php',
     'deliver'   => require './views/pages/deliver.php',
     default     => require './views/pages/404.php',
   };

@@ -199,37 +199,6 @@ ol {
   margin-bottom: 10px;
 }
 
-.contact-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  margin-top: 30px;
-}
-
-.info-box {
-  background: #f1f1f0;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.07);
-  border-left: 5px solid #ffb400;
-}
-
-.info-box h3 {
-  color: #030000;
-  margin-bottom: 10px;
-}
-
-.info-box a {
-  color: #000000;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.info-box a:hover {
-  text-decoration: underline;
-  color: #ffb300;
-}
-
 .menu-section {
   background: #ffffff;
   padding: 2rem;
@@ -279,33 +248,12 @@ ol {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.about-section {
-  background-color: rgba(255, 255, 255, 0.03);
-  padding: 2.5rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .section-title {
   font-size: 2.2rem;
   margin-bottom: 1.5rem;
   color: #760000;
   text-align: center;
   font-weight: bold;
-}
-
-.about-section h3 {
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 0.8rem;
-  color: #000000;
-  border-left: 5px solid #e3a600;
-  padding-left: 0.6rem;
-}
-
-.about-section p {
-  margin-bottom: 1rem;
-  color: #060606;
 }
 
 .styled-list {
