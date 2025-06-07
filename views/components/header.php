@@ -11,6 +11,7 @@
     <nav class="main-nav">
       <ul class="nav-list">
         <li><a href="?page=home" class="nav-link">Página Inicial</a></li>
+        <li><a href="?page=dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
         <li><a href="?page=users" class="nav-link">Usuários</a></li>
         <li><a href="?page=deliver" class="nav-link cta-button">Peça Agora</a></li>

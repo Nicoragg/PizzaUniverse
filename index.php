@@ -18,6 +18,9 @@ $page = $_GET['page'] ?? 'login';
   <?php if ($page === 'login'): ?>
     <link rel="stylesheet" href="./assets/stylesheets/auth.css">
   <?php endif; ?>
+  <?php if ($page === 'home'): ?>
+    <link rel="stylesheet" href="./assets/stylesheets/home.css">
+  <?php endif; ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
 </head>
 

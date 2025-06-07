@@ -1,0 +1,467 @@
+/* HOME PAGE STYLES */
+
+/* HERO SECTION */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 4rem 0;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f1f3f4 100%);
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+  z-index: 2;
+  position: relative;
+}
+
+.hero-text h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #2c1b1b;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hero-text h1 span {
+  color: #ffb400;
+  background: linear-gradient(45deg, #ffb400, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.hero-text h1 span::after {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -30px;
+  font-size: 1.5rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.hero-text p {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-button {
+  padding: 18px 36px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.hero-button:hover::before {
+  left: 100%;
+}
+
+.hero-button.primary {
+  background: linear-gradient(135deg, #ffb400, #ffd700);
+  color: #2c1b1b;
+  box-shadow: 0 8px 25px rgba(255, 180, 0, 0.3);
+}
+
+.hero-button.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 180, 0, 0.4);
+}
+
+.hero-button.secondary {
+  background: linear-gradient(135deg, #2c1b1b, #444);
+  color: #ffffff;
+  box-shadow: 0 8px 25px rgba(44, 27, 27, 0.3);
+}
+
+.hero-button.secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(44, 27, 27, 0.4);
+  background: linear-gradient(135deg, #ffb400, #ffd700);
+  color: #2c1b1b;
+}
+
+.hero-image {
+  flex: 1;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+  transform: scale(1.05);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+/* DESTAQUES SECTION */
+.destaques {
+  padding: 4rem 0;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.destaques::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffb400, #ffd700, #ffb400);
+  border-radius: 20px 20px 0 0;
+}
+
+.destaques h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #2c1b1b;
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+}
+
+.destaques h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #ffb400, #ffd700);
+  border-radius: 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #ffb400, #ffd700, #ff6b6b);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border-color: #ffb400;
+}
+
+.card h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c1b1b;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.card h3::before {
+  content: '🍕';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.card:hover h3::before {
+  opacity: 1;
+  left: -35px;
+}
+
+.card p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* MISSAO SECTION */
+.missao {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #2c1b1b 0%, #444 100%);
+  border-radius: 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.missao::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%);
+  animation: rotate 30s linear infinite reverse;
+}
+
+.missao h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.missao h2::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #ffb400, #ffd700);
+  border-radius: 2px;
+}
+
+.missao ul {
+  list-style: none;
+  padding: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.missao li {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  border-left: 5px solid #ffb400;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.missao li::before {
+  content: '🚀';
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffb400;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3);
+}
+
+.missao li:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(10px);
+  border-left-color: #ffd700;
+}
+
+.missao li:nth-child(odd)::before {
+  content: '⭐';
+}
+
+.missao li:nth-child(even)::before {
+  content: '🌟';
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 1rem;
+    gap: 2rem;
+  }
+  
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-text p {
+    font-size: 1.1rem;
+  }
+  
+  .hero-buttons {
+    justify-content: center;
+  }
+  
+  .hero-button {
+    padding: 15px 30px;
+    font-size: 1rem;
+  }
+  
+  .destaques h2 {
+    font-size: 2.2rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+  
+  .card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .missao {
+    padding: 3rem 1rem;
+  }
+  
+  .missao h2 {
+    font-size: 2rem;
+  }
+  
+  .missao li {
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-text p {
+    font-size: 1rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero-button {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .destaques h2 {
+    font-size: 1.8rem;
+  }
+  
+  .card h3 {
+    font-size: 1.5rem;
+  }
+  
+  .missao h2 {
+    font-size: 1.8rem;
+  }
+}
