@@ -17,7 +17,7 @@ body {
   line-height: 1.7;
 }
 
-/* HEADER STYLES - MELHORADO */
+/* HEADER STYLES */
 .main-header {
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -157,124 +157,6 @@ body {
   0% { box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3); }
   50% { box-shadow: 0 6px 20px rgba(255, 180, 0, 0.5); }
   100% { box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3); }
-}
-
-.mobile-menu-toggle {
-  display: none;
-  flex-direction: column;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  gap: 4px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-toggle:hover {
-  background: rgba(255, 180, 0, 0.1);
-}
-
-.hamburger-line {
-  width: 25px;
-  height: 3px;
-  background: #2c1b1b;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-toggle:hover .hamburger-line {
-  background: #ffb400;
-}
-
-/* RESPONSIVIDADE */
-@media (max-width: 1024px) {
-  .header-container {
-    padding: 12px 20px;
-  }
-  
-  .nav-list {
-    gap: 25px;
-  }
-  
-  .nav-link {
-    font-size: 0.9rem;
-    padding: 10px 15px;
-  }
-}
-
-@media (max-width: 768px) {
-  .header-container {
-    padding: 10px 15px;
-  }
-  
-  .logo-img {
-    height: 55px;
-  }
-  
-  .logo-text h1 {
-    font-size: 1.8rem;
-  }
-  
-  .tagline {
-    font-size: 0.7rem;
-  }
-  
-  .main-nav {
-    display: none;
-  }
-  
-  .mobile-menu-toggle {
-    display: flex;
-  }
-  
-  .main-nav.mobile-active {
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border-top: 1px solid #eee;
-  }
-  
-  .main-nav.mobile-active .nav-list {
-    flex-direction: column;
-    gap: 0;
-    padding: 20px 0;
-  }
-  
-  .main-nav.mobile-active .nav-link {
-    display: block;
-    padding: 15px 30px;
-    border-radius: 0;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .main-nav.mobile-active .cta-button {
-    margin: 10px 30px;
-    text-align: center;
-    border-radius: 25px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-container {
-    padding: 8px 10px;
-  }
-  
-  .logo-img {
-    height: 45px;
-  }
-  
-  .logo-text h1 {
-    font-size: 1.5rem;
-  }
-  
-  .tagline {
-    display: none;
-  }
 }
 
 /* SECTIONS */
