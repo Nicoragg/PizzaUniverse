@@ -21,7 +21,7 @@ abstract class UserController
                 $user = new User(0, $username, $email, md5($password));
 
                 $id = UserDao::create($user);
-                header("Location: ?p=users");
+                header("Location: ?page=users");
             } catch (\Exception $e) {
                 self::$msg = $e->getMessage();
             }
@@ -45,7 +45,7 @@ abstract class UserController
             try {
                 $user = new User($id, $username, $email, md5($password));
                 UserDao::update($user);
-                header("Location: ?p=users");
+                header("Location: ?page=users");
                 exit;
             } catch (\Exception $e) {
                 self::$msg = $e->getMessage();
@@ -72,7 +72,7 @@ abstract class UserController
         }
         if (isset($_GET["delete"])) {
             UserDao::delete((int) $_GET["delete"]);
-            header("Location: ?p=users");
+            header("Location: ?page=users");
             exit;
         }
     }
@@ -103,7 +103,7 @@ abstract class UserController
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['username'] = $user->username;
                     $_SESSION['email'] = $user->email;
-                    header("Location: ?p=dashboard");
+                    header("Location: ?page=dashboard");
                     exit;
                 } else {
                     self::$msg = "Email ou senha incorretos";
@@ -120,7 +120,7 @@ abstract class UserController
     {
         session_start();
         session_destroy();
-        header("Location: ?p=login");
+        header("Location: ?page=login");
         exit;
     }
 }
