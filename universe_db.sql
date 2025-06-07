@@ -17,4 +17,4 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_created_at ON users(created_at);
 
 INSERT INTO users (username, email, password) VALUES 
-('admin', 'admin@pizzauniverse.com', MD5('admin123'));
+('admin', 'admin@admin.com', MD5('admin123'));

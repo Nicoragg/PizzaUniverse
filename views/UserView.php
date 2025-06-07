@@ -36,11 +36,6 @@ abstract class UserView
 
                     <button type="submit">Entrar</button>
                 </form>
-
-                <div class="login-footer">
-                    <p>Acesso restrito aos administradores</p>
-                    <a href="./index.php">← Voltar ao site</a>
-                </div>
             </div>
         </main>
     <?php

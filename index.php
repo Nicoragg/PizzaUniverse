@@ -15,12 +15,28 @@ $page = $_GET['page'] ?? 'login';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pizza Universe - Admin</title>
   <link rel="stylesheet" href="./assets/stylesheets/style.css">
-  <?php if ($page === 'login'): ?>
-    <link rel="stylesheet" href="./assets/stylesheets/auth.css">
-  <?php endif; ?>
-  <?php if ($page === 'home'): ?>
-    <link rel="stylesheet" href="./assets/stylesheets/home.css">
-  <?php endif; ?>
+  <?php
+  switch ($page) {
+    case 'login':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/auth.css">';
+      break;
+    case 'home':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/home.css">';
+      break;
+    case 'dashboard':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/dashboard.css">';
+      break;
+    case 'users':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">';
+      break;
+    case 'menu':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/menu.css">';
+      break;
+    case 'deliver':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/deliver.css">';
+      break;
+  }
+  ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
 </head>
 
