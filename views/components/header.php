@@ -1,6 +1,6 @@
 <header>
   <div class="logo">
-    <img src="../assets/images/logo.png" alt="Logo Pizza Universe">
+    <img src="./assets/images/logo.png" alt="Logo Pizza Universe">
   </div>
 
   <nav class="main-nav">

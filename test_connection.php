@@ -16,7 +16,7 @@ foreach ($hosts as $host) {
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
         echo "✅ Host '{$host}' connection works!\n";
-        
+
         // Test if database exists
         try {
             $conn->exec("USE {$dbName}");
@@ -24,7 +24,6 @@ foreach ($hosts as $host) {
         } catch (Exception $e) {
             echo "❌ Database '{$dbName}' not found on host '{$host}'\n";
         }
-        
     } catch (Exception $e) {
         echo "❌ Host '{$host}' failed: " . $e->getMessage() . "\n";
     }
@@ -37,10 +36,10 @@ try {
     $conn = new PDO("mysql:host=localhost", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
-    
+
     $stmt = $conn->query("SHOW VARIABLES WHERE Variable_name IN ('hostname', 'port', 'socket')");
     $vars = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     foreach ($vars as $var) {
         echo "   {$var['Variable_name']}: {$var['Value']}\n";
     }
@@ -59,10 +58,10 @@ echo "\n=== Testing New Database Connection ===\n\n";
 
 $host = 'localhost';
 $dbName = 'universe_db';
-$user = 'pizza_user';
-$password = 'pizza123';
+$user = 'dev';
+$password = 'admin123';
 
-echo "Testing connection with pizza_user...\n";
+echo "Testing connection with dev...\n";
 try {
     $dsn = "mysql:host={$host};dbname={$dbName};charset=utf8mb4";
     $conn = new PDO($dsn, $user, $password, [
@@ -72,12 +71,12 @@ try {
     echo "   Host: {$host}\n";
     echo "   Database: {$dbName}\n";
     echo "   User: {$user}\n\n";
-    
+
     // Test database operations
     $stmt = $conn->query("SELECT DATABASE() as current_db");
     $result = $stmt->fetch();
     echo "✅ Connected to database: " . $result['current_db'] . "\n";
-    
+
     // Check tables
     $stmt = $conn->query("SHOW TABLES");
     $tables = $stmt->fetchAll();
@@ -85,7 +84,6 @@ try {
     foreach ($tables as $table) {
         echo "   - " . array_values($table)[0] . "\n";
     }
-    
 } catch (Exception $e) {
     echo "❌ Connection failed: " . $e->getMessage() . "\n";
 }
@@ -94,4 +92,3 @@ echo "\n=== Host Configuration Status ===\n";
 echo "✅ Host 'localhost' is CORRECT\n";
 echo "✅ Database user created successfully\n";
 echo "✅ Connection configuration updated\n";
-?>

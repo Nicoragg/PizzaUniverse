@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
-use App\Model\User;
+use App\Models\User;
 use App\Dal\UserDao;
 use function App\Util\validateInput;
 

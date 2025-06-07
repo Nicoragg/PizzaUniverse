@@ -10,3 +10,5 @@ spl_autoload_register(function ($namespace) {
         require_once $arquivo;
     }
 });
+
+require_once __DIR__ . '/helpers/functions.php';

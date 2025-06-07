@@ -3,7 +3,7 @@
 namespace App\Dal;
 
 use App\Dal\Connection;
-use App\Model\User;
+use App\Models\User;
 use Exception;
 use \PDO;
 use \PDOException;
