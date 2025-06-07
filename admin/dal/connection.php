@@ -10,8 +10,8 @@ abstract class Connection
     private static ?PDO $connection = null;
     private static string $host = "localhost";
     private static string $dbName = "universe_db";
-    private static string $user = "pizza_user";
-    private static string $password = "pizza123";
+    private static string $user = "dev";
+    private static string $password = "admin123";
 
     public static function getConnection(): PDO
     {
