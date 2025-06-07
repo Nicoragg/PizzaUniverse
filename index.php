@@ -2,7 +2,10 @@
 
 namespace App;
 
-require_once "./autoload.php";
+require_once './autoload.php';
+
+$page = $_GET['page'] ?? 'login';
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -12,13 +15,14 @@ require_once "./autoload.php";
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pizza Universe - Admin</title>
   <link rel="stylesheet" href="./assets/stylesheets/style.css">
-  <link rel="stylesheet" href="./assets/stylesheets/auth.css">
+  <?php if ($page === 'login'): ?>
+    <link rel="stylesheet" href="./assets/stylesheets/auth.css">
+  <?php endif; ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
 </head>
 
 <body>
   <?php
-  $page = $_GET['page'] ?? 'login';
 
   if (!in_array($page, ['login']) && session_status() === PHP_SESSION_NONE) {
     session_start();

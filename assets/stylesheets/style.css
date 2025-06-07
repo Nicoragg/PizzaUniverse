@@ -412,3 +412,108 @@ strong {
   border-left: 4px solid #650000;
   border-radius: 10px;
 }
+
+/* FOOTER STYLES */
+footer {
+  background: linear-gradient(135deg, #2c1b1b 0%, #1a1010 100%);
+  color: #ffffff;
+  margin-top: 60px;
+  padding: 40px 0 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffb400, #ffd700, #ffb400);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+footer div {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 20px 0;
+  position: relative;
+  display: inline-block;
+}
+
+footer p::before,
+footer p::after {
+  content: '🍕';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+footer p::before {
+  left: -40px;
+  animation-delay: 0s;
+}
+
+footer p::after {
+  right: -40px;
+  animation-delay: 1s;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(-50%);
+  }
+  40% {
+    transform: translateY(-60%);
+  }
+  60% {
+    transform: translateY(-55%);
+  }
+}
+
+/* Responsive design for footer */
+@media (max-width: 768px) {
+  footer {
+    padding: 30px 0 15px 0;
+    margin-top: 40px;
+  }
+  
+  footer div {
+    padding: 0 20px;
+  }
+  
+  footer p {
+    font-size: 0.9rem;
+    padding: 15px 0;
+  }
+  
+  footer p::before,
+  footer p::after {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  footer p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+}
