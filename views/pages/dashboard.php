@@ -2,7 +2,6 @@
 
 use App\Controllers\UserController;
 
-// Processa logout se solicitado
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     UserController::logout();
 }

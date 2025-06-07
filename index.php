@@ -36,13 +36,13 @@ require_once "./autoload.php";
   match ($page) {
     'login'     => require './views/pages/login.php',
     'dashboard' => require './views/pages/dashboard.php',
+    'users'     => require './views/pages/users/index.php',
     'home'      => require './views/pages/home.php',
     'menu'      => require './views/pages/menu.php',
     'deliver'   => require './views/pages/deliver.php',
     default     => require './views/pages/404.php',
   };
 
-  // Exibe footer apenas se não for login
   if ($page !== 'login') {
     require_once("./views/components/footer.php");
   }

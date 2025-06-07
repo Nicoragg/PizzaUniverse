@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Dal\UserDao;
+use App\Views\UserView;
 use function App\Util\validateInput;
 
 abstract class UserController
@@ -26,7 +27,7 @@ abstract class UserController
                 self::$msg = $e->getMessage();
             }
         }
-        // UserView::formulario(self::$msg, null);
+        UserView::renderForm(self::$msg, null);
     }
 
     public static function update(): void
@@ -52,7 +53,7 @@ abstract class UserController
             }
         }
 
-        // UserView::formulario(self::$msg, $user);
+        UserView::renderForm(self::$msg, $user);
     }
 
     public static function findById(int $id): ?User
@@ -81,7 +82,7 @@ abstract class UserController
     {
         $users = UserDao::findAll();
 
-        // UserView::listar($users, $deleteId);
+        UserView::renderList($users, $deleteId);
     }
 
     public static function authenticate(string $email, string $password): ?User
@@ -112,7 +113,7 @@ abstract class UserController
             }
         }
 
-        // UserView::login(self::$msg);
+        UserView::renderLogin(self::$msg);
     }
 
     public static function logout(): void
