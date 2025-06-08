@@ -217,12 +217,36 @@ abstract class OrderDao
     public static function updateStatus(int $orderId, string $status): void
     {
         try {
+            // Verificar se o pedido existe e validar transição
+            $order = self::findById($orderId);
+            if (!$order) {
+                throw new \Exception("Pedido não encontrado.");
+            }
+
+            if (!$order->canTransitionTo($status)) {
+                $currentStatusLabel = self::getOrderStatuses()[$order->status] ?? $order->status;
+                $newStatusLabel = self::getOrderStatuses()[$status] ?? $status;
+                throw new \Exception("Transição de status inválida: {$currentStatusLabel} → {$newStatusLabel}");
+            }
+
             $pdo = Connection::getConnection();
-            $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?");
             $stmt->execute([$status, $orderId]);
+
+            // Log da mudança de status (opcional)
+            self::logStatusChange($orderId, $order->status, $status);
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao atualizar status do pedido: " . $e->getMessage());
         }
+    }
+
+    /**
+     * Log status changes for audit purposes
+     */
+    private static function logStatusChange(int $orderId, string $oldStatus, string $newStatus): void
+    {
+        // Este método pode ser expandido para salvar logs em tabela de auditoria
+        error_log("Order {$orderId}: Status changed from {$oldStatus} to {$newStatus}");
     }
 
     public static function delete(int $id): void

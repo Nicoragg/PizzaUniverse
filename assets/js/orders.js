@@ -31,8 +31,8 @@ class OrderManager {
       customerInfo: document.getElementById('customer-info'),
       orderSummary: document.getElementById('order-summary'),
       submitBtn: document.getElementById('submit-order'),
-      quantityInputs: document.querySelectorAll('.quantity-input'),
-      pizzaCards: document.querySelectorAll('.pizza-card')
+      quantityInputs: document.querySelectorAll('.orders-quantity-input'),
+      pizzaCards: document.querySelectorAll('.orders-pizza-card')
     };
   }
 
@@ -85,23 +85,130 @@ class OrderManager {
   initializeCustomerSelect() {
     if (!this.elements.customerSelect) return;
 
+    // Verificar se TomSelect está disponível
+    if (typeof TomSelect === 'undefined') {
+      console.warn('TomSelect não está disponível. Carregando dinamicamente...');
+      this.loadTomSelect();
+      return;
+    }
+
+    this.createTomSelectInstance();
+  }
+
+  /**
+   * Carrega TomSelect dinamicamente
+   */
+  loadTomSelect() {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js';
+    script.onload = () => {
+      console.log('TomSelect carregado com sucesso');
+      this.createTomSelectInstance();
+    };
+    script.onerror = () => {
+      console.error('Erro ao carregar TomSelect');
+    };
+    document.head.appendChild(script);
+  }
+
+  /**
+   * Cria a instância do TomSelect
+   */
+  createTomSelectInstance() {
     this.tomSelectInstance = new TomSelect('#customer_id', {
       placeholder: 'Selecione ou busque um cliente...',
       searchField: ['text'],
       create: false,
       maxOptions: null,
+      loadThrottle: 300,
+      hideSelected: true,
+      closeAfterSelect: true,
       render: {
-        option: (data, escape) => `
-          <div class="tom-select-option">
-            <strong>${escape(data.text)}</strong>
+        option: (data, escape) => {
+          const option = document.querySelector(`option[value="${data.value}"]`);
+          if (!option) return `<div class="tom-select-option">${escape(data.text)}</div>`;
+
+          const phone = option.getAttribute('data-phone') || '';
+          const city = option.getAttribute('data-city') || '';
+          const state = option.getAttribute('data-state') || '';
+
+          return `
+            <div class="tom-select-option">
+              <strong>${escape(data.text)}</strong>
+              <div class="customer-details">
+                ${phone ? `📞 ${this.formatPhone(phone)}` : ''}
+                ${city && state ? ` • 📍 ${escape(city)} - ${escape(state)}` : ''}
+              </div>
+            </div>
+          `;
+        },
+        item: (data, escape) => `
+          <div class="tom-select-item">
+            <i class="bi bi-person-check"></i>
+            ${escape(data.text)}
           </div>
         `,
-        item: (data, escape) => `
-          <div class="tom-select-item">${escape(data.text)}</div>
+        no_results: () => `
+          <div class="no-results">
+            <i class="bi bi-search"></i>
+            <span>Nenhum cliente encontrado</span>
+          </div>
         `
       },
-      onChange: (value) => this.handleCustomerSelection(value)
+      onChange: (value) => this.handleCustomerSelection(value),
+      onFocus: () => this.onTomSelectFocus(),
+      onBlur: () => this.onTomSelectBlur()
     });
+
+    // Adicionar classes personalizadas
+    const wrapper = this.tomSelectInstance.wrapper;
+    wrapper.classList.add('orders-tom-select');
+
+    // Event listener para mudanças
+    this.tomSelectInstance.on('change', () => {
+      this.addSelectionAnimation();
+    });
+  }
+
+  /**
+   * Manipula o foco do TomSelect
+   */
+  onTomSelectFocus() {
+    const wrapper = this.tomSelectInstance.wrapper;
+    wrapper.classList.add('focus');
+  }
+
+  /**
+   * Manipula a perda de foco do TomSelect
+   */
+  onTomSelectBlur() {
+    const wrapper = this.tomSelectInstance.wrapper;
+    wrapper.classList.remove('focus');
+  }
+
+  /**
+   * Adiciona animação de seleção
+   */
+  addSelectionAnimation() {
+    const control = this.tomSelectInstance.control;
+    control.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      control.style.transform = 'scale(1)';
+    }, 150);
+  }
+
+  /**
+   * Formata telefone para exibição
+   */
+  formatPhone(phone) {
+    if (!phone) return '';
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    } else if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+    }
+    return phone;
   }
 
   /**
@@ -145,7 +252,7 @@ class OrderManager {
   handleKeyboardEvents(e) {
     const activeElement = document.activeElement;
 
-    if (activeElement?.classList.contains('quantity-input')) {
+    if (activeElement?.classList.contains('orders-quantity-input')) {
       const pizzaId = activeElement.id.replace('qty_', '');
 
       if (e.key === 'ArrowUp' || e.key === '+') {
@@ -195,7 +302,7 @@ class CustomerHandler {
     const customerData = this.getCustomerData(customerId);
     if (customerData) {
       this.displayCustomerInfo(customerData);
-      customerInfo.style.display = 'block';
+      this.showCustomerInfo();
     } else {
       this.hideCustomerInfo();
     }
@@ -221,6 +328,23 @@ class CustomerHandler {
   }
 
   /**
+   * Exibe as informações do cliente com animação
+   */
+  showCustomerInfo() {
+    const customerInfo = this.orderManager.elements.customerInfo;
+    customerInfo.style.display = 'block';
+    customerInfo.style.opacity = '0';
+    customerInfo.style.transform = 'translateY(20px)';
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+      customerInfo.style.transition = 'all 0.4s ease';
+      customerInfo.style.opacity = '1';
+      customerInfo.style.transform = 'translateY(0)';
+    });
+  }
+
+  /**
    * Exibe as informações do cliente
    */
   displayCustomerInfo(customerData) {
@@ -237,15 +361,43 @@ class CustomerHandler {
 
     Object.entries(fields).forEach(([id, value]) => {
       const element = document.getElementById(id);
-      if (element) element.textContent = value;
+      if (element) {
+        element.textContent = value;
+        // Adicionar animação de typing
+        this.addTypingAnimation(element, value);
+      }
     });
+  }
+
+  /**
+   * Adiciona animação de digitação
+   */
+  addTypingAnimation(element, text) {
+    element.style.overflow = 'hidden';
+    element.style.whiteSpace = 'nowrap';
+    element.style.borderRight = '2px solid var(--orders-primary)';
+    element.style.animation = 'ordersTyping 0.8s steps(40, end), ordersBlink 0.8s step-end infinite';
+
+    setTimeout(() => {
+      element.style.animation = '';
+      element.style.borderRight = '';
+      element.style.overflow = '';
+      element.style.whiteSpace = '';
+    }, 1000);
   }
 
   /**
    * Oculta as informações do cliente
    */
   hideCustomerInfo() {
-    this.orderManager.elements.customerInfo.style.display = 'none';
+    const customerInfo = this.orderManager.elements.customerInfo;
+    customerInfo.style.transition = 'all 0.3s ease';
+    customerInfo.style.opacity = '0';
+    customerInfo.style.transform = 'translateY(-20px)';
+
+    setTimeout(() => {
+      customerInfo.style.display = 'none';
+    }, 300);
   }
 }
 
@@ -268,7 +420,56 @@ class PizzaHandler {
       if (quantityInput) {
         this.updateCardAppearance(card, parseInt(quantityInput.value));
       }
+
+      // Adicionar event listeners para os botões
+      this.attachCardEventListeners(card, pizzaId);
     });
+  }
+
+  /**
+   * Anexa event listeners aos cards
+   */
+  attachCardEventListeners(card, pizzaId) {
+    const increaseBtn = card.querySelector('.orders-btn-increase');
+    const decreaseBtn = card.querySelector('.orders-btn-decrease');
+    const quantityInput = card.querySelector('.orders-quantity-input');
+
+    if (increaseBtn) {
+      increaseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.increaseQuantity(pizzaId);
+        this.addButtonPressAnimation(increaseBtn);
+      });
+    }
+
+    if (decreaseBtn) {
+      decreaseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.decreaseQuantity(pizzaId);
+        this.addButtonPressAnimation(decreaseBtn);
+      });
+    }
+
+    if (quantityInput) {
+      quantityInput.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          this.increaseQuantity(pizzaId);
+        } else {
+          this.decreaseQuantity(pizzaId);
+        }
+      });
+    }
+  }
+
+  /**
+   * Adiciona animação de pressão do botão
+   */
+  addButtonPressAnimation(button) {
+    button.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 100);
   }
 
   /**
@@ -304,10 +505,63 @@ class PizzaHandler {
     const input = document.getElementById(`qty_${pizzaId}`);
     if (!input) return;
 
+    const oldValue = parseInt(input.value);
     input.value = newValue;
+
     this.addChangeAnimation(input);
     this.updatePizzaCardState(pizzaId, newValue);
+
+    // Adicionar feedback visual
+    this.addQuantityFeedback(input, newValue, oldValue);
+
     this.orderManager.updateOrderSummary();
+  }
+
+  /**
+   * Adiciona feedback visual para mudança de quantidade
+   */
+  addQuantityFeedback(input, newValue, oldValue) {
+    const card = input.closest('.orders-pizza-card');
+    if (!card) return;
+
+    // Criar elemento de feedback
+    const feedback = document.createElement('div');
+    feedback.className = 'quantity-feedback';
+    feedback.style.cssText = `
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--orders-primary);
+      color: var(--orders-secondary);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s ease;
+    `;
+
+    const diff = newValue - oldValue;
+    feedback.textContent = diff > 0 ? `+${diff}` : diff.toString();
+
+    input.parentElement.style.position = 'relative';
+    input.parentElement.appendChild(feedback);
+
+    // Animar feedback
+    requestAnimationFrame(() => {
+      feedback.style.opacity = '1';
+      feedback.style.transform = 'translateX(-50%) translateY(-10px)';
+    });
+
+    // Remover feedback
+    setTimeout(() => {
+      feedback.style.opacity = '0';
+      feedback.style.transform = 'translateX(-50%) translateY(-20px)';
+      setTimeout(() => feedback.remove(), 300);
+    }, 1000);
   }
 
   /**
@@ -327,6 +581,21 @@ class PizzaHandler {
 
     card.setAttribute('data-quantity', quantity);
     card.classList.toggle('selected', quantity > 0);
+
+    // Adicionar animação de seleção
+    if (quantity > 0) {
+      this.addSelectionAnimation(card);
+    }
+  }
+
+  /**
+   * Adiciona animação de seleção ao card
+   */
+  addSelectionAnimation(card) {
+    card.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      card.style.transform = '';
+    }, 200);
   }
 
   /**
@@ -409,7 +678,7 @@ class OrderSummaryHandler {
    */
   getEmptySummaryHTML() {
     return `
-      <div class="summary-item">
+      <div class="orders-summary-item">
         <span><i class="bi bi-cart-x"></i> Nenhuma pizza selecionada</span>
         <span>R$ 0,00</span>
       </div>
@@ -421,12 +690,16 @@ class OrderSummaryHandler {
    */
   getItemsSummaryHTML(items, total) {
     const itemsHTML = items.map(item => `
-      <div class="summary-item">
+      <div class="orders-summary-item">
         <span>
           <strong>${item.quantity}x</strong> ${item.name}
-          <small>R$ ${this.formatPrice(item.price)} cada</small>
+          <small style="display: block; color: var(--orders-text-muted); font-size: 0.85rem;">
+            R$ ${this.formatPrice(item.price)} cada
+          </small>
         </span>
-        <span class="item-subtotal">R$ ${this.formatPrice(item.subtotal)}</span>
+        <span class="item-subtotal" style="color: var(--orders-success); font-weight: 600;">
+          R$ ${this.formatPrice(item.subtotal)}
+        </span>
       </div>
     `).join('');
 
@@ -434,7 +707,7 @@ class OrderSummaryHandler {
 
     return `
       <div class="summary-items">${itemsHTML}</div>
-      <div class="summary-item total">
+      <div class="orders-summary-item orders-summary-total">
         <span><i class="bi bi-receipt"></i> <strong>Total (${items.length} ${totalText})</strong></span>
         <span><strong>R$ ${this.formatPrice(total)}</strong></span>
       </div>
@@ -452,6 +725,12 @@ class OrderSummaryHandler {
     submitBtn.innerHTML = hasItems
       ? '<i class="bi bi-check-circle"></i> Finalizar Pedido'
       : '<i class="bi bi-lock"></i> Selecione as pizzas';
+
+    // Adicionar animação quando habilitar/desabilitar
+    submitBtn.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      submitBtn.style.transform = '';
+    }, 150);
   }
 
   /**
@@ -466,9 +745,12 @@ class OrderSummaryHandler {
    */
   addSmoothAnimation() {
     const summaryDiv = this.orderManager.elements.orderSummary;
-    summaryDiv.style.opacity = '0.5';
+    summaryDiv.style.opacity = '0.7';
+    summaryDiv.style.transform = 'scale(0.98)';
+
     setTimeout(() => {
       summaryDiv.style.opacity = '1';
+      summaryDiv.style.transform = 'scale(1)';
     }, 100);
   }
 }
@@ -478,50 +760,71 @@ class OrderSummaryHandler {
  */
 class DataFormatter {
   /**
-   * Formata número de telefone
+   * Formata telefone para exibição
    */
   formatPhone(phone) {
-    if (!phone) return '';
-
+    if (!phone) return '-';
     const cleaned = phone.replace(/\D/g, '');
-
     if (cleaned.length === 11) {
       return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
     } else if (cleaned.length === 10) {
       return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
     }
-
     return phone;
   }
 
   /**
-   * Formata CPF
+   * Formata CPF para exibição
    */
   formatCPF(cpf) {
-    if (!cpf) return '';
-
+    if (!cpf) return '-';
     const cleaned = cpf.replace(/\D/g, '');
-
     if (cleaned.length === 11) {
       return `${cleaned.slice(0, 3)}.${cleaned.slice(3, 6)}.${cleaned.slice(6, 9)}-${cleaned.slice(9)}`;
     }
-
     return cpf;
   }
 
   /**
-   * Formata CEP
+   * Formata CEP para exibição
    */
   formatZipcode(zipcode) {
-    if (!zipcode) return '';
-
+    if (!zipcode) return '-';
     const cleaned = zipcode.replace(/\D/g, '');
-
     if (cleaned.length === 8) {
       return `${cleaned.slice(0, 5)}-${cleaned.slice(5)}`;
     }
-
     return zipcode;
+  }
+
+  /**
+   * Formata preço para exibição
+   */
+  formatPrice(price) {
+    if (typeof price !== 'number') return 'R$ 0,00';
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  }
+
+  /**
+   * Formata data para exibição
+   */
+  formatDate(date) {
+    if (!date) return '-';
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
+    return date.toLocaleDateString('pt-BR');
+  }
+
+  /**
+   * Formata data e hora para exibição
+   */
+  formatDateTime(date) {
+    if (!date) return '-';
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
+    return `${date.toLocaleDateString('pt-BR')} às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
   }
 }
 

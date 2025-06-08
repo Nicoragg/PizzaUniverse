@@ -16,6 +16,26 @@ class Order
     private string $createdAt;
     private string $updatedAt;
 
+    private array $dynamicProperties = [];
+
+    private array $propertyMap = [
+        'customer_id' => 'customerId',
+        'order_number' => 'orderNumber',
+        'total_amount' => 'totalAmount',
+        'delivery_address' => 'deliveryAddress',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt'
+    ];
+
+    private static array $validTransitions = [
+        'pending' => ['confirmed', 'cancelled'],
+        'confirmed' => ['preparing', 'cancelled'],
+        'preparing' => ['ready', 'cancelled'],
+        'ready' => ['delivered'],
+        'delivered' => [],
+        'cancelled' => []
+    ];
+
     public function __construct(
         int $id,
         int $customerId = 0,
@@ -44,6 +64,15 @@ class Order
             return $this->$attr;
         }
 
+        if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
+            $camelCaseProperty = $this->propertyMap[$attr];
+            return $this->$camelCaseProperty;
+        }
+
+        if (array_key_exists($attr, $this->dynamicProperties)) {
+            return $this->dynamicProperties[$attr];
+        }
+
         throw new InvalidArgumentException("Property '{$attr}' does not exist");
     }
 
@@ -55,8 +84,25 @@ class Order
 
         if (property_exists($this, $attr)) {
             $this->$attr = $value;
-        } else {
-            throw new InvalidArgumentException("Property '{$attr}' does not exist");
+            return;
         }
+
+        if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
+            $camelCaseProperty = $this->propertyMap[$attr];
+            $this->$camelCaseProperty = $value;
+            return;
+        }
+
+        $this->dynamicProperties[$attr] = $value;
+    }
+
+    public function canTransitionTo(string $newStatus): bool
+    {
+        return in_array($newStatus, self::$validTransitions[$this->status] ?? []);
+    }
+
+    public function getAvailableTransitions(): array
+    {
+        return self::$validTransitions[$this->status] ?? [];
     }
 }

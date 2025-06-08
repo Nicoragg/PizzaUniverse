@@ -15,6 +15,15 @@ class OrderItem
     private ?string $notes;
     private string $createdAt;
 
+    private array $dynamicProperties = [];
+
+    private array $propertyMap = [
+        'order_id' => 'orderId',
+        'pizza_id' => 'pizzaId',
+        'unit_price' => 'unitPrice',
+        'created_at' => 'createdAt'
+    ];
+
     public function __construct(
         int $id,
         int $orderId = 0,
@@ -37,8 +46,20 @@ class OrderItem
 
     public function __get(string $attr): mixed
     {
+        // Check if property exists directly
         if (property_exists($this, $attr)) {
             return $this->$attr;
+        }
+
+        // Check if it's a snake_case version of a camelCase property
+        if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
+            $camelCaseProperty = $this->propertyMap[$attr];
+            return $this->$camelCaseProperty;
+        }
+
+        // Check dynamic properties
+        if (array_key_exists($attr, $this->dynamicProperties)) {
+            return $this->dynamicProperties[$attr];
         }
 
         throw new InvalidArgumentException("Property '{$attr}' does not exist");
@@ -50,10 +71,20 @@ class OrderItem
             throw new InvalidArgumentException("Cannot modify readonly property 'id'");
         }
 
+        // Check if property exists directly
         if (property_exists($this, $attr)) {
             $this->$attr = $value;
-        } else {
-            throw new InvalidArgumentException("Property '{$attr}' does not exist");
+            return;
         }
+
+        // Check if it's a snake_case version of a camelCase property
+        if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
+            $camelCaseProperty = $this->propertyMap[$attr];
+            $this->$camelCaseProperty = $value;
+            return;
+        }
+
+        // Allow setting dynamic properties for display purposes
+        $this->dynamicProperties[$attr] = $value;
     }
 }
