@@ -857,8 +857,8 @@
 }
 
 .orders-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
     margin-bottom: 2rem;
 }
@@ -871,6 +871,7 @@
     border-radius: var(--orders-radius-lg);
     border: 1px solid var(--orders-border);
     box-shadow: var(--orders-shadow-sm);
+    width: 100%;
 }
 
 .orders-customer-section h3,

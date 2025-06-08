@@ -290,20 +290,42 @@ abstract class OrderView
 
                 <div class="orders-content">
                     <div class="orders-customer-section">
-                        <h3>Informações do Cliente</h3>
-                        <p><strong>Nome:</strong> <?= htmlspecialchars($customer->name) ?></p>
-                        <p><strong>Telefone:</strong> <?= htmlspecialchars($customer->phone) ?></p>
-                        <p><strong>Endereço:</strong><br>
-                            <?= htmlspecialchars($customer->street) ?><br>
-                            <?= htmlspecialchars($customer->neighborhood) ?><br>
-                            <?= htmlspecialchars($customer->city) ?> - <?= htmlspecialchars($customer->state) ?><br>
-                            CEP: <?= htmlspecialchars($customer->zipcode) ?>
-                        </p>
-                        <?php if (!empty($order->delivery_address)): ?>
-                            <p><strong>Endereço de Entrega:</strong><br>
-                                <?= htmlspecialchars($order->delivery_address) ?>
-                            </p>
-                        <?php endif; ?>
+                        <h3><i class="bi bi-person-circle"></i> Informações do Cliente</h3>
+
+                        <div class="orders-customer-details">
+                            <div class="orders-customer-row">
+                                <span class="orders-customer-label"><i class="bi bi-person"></i> Nome:</span>
+                                <span class="orders-customer-value"><?= htmlspecialchars($customer->name) ?></span>
+                            </div>
+
+                            <div class="orders-customer-row">
+                                <span class="orders-customer-label"><i class="bi bi-telephone"></i> Telefone:</span>
+                                <span class="orders-customer-value"><?= htmlspecialchars($customer->phone) ?></span>
+                            </div>
+
+                            <?php if (!empty($customer->cpf)): ?>
+                                <div class="orders-customer-row">
+                                    <span class="orders-customer-label"><i class="bi bi-card-text"></i> CPF:</span>
+                                    <span class="orders-customer-value"><?= htmlspecialchars($customer->cpf) ?></span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="orders-customer-row">
+                                <span class="orders-customer-label"><i class="bi bi-geo-alt"></i> Endereço:</span>
+                                <div class="orders-address-details">
+                                    <?= htmlspecialchars($customer->street) ?>, <?= htmlspecialchars($customer->neighborhood) ?>, <?= htmlspecialchars($customer->city) ?> - <?= htmlspecialchars($customer->state) ?>, CEP: <?= htmlspecialchars($customer->zipcode) ?>
+                                </div>
+                            </div>
+
+                            <?php if (!empty($order->delivery_address)): ?>
+                                <div class="orders-customer-row">
+                                    <span class="orders-customer-label"><i class="bi bi-truck"></i> Entrega:</span>
+                                    <div class="orders-address-details">
+                                        <?= nl2br(htmlspecialchars($order->delivery_address)) ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                     <div class="orders-items-section">
