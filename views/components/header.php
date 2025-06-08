@@ -14,7 +14,7 @@
         <li><a href="?page=dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
         <li><a href="?page=users" class="nav-link">Usuários</a></li>
-        <li><a href="?page=deliver" class="nav-link cta-button">Peça Agora</a></li>
+        <li><a href="?page=deliver" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Pedido</a></li>
       </ul>
     </nav>
   </div>
