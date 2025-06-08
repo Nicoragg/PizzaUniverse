@@ -98,16 +98,6 @@ abstract class PizzaView
                 <a href="?page=pizzas&action=create"><i class="bi bi-plus-lg"></i> Nova Pizza</a>
             </div>
 
-            <?php if ($deleteId): ?>
-                <section class="delete-confirmation">
-                    <p>Tem certeza que deseja excluir esta pizza?</p>
-                    <nav>
-                        <a href="?page=pizzas&action=delete&id=<?= $deleteId ?>" class="btn-danger"><i class="bi bi-trash3"></i> Confirmar Exclusão</a>
-                        <a href="?page=pizzas"><i class="bi bi-arrow-left"></i> Cancelar</a>
-                    </nav>
-                </section>
-            <?php endif; ?>
-
             <?php if (!empty($pizzas)): ?>
                 <div class="pizza-grid">
                     <?php foreach ($pizzas as $pizza): ?>

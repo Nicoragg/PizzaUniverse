@@ -16,44 +16,39 @@ $page = $_GET['page'] ?? 'login';
   <title>Pizza Universe - Admin</title>
   <link rel="stylesheet" href="./assets/stylesheets/style.css">
   <?php
-  switch ($page) {
-    case 'login':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/auth.css">';
-      break;
-    case 'home':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/home.css">';
-      break;
-    case 'dashboard':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/dashboard.css">';
-      break;
-    case 'users':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
-      echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">';
-      break;
-    case 'pizzas':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
-      echo '<link rel="stylesheet" href="./assets/stylesheets/pizzas.css">';
-      break;
-    case 'menu':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/menu.css">';
-      break;
-    case 'deliver':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/deliver.css">';
-      break;
+  $crudPages = ['users', 'pizzas'];
+
+  if (in_array($page, $crudPages)) {
+    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+    echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
+  }
+
+  $pageStyles = [
+    'login' => 'auth.css',
+    'home' => 'home.css',
+    'dashboard' => 'dashboard.css',
+    'users' => 'users.css',
+    'pizzas' => 'pizzas.css',
+    'menu' => 'menu.css',
+    'deliver' => 'deliver.css'
+  ];
+
+  if (isset($pageStyles[$page])) {
+    echo '<link rel="stylesheet" href="./assets/stylesheets/' . $pageStyles[$page] . '">';
   }
   ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
 
   <?php
-  $jsFiles = [];
-  switch ($page) {
-    case 'pizzas':
-      $jsFiles[] = './assets/js/pizzas.js';
-      break;
-  }
+  $pageScripts = [
+    'pizzas' => ['sweetalert-confirm.js', 'pizzas.js'],
+    'users' => ['sweetalert-confirm.js', 'users.js']
+  ];
 
-  foreach ($jsFiles as $jsFile) {
-    echo '<script src="' . $jsFile . '" defer></script>';
+  if (isset($pageScripts[$page])) {
+    foreach ($pageScripts[$page] as $script) {
+      echo '<script src="./assets/js/' . $script . '" defer></script>';
+    }
   }
   ?>
 </head>

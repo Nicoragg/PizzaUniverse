@@ -107,16 +107,6 @@ abstract class UserView
                 <a href="?page=users&action=create"><i class="bi bi-plus-lg"></i> Novo Usuário</a>
             </div>
 
-            <?php if ($deleteId): ?>
-                <section>
-                    <p>Tem certeza que deseja excluir este usuário?</p>
-                    <nav>
-                        <a href="?page=users&action=delete&id=<?= $deleteId ?>"><i class="bi bi-trash3"></i> Confirmar Exclusão</a>
-                        <a href="?page=users"><i class="bi bi-arrow-left"></i> Cancelar</a>
-                    </nav>
-                </section>
-            <?php endif; ?>
-
             <table>
                 <thead>
                     <tr>

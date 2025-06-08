@@ -71,3 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
     autoResize.call(descriptionTextarea);
   }
 });
+
+// Modal de confirmação para exclusão de pizzas
+document.addEventListener('DOMContentLoaded', () => {
+  const deleteButtons = document.querySelectorAll('.btn-delete');
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const href = button.getAttribute('href');
+      const pizzaId = new URLSearchParams(href.split('?')[1]).get('confirm');
+
+      SweetAlertConfirm.confirmPizzaDeletion(() => {
+        window.location.href = `?page=pizzas&action=delete&id=${pizzaId}`;
+      });
+    });
+  });
+});
