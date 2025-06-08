@@ -112,7 +112,7 @@ abstract class OrderView
 
                                                 <div class="orders-pizza-controls">
                                                     <div class="orders-quantity-controls">
-                                                        <button type="button" class="orders-btn-quantity orders-btn-decrease" onclick="decreaseQuantity(<?= $pizza->id ?>)">
+                                                        <button type="button" class="orders-btn-quantity orders-btn-decrease">
                                                             <i class="bi bi-dash"></i>
                                                         </button>
                                                         <div class="orders-quantity-display">
@@ -122,7 +122,7 @@ abstract class OrderView
                                                                 value="0" min="0" max="99"
                                                                 readonly>
                                                         </div>
-                                                        <button type="button" class="orders-btn-quantity orders-btn-increase" onclick="increaseQuantity(<?= $pizza->id ?>)">
+                                                        <button type="button" class="orders-btn-quantity orders-btn-increase">
                                                             <i class="bi bi-plus"></i>
                                                         </button>
                                                     </div>

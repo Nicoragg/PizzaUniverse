@@ -102,7 +102,6 @@ class OrderManager {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js';
     script.onload = () => {
-      console.log('TomSelect carregado com sucesso');
       this.createTomSelectInstance();
     };
     script.onerror = () => {
