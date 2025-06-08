@@ -6,7 +6,7 @@ use App\Models\User;
 
 abstract class UserView
 {
-    public static function renderLogin(?string $message = null): void
+    public static function renderLogin(?string $message = null, ?array $fieldsWithErrors = null, ?array $formData = null): void
     {
 ?>
         <section class="login-page">
@@ -24,12 +24,16 @@ abstract class UserView
                 <form method="POST" action="?page=login" class="auth-form">
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required placeholder="Digite seu email">
+                        <input type="email" id="email" name="email"
+                            value="<?= $formData['email'] ?? '' ?>"
+                            placeholder="Digite seu email">
                     </div>
 
                     <div class="form-group">
                         <label for="password">Senha:</label>
-                        <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                        <input type="password" id="password" name="password"
+                            value="<?= $formData['password'] ?? '' ?>"
+                            placeholder="Digite sua senha">
                     </div>
 
                     <button type="submit" class="auth-button">Entrar</button>
@@ -39,11 +43,15 @@ abstract class UserView
     <?php
     }
 
-    public static function renderForm(?string $message = null, ?User $user = null): void
+    public static function renderForm(?string $message = null, ?User $user = null, ?array $fieldsWithErrors = null, ?array $formData = null): void
     {
         $isEdit = $user !== null;
         $title = $isEdit ? "Editar Usuário" : "Novo Usuário";
         $action = $isEdit ? "?page=users&action=edit" : "?page=users&action=create";
+
+        $usernameValue = $formData['username'] ?? ($user ? htmlspecialchars($user->username) : '');
+        $emailValue = $formData['email'] ?? ($user ? htmlspecialchars($user->email) : '');
+        $passwordValue = $formData['password'] ?? '';
     ?>
         <main>
             <h1><?= $title ?></h1>
@@ -54,7 +62,7 @@ abstract class UserView
 
             <section>
                 <?php if ($message): ?>
-                    <p>
+                    <p class="message error">
                         <?= htmlspecialchars($message) ?>
                     </p>
                 <?php endif; ?>
@@ -65,18 +73,22 @@ abstract class UserView
                     <?php endif; ?>
 
                     <label for="username">Nome de usuário:</label>
-                    <input type="text" id="username" name="username" required
-                        value="<?= $user ? htmlspecialchars($user->username) : '' ?>"
-                        placeholder="Digite o nome de usuário">
+                    <input type="text" id="username" name="username"
+                        value="<?= $usernameValue ?>"
+                        placeholder="Digite o nome de usuário"
+                        class="<?= $fieldsWithErrors && in_array('username', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required
-                        value="<?= $user ? htmlspecialchars($user->email) : '' ?>"
-                        placeholder="Digite o email">
+                    <input type="email" id="email" name="email"
+                        value="<?= $emailValue ?>"
+                        placeholder="Digite o email"
+                        class="<?= $fieldsWithErrors && in_array('email', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <label for="password">Senha:</label>
-                    <input type="password" id="password" name="password" required
-                        placeholder="<?= $isEdit ? 'Nova senha' : 'Digite a senha' ?>">
+                    <input type="password" id="password" name="password"
+                        value="<?= $passwordValue ?>"
+                        placeholder="<?= $isEdit ? 'Nova senha' : 'Digite a senha' ?>"
+                        class="<?= $fieldsWithErrors && in_array('password', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <button type="submit"><?= $isEdit ? 'Atualizar' : 'Criar' ?> Usuário</button>
                 </form>

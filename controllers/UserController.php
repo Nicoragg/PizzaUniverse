@@ -5,29 +5,53 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Dal\UserDao;
 use App\Views\UserView;
+use App\Util\Validator;
 use function App\Util\validateInput;
 
 abstract class UserController
 {
     public static ?string $msg = null;
+    public static ?array $fieldsWithErrors = null;
+    public static ?array $formData = null;
 
     public static function create(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST["username"])) {
-            $username = validateInput($_POST["username"]);
-            $email = validateInput($_POST["email"]);
-            $password = validateInput($_POST["password"]);
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            $username = validateInput($_POST["username"] ?? '');
+            $email = validateInput($_POST["email"] ?? '');
+            $password = validateInput($_POST["password"] ?? '');
 
-            try {
-                $user = new User(0, $username, $email, md5($password));
+            $validator = new Validator();
+            $validator
+                ->validateRequired('username', $username, 'Nome de usuário')
+                ->validateMinLength('username', $username, 3, 'Nome de usuário')
+                ->validateMaxLength('username', $username, 50, 'Nome de usuário')
+                ->validateRequired('email', $email, 'Email')
+                ->validateEmail('email', $email, 'Email')
+                ->validateUniqueEmail('email', $email)
+                ->validateRequired('password', $password, 'Senha')
+                ->validateMinLength('password', $password, 6, 'Senha');
 
-                $id = UserDao::create($user);
-                header("Location: ?page=users");
-            } catch (\Exception $e) {
-                self::$msg = $e->getMessage();
+            if ($validator->hasErrors()) {
+                self::$msg = $validator->getErrorsAsString();
+                self::$fieldsWithErrors = $validator->getFieldsWithErrors();
+                self::$formData = [
+                    'username' => $validator->hasFieldError('username') ? '' : $username,
+                    'email' => $validator->hasFieldError('email') ? '' : $email,
+                    'password' => ''
+                ];
+            } else {
+                try {
+                    $user = new User(0, $username, $email, md5($password));
+                    $id = UserDao::create($user);
+                    header("Location: ?page=users");
+                    exit;
+                } catch (\Exception $e) {
+                    self::$msg = $e->getMessage();
+                }
             }
         }
-        UserView::renderForm(self::$msg, null);
+        UserView::renderForm(self::$msg, null, self::$fieldsWithErrors, self::$formData);
     }
 
     public static function update(): void
@@ -37,23 +61,51 @@ abstract class UserController
             $user = UserDao::findById((int) $_GET["edit"]);
         }
 
-        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["id"])) {
-            $id = (int) validateInput($_POST["id"]);
-            $username = validateInput($_POST["username"]);
-            $email = validateInput($_POST["email"]);
-            $password = validateInput($_POST["password"]);
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $id = (int) validateInput($_POST["id"] ?? '0');
+            $username = validateInput($_POST["username"] ?? '');
+            $email = validateInput($_POST["email"] ?? '');
+            $password = validateInput($_POST["password"] ?? '');
 
-            try {
-                $user = new User($id, $username, $email, md5($password));
-                UserDao::update($user);
-                header("Location: ?page=users");
-                exit;
-            } catch (\Exception $e) {
-                self::$msg = $e->getMessage();
+            $validator = new Validator();
+            $validator
+                ->validateRequired('username', $username, 'Nome de usuário')
+                ->validateMinLength('username', $username, 3, 'Nome de usuário')
+                ->validateMaxLength('username', $username, 50, 'Nome de usuário')
+                ->validateRequired('email', $email, 'Email')
+                ->validateEmail('email', $email, 'Email')
+                ->validateUniqueEmail('email', $email, $id)
+                ->validateRequired('password', $password, 'Senha')
+                ->validateMinLength('password', $password, 6, 'Senha');
+
+            if ($validator->hasErrors()) {
+                self::$msg = $validator->getErrorsAsString();
+                self::$fieldsWithErrors = $validator->getFieldsWithErrors();
+                self::$formData = [
+                    'username' => $validator->hasFieldError('username') ? '' : $username,
+                    'email' => $validator->hasFieldError('email') ? '' : $email,
+                    'password' => ''
+                ];
+                $user = new User($id, self::$formData['username'], self::$formData['email'], '');
+            } else {
+                try {
+                    $user = new User($id, $username, $email, md5($password));
+                    UserDao::update($user);
+                    header("Location: ?page=users");
+                    exit;
+                } catch (\Exception $e) {
+                    self::$msg = $e->getMessage();
+                    self::$formData = [
+                        'username' => $username,
+                        'email' => $email,
+                        'password' => ''
+                    ];
+                    $user = new User($id, $username, $email, '');
+                }
             }
         }
 
-        UserView::renderForm(self::$msg, $user);
+        UserView::renderForm(self::$msg, $user, self::$fieldsWithErrors, self::$formData);
     }
 
     public static function findById(int $id): ?User
@@ -103,28 +155,45 @@ abstract class UserController
 
     public static function login(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST["email"], $_POST["password"])) {
-            $email = validateInput($_POST["email"]);
-            $password = validateInput($_POST["password"]);
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            $email = validateInput($_POST["email"] ?? '');
+            $password = validateInput($_POST["password"] ?? '');
 
-            try {
-                $user = self::authenticate($email, $password);
+            $validator = new Validator();
+            $validator
+                ->validateRequired('email', $email, 'Email')
+                ->validateEmail('email', $email, 'Email')
+                ->validateRequired('password', $password, 'Senha');
 
-                if ($user) {
-                    $_SESSION['user_id'] = $user->id;
-                    $_SESSION['username'] = $user->username;
-                    $_SESSION['email'] = $user->email;
-                    header("Location: ?page=dashboard");
-                    exit;
-                } else {
-                    self::$msg = "Email ou senha incorretos";
+            if ($validator->hasErrors()) {
+                self::$msg = $validator->getErrorsAsString();
+                self::$fieldsWithErrors = $validator->getFieldsWithErrors();
+                self::$formData = [
+                    'email' => $validator->hasFieldError('email') ? '' : $email,
+                    'password' => ''
+                ];
+            } else {
+                try {
+                    $user = self::authenticate($email, $password);
+
+                    if ($user) {
+                        $_SESSION['user_id'] = $user->id;
+                        $_SESSION['username'] = $user->username;
+                        $_SESSION['email'] = $user->email;
+                        header("Location: ?page=dashboard");
+                        exit;
+                    } else {
+                        self::$msg = "Email ou senha incorretos";
+                        self::$formData = ['email' => $email, 'password' => ''];
+                    }
+                } catch (\Exception $e) {
+                    self::$msg = $e->getMessage();
+                    self::$formData = ['email' => $email, 'password' => ''];
                 }
-            } catch (\Exception $e) {
-                self::$msg = $e->getMessage();
             }
         }
 
-        UserView::renderLogin(self::$msg);
+        UserView::renderLogin(self::$msg, self::$fieldsWithErrors, self::$formData);
     }
 
     public static function logout(): void
