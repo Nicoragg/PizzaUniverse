@@ -44,4 +44,10 @@ spl_autoload_register(function ($namespace) {
     }
 });
 
-require_once __DIR__ . '/helpers/functions.php';
+$helpersPath = __DIR__ . '/helpers';
+if (is_dir($helpersPath)) {
+    $helperFiles = glob($helpersPath . '/*.php');
+    foreach ($helperFiles as $file) {
+        require_once $file;
+    }
+}
