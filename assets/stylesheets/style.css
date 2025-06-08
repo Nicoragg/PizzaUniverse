@@ -160,9 +160,17 @@ body {
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3); }
-  50% { box-shadow: 0 6px 20px rgba(255, 180, 0, 0.5); }
-  100% { box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3); }
+  0% {
+    box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 6px 20px rgba(255, 180, 0, 0.5);
+  }
+
+  100% {
+    box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3);
+  }
 }
 
 /* MENU SECTIONS */
@@ -265,28 +273,25 @@ body {
   transform: translateX(4px);
 }
 
-/* FORM ERROR STYLES */
-.field-error {
-  border: 2px solid #dc3545;
-  background-color: #fff5f5;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+/* UTILITY CLASSES */
+ul {
+  list-style: disc inside;
+  margin-bottom: 10px;
 }
 
-.field-error:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-  outline: 0;
+ol {
+  list-style: decimal inside;
+  margin-bottom: 10px;
 }
 
-.message.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-weight: 500;
-  border-left: 4px solid #dc3545;
+em {
+  color: #473d2b;
+  font-style: italic;
+}
+
+strong {
+  color: #000000;
+  font-weight: 600;
 }
 
 /* FOOTER STYLES */
@@ -311,8 +316,15 @@ footer::before {
 }
 
 @keyframes shimmer {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 footer div {
@@ -354,12 +366,19 @@ footer p::after {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(-50%);
   }
+
   40% {
     transform: translateY(-60%);
   }
+
   60% {
     transform: translateY(-55%);
   }
@@ -370,38 +389,38 @@ footer p::after {
   .container {
     padding: 0 20px;
   }
-  
+
   .header-container {
     flex-direction: column;
     gap: 15px;
     padding: 20px;
   }
-  
+
   .nav-list {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .menu-section {
     padding: 20px;
     margin-bottom: 30px;
   }
-  
+
   footer {
     padding: 30px 0 15px 0;
     margin-top: 40px;
   }
-  
+
   footer div {
     padding: 0 20px;
   }
-  
+
   footer p {
     font-size: 0.9rem;
     padding: 15px 0;
   }
-  
+
   footer p::before,
   footer p::after {
     display: none;
@@ -412,16 +431,16 @@ footer p::after {
   .container {
     padding: 0 15px;
   }
-  
+
   .logo-text h1 {
     font-size: 1.8rem;
   }
-  
+
   .nav-link {
     font-size: 0.9rem;
     padding: 10px 15px;
   }
-  
+
   footer p {
     font-size: 0.8rem;
     line-height: 1.4;

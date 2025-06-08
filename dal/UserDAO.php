@@ -105,10 +105,6 @@ abstract class UserDao
                 $user->password,
                 $user->id
             ]);
-
-            if ($stmt->rowCount() === 0) {
-                throw new Exception("Nenhum registro foi alterado ou usuário não encontrado");
-            }
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao alterar usuário: " . $e->getMessage());
         }

@@ -87,7 +87,7 @@ abstract class UserView
                     <label for="password">Senha:</label>
                     <input type="password" id="password" name="password"
                         value="<?= $passwordValue ?>"
-                        placeholder="<?= $isEdit ? 'Nova senha' : 'Digite a senha' ?>"
+                        placeholder="<?= $isEdit ? 'Deixe em branco para manter a senha atual' : 'Digite a senha' ?>"
                         class="<?= $fieldsWithErrors && in_array('password', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <button type="submit"><?= $isEdit ? 'Atualizar' : 'Criar' ?> Usuário</button>

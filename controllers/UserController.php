@@ -74,33 +74,50 @@ abstract class UserController
                 ->validateMaxLength('username', $username, 50, 'Nome de usuário')
                 ->validateRequired('email', $email, 'Email')
                 ->validateEmail('email', $email, 'Email')
-                ->validateUniqueEmail('email', $email, $id)
-                ->validateRequired('password', $password, 'Senha')
-                ->validateMinLength('password', $password, 6, 'Senha');
+                ->validateUniqueEmail('email', $email, $id);
+
+            // Para edição, senha é opcional - só valida se foi preenchida
+            if (!empty($password)) {
+                $validator->validateMinLength('password', $password, 6, 'Senha');
+            }
 
             if ($validator->hasErrors()) {
                 self::$msg = $validator->getErrorsAsString();
                 self::$fieldsWithErrors = $validator->getFieldsWithErrors();
+
+                // Recriar o objeto user com os dados do POST, mantendo valores válidos
+                $user = new User(
+                    $id,
+                    $validator->hasFieldError('username') ? '' : $username,
+                    $validator->hasFieldError('email') ? '' : $email,
+                    '' // Senha sempre vazia no objeto para não aparecer no campo
+                );
+
+                // Para a view, manter dados válidos
                 self::$formData = [
                     'username' => $validator->hasFieldError('username') ? '' : $username,
                     'email' => $validator->hasFieldError('email') ? '' : $email,
-                    'password' => ''
+                    'password' => '' // Senha sempre limpa por segurança no formulário
                 ];
-                $user = new User($id, self::$formData['username'], self::$formData['email'], '');
             } else {
                 try {
-                    $user = new User($id, $username, $email, md5($password));
+                    // Se senha não foi preenchida na edição, manter a atual
+                    $currentUser = UserDao::findById($id);
+                    $finalPassword = !empty($password) ? md5($password) : $currentUser->password;
+
+                    $user = new User($id, $username, $email, $finalPassword);
                     UserDao::update($user);
                     header("Location: ?page=users");
                     exit;
                 } catch (\Exception $e) {
                     self::$msg = $e->getMessage();
+                    // Recriar o objeto user com os dados válidos
+                    $user = new User($id, $username, $email, '');
                     self::$formData = [
                         'username' => $username,
                         'email' => $email,
                         'password' => ''
                     ];
-                    $user = new User($id, $username, $email, '');
                 }
             }
         }
