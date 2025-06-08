@@ -108,6 +108,6 @@ INSERT INTO pizzas (name, description, price, category) VALUES
 ('Brigadeiro', 'Pizza doce com cobertura de brigadeiro', 36.90, 'Doces');
 
 INSERT INTO customers (name, cpf, phone, status, zipcode, neighborhood, street, city, state) VALUES 
-('Maria Silva Santos', '12345678901', '41998765432', 'active', '80020-100', 'Centro', 'Praça Tiradentes', 'Curitiba', 'Paraná'),
-('João Carlos Oliveira', '98765432102', '41987654321', 'active', '80020-110', 'Centro', 'Rua do Rosário', 'Curitiba', 'Paraná'),
-('Ana Paula Ferreira', '45678912303', '41976543210', 'active', '80020-010', 'Centro', 'Praça General Osório', 'Curitiba', 'Paraná');
+('Maria Silva Santos', '30536516022', '41998765432', 'active', '80020-100', 'Centro', 'Praça Tiradentes', 'Curitiba', 'Paraná'),
+('João Carlos Oliveira', '40628454074', '41987654321', 'active', '80020-110', 'Centro', 'Rua do Rosário', 'Curitiba', 'Paraná'),
+('Ana Paula Ferreira', '75395304053', '41976543210', 'active', '80020-010', 'Centro', 'Praça General Osório', 'Curitiba', 'Paraná');
