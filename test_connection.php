@@ -1,8 +1,6 @@
 <?php
-// Simple connection test without autoload
 echo "=== Testing Database Connection ===\n\n";
 
-// Test different host configurations
 $hosts = ['localhost', '127.0.0.1', '::1'];
 $dbName = 'universe_db';
 $user = 'root';
@@ -17,7 +15,6 @@ foreach ($hosts as $host) {
         ]);
         echo "✅ Host '{$host}' connection works!\n";
 
-        // Test if database exists
         try {
             $conn->exec("USE {$dbName}");
             echo "✅ Database '{$dbName}' exists on host '{$host}'\n";
@@ -30,7 +27,6 @@ foreach ($hosts as $host) {
     echo "\n";
 }
 
-// Test 2: Check MySQL socket configuration
 echo "2. Checking MySQL configuration...\n";
 try {
     $conn = new PDO("mysql:host=localhost", $user, $password, [
@@ -53,7 +49,6 @@ echo "- Host: localhost (most common)\n";
 echo "- Alternative: 127.0.0.1 (if localhost fails)\n";
 echo "- Port: 3306 (default MySQL port)\n";
 
-// Test with new credentials
 echo "\n=== Testing New Database Connection ===\n\n";
 
 $host = 'localhost';
@@ -72,12 +67,10 @@ try {
     echo "   Database: {$dbName}\n";
     echo "   User: {$user}\n\n";
 
-    // Test database operations
     $stmt = $conn->query("SELECT DATABASE() as current_db");
     $result = $stmt->fetch();
     echo "✅ Connected to database: " . $result['current_db'] . "\n";
 
-    // Check tables
     $stmt = $conn->query("SHOW TABLES");
     $tables = $stmt->fetchAll();
     echo "✅ Available tables:\n";

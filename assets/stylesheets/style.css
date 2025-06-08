@@ -1,7 +1,5 @@
-/* IMPORT BOOTSTRAP ICONS */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
 
-/* RESET & BASE */
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +24,6 @@ body {
   padding: 0 30px;
 }
 
-/* HEADER STYLES */
 .main-header {
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -176,7 +173,6 @@ body {
   }
 }
 
-/* MENU SECTIONS */
 .menu-section {
   background: #ffffff;
   border-radius: 12px;
@@ -276,7 +272,6 @@ body {
   transform: translateX(4px);
 }
 
-/* DROPDOWN STYLES */
 .dropdown {
   position: relative;
 }
@@ -337,7 +332,6 @@ body {
   transform: translateX(3px);
 }
 
-/* UTILITY CLASSES */
 ul {
   list-style: disc inside;
   margin-bottom: 10px;
@@ -358,7 +352,6 @@ strong {
   font-weight: 600;
 }
 
-/* FOOTER STYLES */
 footer {
   background: linear-gradient(135deg, #2c1b1b 0%, #1a1010 100%);
   color: #ffffff;
@@ -448,7 +441,6 @@ footer p::after {
   }
 }
 
-/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .container {
     padding: 0 20px;

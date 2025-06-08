@@ -70,7 +70,6 @@ abstract class OrderDao
                     $data["created_at"],
                     $data["updated_at"]
                 );
-                // Adicionar o nome do cliente como propriedade dinâmica
                 $order->customer_name = $data["customer_name"];
                 $orders[] = $order;
             }
@@ -186,7 +185,6 @@ abstract class OrderDao
                     $data["notes"],
                     $data["created_at"]
                 );
-                // Adicionar o nome da pizza como propriedade dinâmica
                 $item->pizza_name = $data["pizza_name"];
                 $items[] = $item;
             }
@@ -217,7 +215,6 @@ abstract class OrderDao
     public static function updateStatus(int $orderId, string $status): void
     {
         try {
-            // Verificar se o pedido existe e validar transição
             $order = self::findById($orderId);
             if (!$order) {
                 throw new \Exception("Pedido não encontrado.");
@@ -233,19 +230,14 @@ abstract class OrderDao
             $stmt = $pdo->prepare("UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?");
             $stmt->execute([$status, $orderId]);
 
-            // Log da mudança de status (opcional)
             self::logStatusChange($orderId, $order->status, $status);
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao atualizar status do pedido: " . $e->getMessage());
         }
     }
 
-    /**
-     * Log status changes for audit purposes
-     */
     private static function logStatusChange(int $orderId, string $oldStatus, string $newStatus): void
     {
-        // Este método pode ser expandido para salvar logs em tabela de auditoria
         error_log("Order {$orderId}: Status changed from {$oldStatus} to {$newStatus}");
     }
 

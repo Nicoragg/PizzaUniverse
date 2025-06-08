@@ -1,8 +1,3 @@
-/**
- * Sistema de Gerenciamento de Pedidos
- * Módulo responsável por gerenciar a criação de pedidos de pizza
- */
-
 class OrderManager {
   constructor() {
     this.pizzaPrices = {};
@@ -13,18 +8,12 @@ class OrderManager {
     this.init();
   }
 
-  /**
-   * Inicialização do sistema
-   */
   init() {
     this.cacheElements();
     this.bindEvents();
     this.initializeComponents();
   }
 
-  /**
-   * Cache dos elementos DOM
-   */
   cacheElements() {
     this.elements = {
       customerSelect: document.getElementById('customer_id'),
@@ -36,56 +25,38 @@ class OrderManager {
     };
   }
 
-  /**
-   * Vinculação de eventos
-   */
   bindEvents() {
     document.addEventListener('DOMContentLoaded', () => this.onDOMContentLoaded());
     document.addEventListener('keydown', (e) => this.handleKeyboardEvents(e));
 
-    // Event listeners para inputs de quantidade
     this.elements.quantityInputs.forEach(input => {
       input.addEventListener('input', () => this.updateOrderSummary());
     });
   }
 
-  /**
-   * Evento de carregamento do DOM
-   */
   onDOMContentLoaded() {
     this.initializeCustomerSelect();
     this.initializePizzaCards();
 
-    // Trigger customer selection if there's a pre-selected value
     if (this.elements.customerSelect?.value) {
       this.handleCustomerSelection(this.elements.customerSelect.value);
     }
   }
 
-  /**
-   * Inicializa os dados das pizzas
-   */
   initializePizzaData(prices, names) {
     this.pizzaPrices = prices;
     this.pizzaNames = names;
   }
 
-  /**
-   * Inicializa os componentes
-   */
   initializeComponents() {
     this.customerHandler = new CustomerHandler(this);
     this.pizzaHandler = new PizzaHandler(this);
     this.orderSummaryHandler = new OrderSummaryHandler(this);
   }
 
-  /**
-   * Inicializa o seletor de cliente com TomSelect
-   */
   initializeCustomerSelect() {
     if (!this.elements.customerSelect) return;
 
-    // Verificar se TomSelect está disponível
     if (typeof TomSelect === 'undefined') {
       console.warn('TomSelect não está disponível. Carregando dinamicamente...');
       this.loadTomSelect();
@@ -95,9 +66,6 @@ class OrderManager {
     this.createTomSelectInstance();
   }
 
-  /**
-   * Carrega TomSelect dinamicamente
-   */
   loadTomSelect() {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js';
@@ -110,9 +78,6 @@ class OrderManager {
     document.head.appendChild(script);
   }
 
-  /**
-   * Cria a instância do TomSelect
-   */
   createTomSelectInstance() {
     this.tomSelectInstance = new TomSelect('#customer_id', {
       placeholder: 'Selecione ou busque um cliente...',
@@ -158,22 +123,17 @@ class OrderManager {
       onBlur: () => this.onTomSelectBlur()
     });
 
-    // Adicionar classes personalizadas
     const wrapper = this.tomSelectInstance.wrapper;
     wrapper.classList.add('orders-tom-select');
 
-    // Corrigir cursor para seleção única
     const control = this.tomSelectInstance.control;
     control.style.cursor = 'pointer';
 
-    // Garantir que o input não seja editável após seleção
     this.tomSelectInstance.control_input.style.cursor = 'pointer';
     this.tomSelectInstance.control_input.readOnly = true;
 
-    // Event listener para mudanças
     this.tomSelectInstance.on('change', () => {
       this.addSelectionAnimation();
-      // Garantir que o cursor seja removido após seleção
       setTimeout(() => {
         this.tomSelectInstance.blur();
         this.tomSelectInstance.control_input.blur();
@@ -181,25 +141,16 @@ class OrderManager {
     });
   }
 
-  /**
-   * Manipula o foco do TomSelect
-   */
   onTomSelectFocus() {
     const wrapper = this.tomSelectInstance.wrapper;
     wrapper.classList.add('focus');
   }
 
-  /**
-   * Manipula a perda de foco do TomSelect
-   */
   onTomSelectBlur() {
     const wrapper = this.tomSelectInstance.wrapper;
     wrapper.classList.remove('focus');
   }
 
-  /**
-   * Adiciona animação de seleção
-   */
   addSelectionAnimation() {
     const control = this.tomSelectInstance.control;
     control.style.transform = 'scale(0.98)';
@@ -208,9 +159,6 @@ class OrderManager {
     }, 150);
   }
 
-  /**
-   * Formata telefone para exibição
-   */
   formatPhone(phone) {
     if (!phone) return '';
     const cleaned = phone.replace(/\D/g, '');
@@ -222,44 +170,27 @@ class OrderManager {
     return phone;
   }
 
-  /**
-   * Manipula a seleção de cliente
-   */
   handleCustomerSelection(customerId) {
     this.customerHandler.handleSelection(customerId);
   }
 
-  /**
-   * Inicializa os cards de pizza
-   */
   initializePizzaCards() {
     this.pizzaHandler.initializeCards();
   }
 
-  /**
-   * Aumenta a quantidade de uma pizza
-   */
+
   increaseQuantity(pizzaId) {
     this.pizzaHandler.increaseQuantity(pizzaId);
   }
 
-  /**
-   * Diminui a quantidade de uma pizza
-   */
   decreaseQuantity(pizzaId) {
     this.pizzaHandler.decreaseQuantity(pizzaId);
   }
 
-  /**
-   * Atualiza o resumo do pedido
-   */
   updateOrderSummary() {
     this.orderSummaryHandler.update();
   }
 
-  /**
-   * Manipula eventos de teclado
-   */
   handleKeyboardEvents(e) {
     const activeElement = document.activeElement;
 
@@ -276,9 +207,6 @@ class OrderManager {
     }
   }
 
-  /**
-   * Scroll suave para seção
-   */
   scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -289,19 +217,12 @@ class OrderManager {
     }
   }
 }
-
-/**
- * Classe responsável por gerenciar clientes
- */
 class CustomerHandler {
   constructor(orderManager) {
     this.orderManager = orderManager;
     this.formatter = new DataFormatter();
   }
 
-  /**
-   * Manipula a seleção de cliente
-   */
   handleSelection(customerId) {
     const customerInfo = this.orderManager.elements.customerInfo;
 
@@ -319,9 +240,6 @@ class CustomerHandler {
     }
   }
 
-  /**
-   * Obtém os dados do cliente
-   */
   getCustomerData(customerId) {
     const option = document.querySelector(`#customer_id option[value="${customerId}"]`);
     if (!option) return null;
@@ -338,16 +256,12 @@ class CustomerHandler {
     };
   }
 
-  /**
-   * Exibe as informações do cliente com animação
-   */
   showCustomerInfo() {
     const customerInfo = this.orderManager.elements.customerInfo;
     customerInfo.style.display = 'block';
     customerInfo.style.opacity = '0';
     customerInfo.style.transform = 'translateY(20px)';
 
-    // Trigger animation
     requestAnimationFrame(() => {
       customerInfo.style.transition = 'all 0.4s ease';
       customerInfo.style.opacity = '1';
@@ -355,11 +269,7 @@ class CustomerHandler {
     });
   }
 
-  /**
-   * Exibe as informações do cliente
-   */
   displayCustomerInfo(customerData) {
-    // Criar endereço em uma linha separado por vírgulas
     const addressParts = [
       customerData.street,
       customerData.neighborhood,
@@ -375,17 +285,14 @@ class CustomerHandler {
       'customer-cpf': this.formatter.formatCPF(customerData.cpf)
     };
 
-    // Atualizar campos individuais
     Object.entries(fields).forEach(([id, value]) => {
       const element = document.getElementById(id);
       if (element) {
         element.textContent = value;
-        // Adicionar animação de typing
         this.addTypingAnimation(element, value);
       }
     });
 
-    // Atualizar endereço completo
     const addressContainer = document.querySelector('.orders-address-details');
     if (addressContainer) {
       addressContainer.innerHTML = fullAddress;
@@ -393,9 +300,6 @@ class CustomerHandler {
     }
   }
 
-  /**
-   * Adiciona animação de digitação
-   */
   addTypingAnimation(element, text) {
     element.style.overflow = 'hidden';
     element.style.whiteSpace = 'nowrap';
@@ -410,9 +314,6 @@ class CustomerHandler {
     }, 1000);
   }
 
-  /**
-   * Oculta as informações do cliente
-   */
   hideCustomerInfo() {
     const customerInfo = this.orderManager.elements.customerInfo;
     customerInfo.style.transition = 'all 0.3s ease';
@@ -425,17 +326,11 @@ class CustomerHandler {
   }
 }
 
-/**
- * Classe responsável por gerenciar pizzas
- */
 class PizzaHandler {
   constructor(orderManager) {
     this.orderManager = orderManager;
   }
 
-  /**
-   * Inicializa os cards de pizza
-   */
   initializeCards() {
     this.orderManager.elements.pizzaCards.forEach(card => {
       const pizzaId = card.getAttribute('data-pizza-id');
@@ -445,14 +340,10 @@ class PizzaHandler {
         this.updateCardAppearance(card, parseInt(quantityInput.value));
       }
 
-      // Adicionar event listeners para os botões
       this.attachCardEventListeners(card, pizzaId);
     });
   }
 
-  /**
-   * Anexa event listeners aos cards
-   */
   attachCardEventListeners(card, pizzaId) {
     const increaseBtn = card.querySelector('.orders-btn-increase');
     const decreaseBtn = card.querySelector('.orders-btn-decrease');
@@ -486,9 +377,6 @@ class PizzaHandler {
     }
   }
 
-  /**
-   * Adiciona animação de pressão do botão
-   */
   addButtonPressAnimation(button) {
     button.style.transform = 'scale(0.9)';
     setTimeout(() => {
@@ -496,9 +384,6 @@ class PizzaHandler {
     }, 100);
   }
 
-  /**
-   * Aumenta a quantidade de uma pizza
-   */
   increaseQuantity(pizzaId) {
     const input = document.getElementById(`qty_${pizzaId}`);
     if (!input) return;
@@ -509,9 +394,6 @@ class PizzaHandler {
     this.updateQuantity(pizzaId, newValue);
   }
 
-  /**
-   * Diminui a quantidade de uma pizza
-   */
   decreaseQuantity(pizzaId) {
     const input = document.getElementById(`qty_${pizzaId}`);
     if (!input) return;
@@ -522,9 +404,6 @@ class PizzaHandler {
     this.updateQuantity(pizzaId, newValue);
   }
 
-  /**
-   * Atualiza a quantidade de uma pizza
-   */
   updateQuantity(pizzaId, newValue) {
     const input = document.getElementById(`qty_${pizzaId}`);
     if (!input) return;
@@ -535,20 +414,15 @@ class PizzaHandler {
     this.addChangeAnimation(input);
     this.updatePizzaCardState(pizzaId, newValue);
 
-    // Adicionar feedback visual
     this.addQuantityFeedback(input, newValue, oldValue);
 
     this.orderManager.updateOrderSummary();
   }
 
-  /**
-   * Adiciona feedback visual para mudança de quantidade
-   */
   addQuantityFeedback(input, newValue, oldValue) {
     const card = input.closest('.orders-pizza-card');
     if (!card) return;
 
-    // Criar elemento de feedback
     const feedback = document.createElement('div');
     feedback.className = 'quantity-feedback';
     feedback.style.cssText = `
@@ -574,13 +448,11 @@ class PizzaHandler {
     input.parentElement.style.position = 'relative';
     input.parentElement.appendChild(feedback);
 
-    // Animar feedback
     requestAnimationFrame(() => {
       feedback.style.opacity = '1';
       feedback.style.transform = 'translateX(-50%) translateY(-10px)';
     });
 
-    // Remover feedback
     setTimeout(() => {
       feedback.style.opacity = '0';
       feedback.style.transform = 'translateX(-50%) translateY(-20px)';
@@ -588,17 +460,11 @@ class PizzaHandler {
     }, 1000);
   }
 
-  /**
-   * Adiciona animação de mudança
-   */
   addChangeAnimation(input) {
     input.classList.add('changed');
     setTimeout(() => input.classList.remove('changed'), 300);
   }
 
-  /**
-   * Atualiza o estado visual do card da pizza
-   */
   updatePizzaCardState(pizzaId, quantity) {
     const card = document.querySelector(`[data-pizza-id="${pizzaId}"]`);
     if (!card) return;
@@ -606,15 +472,11 @@ class PizzaHandler {
     card.setAttribute('data-quantity', quantity);
     card.classList.toggle('selected', quantity > 0);
 
-    // Adicionar animação de seleção
     if (quantity > 0) {
       this.addSelectionAnimation(card);
     }
   }
 
-  /**
-   * Adiciona animação de seleção ao card
-   */
   addSelectionAnimation(card) {
     card.style.transform = 'scale(1.02)';
     setTimeout(() => {
@@ -622,26 +484,17 @@ class PizzaHandler {
     }, 200);
   }
 
-  /**
-   * Atualiza a aparência do card
-   */
   updateCardAppearance(card, quantity) {
     card.setAttribute('data-quantity', quantity);
     card.classList.toggle('selected', quantity > 0);
   }
 }
 
-/**
- * Classe responsável por gerenciar o resumo do pedido
- */
 class OrderSummaryHandler {
   constructor(orderManager) {
     this.orderManager = orderManager;
   }
 
-  /**
-   * Atualiza o resumo do pedido
-   */
   update() {
     const items = this.getOrderItems();
     const total = this.calculateTotal(items);
@@ -651,9 +504,6 @@ class OrderSummaryHandler {
     this.addSmoothAnimation();
   }
 
-  /**
-   * Obtém os itens do pedido
-   */
   getOrderItems() {
     const items = [];
 
@@ -677,16 +527,10 @@ class OrderSummaryHandler {
     return items;
   }
 
-  /**
-   * Calcula o total do pedido
-   */
   calculateTotal(items) {
     return items.reduce((total, item) => total + item.subtotal, 0);
   }
 
-  /**
-   * Renderiza o resumo do pedido
-   */
   renderSummary(items, total) {
     const summaryDiv = this.orderManager.elements.orderSummary;
 
@@ -697,9 +541,6 @@ class OrderSummaryHandler {
     }
   }
 
-  /**
-   * HTML para resumo vazio
-   */
   getEmptySummaryHTML() {
     return `
       <div class="orders-summary-item">
@@ -709,9 +550,6 @@ class OrderSummaryHandler {
     `;
   }
 
-  /**
-   * HTML para resumo com itens
-   */
   getItemsSummaryHTML(items, total) {
     const itemsHTML = items.map(item => `
       <div class="orders-summary-item">
@@ -738,9 +576,6 @@ class OrderSummaryHandler {
     `;
   }
 
-  /**
-   * Atualiza o botão de submit
-   */
   updateSubmitButton(hasItems) {
     const submitBtn = this.orderManager.elements.submitBtn;
     const submitContainer = document.getElementById('submit-container');
@@ -748,10 +583,8 @@ class OrderSummaryHandler {
 
     if (!submitBtn) return;
 
-    // Atualizar estado do botão
     submitBtn.disabled = !hasItems;
 
-    // Atualizar ícone e texto do botão
     if (hasItems) {
       submitBtn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Finalizar Pedido';
       submitBtn.classList.remove('loading');
@@ -760,7 +593,6 @@ class OrderSummaryHandler {
       submitBtn.classList.remove('loading');
     }
 
-    // Atualizar container e texto de estado
     if (submitContainer) {
       if (hasItems) {
         submitContainer.classList.remove('disabled');
@@ -781,21 +613,15 @@ class OrderSummaryHandler {
       }
     }
 
-    // Adicionar animação de estado
     this.addSubmitButtonAnimation(submitBtn, hasItems);
   }
 
-  /**
-   * Adiciona animação ao botão de submit
-   */
   addSubmitButtonAnimation(submitBtn, isEnabled) {
-    // Animação de escala
     submitBtn.style.transform = 'scale(0.95)';
 
     setTimeout(() => {
       submitBtn.style.transform = '';
 
-      // Se habilitado, adicionar efeito de pulso
       if (isEnabled) {
         submitBtn.classList.add('orders-pulse');
         setTimeout(() => {
@@ -804,15 +630,11 @@ class OrderSummaryHandler {
       }
     }, 150);
 
-    // Adicionar efeito de brilho quando habilitar
     if (isEnabled) {
       this.addSubmitGlowEffect(submitBtn);
     }
   }
 
-  /**
-   * Adiciona efeito de brilho ao botão
-   */
   addSubmitGlowEffect(submitBtn) {
     const glowElement = document.createElement('div');
     glowElement.style.cssText = `
@@ -831,27 +653,19 @@ class OrderSummaryHandler {
     submitBtn.style.overflow = 'hidden';
     submitBtn.appendChild(glowElement);
 
-    // Trigger glow animation
     setTimeout(() => {
       glowElement.style.left = '100%';
     }, 100);
 
-    // Remove glow element
     setTimeout(() => {
       glowElement.remove();
     }, 700);
   }
 
-  /**
-   * Formata preço para exibição
-   */
   formatPrice(price) {
     return price.toFixed(2).replace('.', ',');
   }
 
-  /**
-   * Adiciona animação suave na atualização
-   */
   addSmoothAnimation() {
     const summaryDiv = this.orderManager.elements.orderSummary;
     summaryDiv.style.opacity = '0.7';
@@ -864,13 +678,7 @@ class OrderSummaryHandler {
   }
 }
 
-/**
- * Classe utilitária para formatação de dados
- */
 class DataFormatter {
-  /**
-   * Formata telefone para exibição
-   */
   formatPhone(phone) {
     if (!phone) return '-';
     const cleaned = phone.replace(/\D/g, '');
@@ -882,9 +690,6 @@ class DataFormatter {
     return phone;
   }
 
-  /**
-   * Formata CPF para exibição
-   */
   formatCPF(cpf) {
     if (!cpf) return '-';
     const cleaned = cpf.replace(/\D/g, '');
@@ -894,9 +699,6 @@ class DataFormatter {
     return cpf;
   }
 
-  /**
-   * Formata CEP para exibição
-   */
   formatZipcode(zipcode) {
     if (!zipcode) return '-';
     const cleaned = zipcode.replace(/\D/g, '');
@@ -906,17 +708,11 @@ class DataFormatter {
     return zipcode;
   }
 
-  /**
-   * Formata preço para exibição
-   */
   formatPrice(price) {
     if (typeof price !== 'number') return 'R$ 0,00';
     return `R$ ${price.toFixed(2).replace('.', ',')}`;
   }
 
-  /**
-   * Formata data para exibição
-   */
   formatDate(date) {
     if (!date) return '-';
     if (typeof date === 'string') {
@@ -925,9 +721,6 @@ class DataFormatter {
     return date.toLocaleDateString('pt-BR');
   }
 
-  /**
-   * Formata data e hora para exibição
-   */
   formatDateTime(date) {
     if (!date) return '-';
     if (typeof date === 'string') {

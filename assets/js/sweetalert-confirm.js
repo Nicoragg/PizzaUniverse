@@ -1,10 +1,4 @@
-/**
- * Classe utilitária para modais de confirmação usando SweetAlert2
- */
 class SweetAlertConfirm {
-  /**
-   * Configuração padrão para modais de confirmação
-   */
   static defaultConfig = {
     icon: 'warning',
     showCancelButton: true,
@@ -15,14 +9,6 @@ class SweetAlertConfirm {
     reverseButtons: true
   };
 
-  /**
-   * Mostra um modal de confirmação de exclusão
-   * @param {Object} options - Opções para o modal
-   * @param {string} options.title - Título do modal
-   * @param {string} options.text - Texto do modal
-   * @param {Function} options.onConfirm - Callback executado quando confirmado
-   * @param {Object} options.customConfig - Configurações customizadas do SweetAlert2
-   */
   static showDeleteConfirmation({ title, text, onConfirm, customConfig = {} }) {
     const config = {
       ...this.defaultConfig,
@@ -38,10 +24,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Configuração específica para exclusão de pizzas
-   * @param {Function} onConfirm - Callback executado quando confirmado
-   */
   static confirmPizzaDeletion(onConfirm) {
     this.showDeleteConfirmation({
       title: 'Confirmar Exclusão',
@@ -50,10 +32,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Configuração específica para exclusão de usuários
-   * @param {Function} onConfirm - Callback executado quando confirmado
-   */
   static confirmUserDeletion(onConfirm) {
     this.showDeleteConfirmation({
       title: 'Confirmar Exclusão',
@@ -62,10 +40,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Configuração específica para exclusão de clientes
-   * @param {Function} onConfirm - Callback executado quando confirmado
-   */
   static confirmCustomerDeletion(onConfirm) {
     this.showDeleteConfirmation({
       title: 'Confirmar Exclusão',
@@ -74,10 +48,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Configuração específica para desativação de clientes
-   * @param {Function} onConfirm - Callback executado quando confirmado
-   */
   static confirmCustomerDeactivation(onConfirm) {
     Swal.fire({
       title: 'Desativar Cliente',
@@ -96,10 +66,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Configuração específica para ativação de clientes
-   * @param {Function} onConfirm - Callback executado quando confirmado
-   */
   static confirmCustomerActivation(onConfirm) {
     Swal.fire({
       title: 'Ativar Cliente',
@@ -118,11 +84,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Modal de sucesso
-   * @param {string} title - Título do modal
-   * @param {string} text - Texto do modal
-   */
   static showSuccess(title = 'Sucesso!', text = 'Operação realizada com sucesso.') {
     Swal.fire({
       title,
@@ -132,11 +93,6 @@ class SweetAlertConfirm {
     });
   }
 
-  /**
-   * Modal de erro
-   * @param {string} title - Título do modal
-   * @param {string} text - Texto do modal
-   */
   static showError(title = 'Erro!', text = 'Ocorreu um erro durante a operação.') {
     Swal.fire({
       title,

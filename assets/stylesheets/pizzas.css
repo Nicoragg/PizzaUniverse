@@ -1,13 +1,9 @@
-/* Estilos para Pizzas */
 .pizza-management {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* PIZZA-SPECIFIC STYLES */
-
-/* Pizza Grid Layout */
 .pizza-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -15,7 +11,6 @@
     margin-bottom: 2rem;
 }
 
-/* Pizza Card Styles */
 .pizza-card {
     background: #ffffff;
     border-radius: 12px;
@@ -31,7 +26,6 @@
     border-color: rgba(255, 180, 0, 0.3);
 }
 
-/* Card Header */
 .pizza-card-header {
     display: flex;
     justify-content: space-between;
@@ -62,7 +56,6 @@
     letter-spacing: 0.5px;
 }
 
-/* Card Body */
 .pizza-card-body {
     padding: 1.25rem;
 }
@@ -96,7 +89,6 @@
     margin-bottom: 1rem;
 }
 
-/* Card Actions */
 .pizza-card-actions {
     display: flex;
     gap: 0.75rem;
@@ -147,7 +139,6 @@
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
-/* Campo de nova categoria */
 #new-category-field {
     margin-top: 15px;
     padding: 15px;
@@ -161,7 +152,6 @@
     color: #495057;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .pizza-grid {
         grid-template-columns: 1fr;

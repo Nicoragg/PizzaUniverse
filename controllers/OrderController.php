@@ -35,7 +35,6 @@ abstract class OrderController
             $validator = new Validator();
             $validator->validateRequired('customer_id', $customerId, 'Cliente');
 
-            // Validar se pelo menos uma pizza foi selecionada
             $validPizzas = [];
             $totalAmount = 0.0;
 
@@ -71,11 +70,9 @@ abstract class OrderController
                 try {
                     $orderNumber = OrderDao::generateOrderNumber();
 
-                    // Buscar dados do cliente para usar como endereço de entrega
                     $customer = CustomerDao::findById($customerId);
                     $deliveryAddress = null;
                     if ($customer) {
-                        // Criar endereço em uma linha separado por vírgulas
                         $addressParts = array_filter([
                             $customer->street,
                             $customer->neighborhood,
@@ -100,7 +97,7 @@ abstract class OrderController
                     foreach ($validPizzas as $pizzaData) {
                         $orderItems[] = new OrderItem(
                             0,
-                            0, // será definido após criar o pedido
+                            0,
                             $pizzaData['pizza_id'],
                             $pizzaData['quantity'],
                             $pizzaData['unit_price'],
@@ -126,7 +123,6 @@ abstract class OrderController
         $customers = CustomerDao::findByStatus('active');
         $pizzas = PizzaDao::findAll();
 
-        // Organizar pizzas por categoria
         $pizzasByCategory = [];
         foreach ($pizzas as $pizza) {
             $pizzasByCategory[$pizza->category][] = $pizza;
@@ -220,7 +216,6 @@ abstract class OrderController
     {
         if (isset($_GET["confirm"])) {
             $deleteId = (int) $_GET["confirm"];
-            // Aqui deveria mostrar confirmação, mas vamos simplificar
             self::findAll();
             return;
         }

@@ -46,18 +46,15 @@ class OrderItem
 
     public function __get(string $attr): mixed
     {
-        // Check if property exists directly
         if (property_exists($this, $attr)) {
             return $this->$attr;
         }
 
-        // Check if it's a snake_case version of a camelCase property
         if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
             $camelCaseProperty = $this->propertyMap[$attr];
             return $this->$camelCaseProperty;
         }
 
-        // Check dynamic properties
         if (array_key_exists($attr, $this->dynamicProperties)) {
             return $this->dynamicProperties[$attr];
         }
@@ -71,20 +68,17 @@ class OrderItem
             throw new InvalidArgumentException("Cannot modify readonly property 'id'");
         }
 
-        // Check if property exists directly
         if (property_exists($this, $attr)) {
             $this->$attr = $value;
             return;
         }
 
-        // Check if it's a snake_case version of a camelCase property
         if (isset($this->propertyMap[$attr]) && property_exists($this, $this->propertyMap[$attr])) {
             $camelCaseProperty = $this->propertyMap[$attr];
             $this->$camelCaseProperty = $value;
             return;
         }
 
-        // Allow setting dynamic properties for display purposes
         $this->dynamicProperties[$attr] = $value;
     }
 }
