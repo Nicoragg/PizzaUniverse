@@ -93,8 +93,9 @@ abstract class CustomerDao
     public static function findByCpf(string $cpf): ?Customer
     {
         try {
+            $cpf = preg_replace('/[^0-9]/', '', $cpf);
             $pdo = Connection::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM customers WHERE cpf = ?");
+            $stmt = $pdo->prepare("SELECT * FROM customers WHERE REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = ?");
             $stmt->execute([$cpf]);
 
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -115,6 +116,34 @@ abstract class CustomerDao
             );
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao buscar cliente por CPF: " . $e->getMessage());
+        }
+    }
+
+    public static function findByPhone(string $phone): ?Customer
+    {
+        try {
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            $pdo = Connection::getConnection();
+            $stmt = $pdo->prepare("SELECT * FROM customers WHERE REPLACE(REPLACE(REPLACE(REPLACE(phone, '(', ''), ')', ''), '-', ''), ' ', '') = ?");
+            $stmt->execute([$phone]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$data) return null;
+
+            return new Customer(
+                (int) $data["id"],
+                $data["name"],
+                $data["cpf"],
+                $data["phone"],
+                $data["status"],
+                $data["zipcode"],
+                $data["neighborhood"],
+                $data["street"],
+                $data["city"],
+                $data["state"]
+            );
+        } catch (\PDOException $e) {
+            throw new PDOException("Erro ao buscar cliente por telefone: " . $e->getMessage());
         }
     }
 

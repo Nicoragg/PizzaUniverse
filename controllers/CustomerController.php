@@ -18,8 +18,8 @@ abstract class CustomerController
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $name = validateInput($_POST["name"] ?? '');
-            $cpf = validateInput($_POST["cpf"] ?? '');
-            $phone = validateInput($_POST["phone"] ?? '');
+            $cpf = preg_replace('/[^0-9]/', '', validateInput($_POST["cpf"] ?? ''));
+            $phone = preg_replace('/[^0-9]/', '', validateInput($_POST["phone"] ?? ''));
             $status = validateInput($_POST["status"] ?? 'active');
             $zipcode = validateInput($_POST["zipcode"] ?? '');
             $neighborhood = validateInput($_POST["neighborhood"] ?? '');
@@ -37,6 +37,7 @@ abstract class CustomerController
                 ->validateUniqueCpf('cpf', $cpf)
                 ->validateRequired('phone', $phone, 'Telefone')
                 ->validatePhone('phone', $phone)
+                ->validateUniquePhone('phone', $phone)
                 ->validateRequired('zipcode', $zipcode, 'CEP')
                 ->validateZipcode('zipcode', $zipcode)
                 ->validateRequired('neighborhood', $neighborhood, 'Bairro')
@@ -82,8 +83,8 @@ abstract class CustomerController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = (int) validateInput($_POST["id"] ?? '0');
             $name = validateInput($_POST["name"] ?? '');
-            $cpf = validateInput($_POST["cpf"] ?? '');
-            $phone = validateInput($_POST["phone"] ?? '');
+            $cpf = preg_replace('/[^0-9]/', '', validateInput($_POST["cpf"] ?? ''));
+            $phone = preg_replace('/[^0-9]/', '', validateInput($_POST["phone"] ?? ''));
             $status = validateInput($_POST["status"] ?? 'active');
             $zipcode = validateInput($_POST["zipcode"] ?? '');
             $neighborhood = validateInput($_POST["neighborhood"] ?? '');
@@ -101,6 +102,7 @@ abstract class CustomerController
                 ->validateUniqueCpf('cpf', $cpf, $id)
                 ->validateRequired('phone', $phone, 'Telefone')
                 ->validatePhone('phone', $phone)
+                ->validateUniquePhone('phone', $phone, $id)
                 ->validateRequired('zipcode', $zipcode, 'CEP')
                 ->validateZipcode('zipcode', $zipcode)
                 ->validateRequired('neighborhood', $neighborhood, 'Bairro')
@@ -217,5 +219,10 @@ abstract class CustomerController
     public static function getCities(): array
     {
         return CustomerDao::getCities();
+    }
+
+    public static function findByPhone(string $phone): ?Customer
+    {
+        return CustomerDao::findByPhone($phone);
     }
 }

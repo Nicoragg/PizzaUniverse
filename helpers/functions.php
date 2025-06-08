@@ -12,10 +12,23 @@ function maskCpf(string $cpf): string
   $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
   if (strlen($cpf) !== 11) {
-    return $cpf; // Retorna original se não for válido
+    return $cpf;
   }
 
   return substr($cpf, 0, 3) . '-XXX-XXX-' . substr($cpf, -2);
+}
+
+function maskPhone(string $phone): string
+{
+  $phone = preg_replace('/[^0-9]/', '', $phone);
+
+  if (strlen($phone) === 10) {
+    return '(' . substr($phone, 0, 2) . ') ' . substr($phone, 2, 4) . '-' . substr($phone, 6);
+  } elseif (strlen($phone) === 11) {
+    return '(' . substr($phone, 0, 2) . ') ' . substr($phone, 2, 5) . '-' . substr($phone, 7);
+  }
+
+  return $phone;
 }
 
 class Validator
@@ -190,5 +203,18 @@ class Validator
   public function getFieldsWithErrors(): array
   {
     return array_unique($this->fieldsWithErrors);
+  }
+
+  public function validateUniquePhone(string $field, string $phone, ?int $excludeId = null): self
+  {
+    if (!empty($phone)) {
+      $phone = preg_replace('/[^0-9]/', '', $phone);
+      $existingCustomer = \App\Dal\CustomerDao::findByPhone($phone);
+      if ($existingCustomer && ($excludeId === null || $existingCustomer->id !== $excludeId)) {
+        $this->errors[$field] = "Este telefone já está sendo usado por outro cliente.";
+        $this->fieldsWithErrors[] = $field;
+      }
+    }
+    return $this;
   }
 }

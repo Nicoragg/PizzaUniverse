@@ -208,7 +208,7 @@ abstract class CustomerView
                                     <td><?= $customer->id ?></td>
                                     <td class="customer-name"><?= htmlspecialchars($customer->name) ?></td>
                                     <td><?= Util\maskCpf($customer->cpf) ?></td>
-                                    <td><?= htmlspecialchars($customer->phone) ?></td>
+                                    <td><?= Util\maskPhone($customer->phone) ?></td>
                                     <td>
                                         <span class="status-badge status-<?= $customer->status ?>">
                                             <?php
