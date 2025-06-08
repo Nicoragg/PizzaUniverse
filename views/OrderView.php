@@ -167,16 +167,26 @@ abstract class OrderView
         </main>
 
         <script>
-            initializePizzaData(
-                <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
-                    $carry[$pizza->id] = $pizza->price;
-                    return $carry;
-                }, [])) ?>,
-                <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
-                    $carry[$pizza->id] = $pizza->name;
-                    return $carry;
-                }, [])) ?>
-            );
+            document.addEventListener('DOMContentLoaded', () => {
+                function waitForScript() {
+                    if (typeof initializePizzaData === 'function') {
+                        initializePizzaData(
+                            <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
+                                $carry[$pizza->id] = $pizza->price;
+                                return $carry;
+                            }, [])) ?>,
+                            <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
+                                $carry[$pizza->id] = $pizza->name;
+                                return $carry;
+                            }, [])) ?>
+                        );
+                    } else {
+                        setTimeout(waitForScript, 100);
+                    }
+                }
+
+                waitForScript();
+            });
         </script>
     <?php
     }
