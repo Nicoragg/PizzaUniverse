@@ -21,28 +21,123 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cpfInput = document.getElementById('cpf');
   if (cpfInput) {
+    function applyCpfMask(value) {
+      value = value.replace(/\D/g, '');
+      value = value.substring(0, 11);
+
+      if (value.length >= 3) {
+        value = value.replace(/^(\d{3})(\d{0,3})/, '$1.$2');
+      }
+      if (value.length >= 7) {
+        value = value.replace(/^(\d{3})\.(\d{3})(\d{0,3})/, '$1.$2.$3');
+      }
+      if (value.length >= 11) {
+        value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+      }
+
+      return value;
+    }
+
     cpfInput.addEventListener('input', (e) => {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.length <= 11) {
-        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-        e.target.value = value;
+      const cursorPosition = e.target.selectionStart;
+      const oldValue = e.target.value;
+      const newValue = applyCpfMask(e.target.value);
+
+      e.target.value = newValue;
+
+      if (newValue.length > oldValue.length) {
+        e.target.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+      } else {
+        e.target.setSelectionRange(cursorPosition, cursorPosition);
       }
     });
+
+    cpfInput.addEventListener('paste', (e) => {
+      setTimeout(() => {
+        e.target.value = applyCpfMask(e.target.value);
+      }, 0);
+    });
+
+    if (cpfInput.value) {
+      cpfInput.value = applyCpfMask(cpfInput.value);
+    }
   }
 
   const phoneInput = document.getElementById('phone');
   if (phoneInput) {
-    phoneInput.addEventListener('input', (e) => {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.length <= 11) {
-        if (value.length <= 10) {
-          value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    function applyPhoneMask(value) {
+      value = value.replace(/\D/g, '');
+      value = value.substring(0, 11);
+
+      if (value.length >= 2) {
+        if (value.length <= 6) {
+          value = value.replace(/^(\d{2})(\d{0,4})/, '($1) $2');
+        } else if (value.length <= 10) {
+          value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
         } else {
-          value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+          value = value.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
         }
-        e.target.value = value;
+      }
+
+      return value;
+    }
+
+    function getNewCursorPosition(oldValue, newValue, oldCursorPos) {
+      if (oldValue === newValue) return oldCursorPos;
+
+      let digitsBeforeCursor = 0;
+      for (let i = 0; i < oldCursorPos && i < oldValue.length; i++) {
+        if (/\d/.test(oldValue[i])) {
+          digitsBeforeCursor++;
+        }
+      }
+
+      let newCursorPos = 0;
+      let digitCount = 0;
+
+      for (let i = 0; i < newValue.length; i++) {
+        if (/\d/.test(newValue[i])) {
+          digitCount++;
+          if (digitCount > digitsBeforeCursor) {
+            newCursorPos = i;
+            break;
+          }
+        }
+        newCursorPos = i + 1;
+      }
+
+      return newCursorPos;
+    }
+
+    phoneInput.addEventListener('input', (e) => {
+      const oldCursorPos = e.target.selectionStart;
+      const oldValue = e.target.value;
+      const newValue = applyPhoneMask(e.target.value);
+
+      e.target.value = newValue;
+
+      const newCursorPos = getNewCursorPosition(oldValue, newValue, oldCursorPos);
+      e.target.setSelectionRange(newCursorPos, newCursorPos);
+    });
+
+    phoneInput.addEventListener('paste', (e) => {
+      setTimeout(() => {
+        e.target.value = applyPhoneMask(e.target.value);
+      }, 0);
+    });
+
+    phoneInput.addEventListener('keypress', (e) => {
+      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+      const isNumber = /[0-9]/.test(e.key);
+
+      if (!isNumber && !allowedKeys.includes(e.key)) {
+        e.preventDefault();
       }
     });
+
+    if (phoneInput.value) {
+      phoneInput.value = applyPhoneMask(phoneInput.value);
+    }
   }
 
   const zipcodeInput = document.getElementById('zipcode');
