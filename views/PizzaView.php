@@ -23,7 +23,7 @@ abstract class PizzaView
             $categories = ['Tradicionais', 'Especiais', 'Doces'];
         }
 ?>
-        <main class="pizza-management">
+        <main>
             <h1><?= $title ?></h1>
 
             <div class="navigation-buttons">
@@ -37,7 +37,7 @@ abstract class PizzaView
                     </p>
                 <?php endif; ?>
 
-                <form method="POST" action="<?= $action ?>" class="pizza-form">
+                <form method="POST" action="<?= $action ?>">
                     <?php if ($isEdit): ?>
                         <input type="hidden" name="id" value="<?= $pizza->id ?>">
                     <?php endif; ?>
@@ -45,20 +45,24 @@ abstract class PizzaView
                     <label for="name">Nome da Pizza:</label>
                     <input type="text" id="name" name="name"
                         value="<?= $nameValue ?>"
-                        placeholder="Digite o nome da pizza">
+                        placeholder="Digite o nome da pizza"
+                        class="<?= $fieldsWithErrors && in_array('name', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <label for="description">Descrição:</label>
                     <textarea id="description" name="description"
                         placeholder="Digite a descrição da pizza"
-                        rows="4"><?= $descriptionValue ?></textarea>
+                        rows="4"
+                        class="<?= $fieldsWithErrors && in_array('description', $fieldsWithErrors) ? 'field-error' : '' ?>"><?= $descriptionValue ?></textarea>
 
                     <label for="price">Preço (R$):</label>
                     <input type="number" id="price" name="price" step="0.01" min="0"
                         value="<?= $priceValue ?>"
-                        placeholder="Digite o preço">
+                        placeholder="Digite o preço"
+                        class="<?= $fieldsWithErrors && in_array('price', $fieldsWithErrors) ? 'field-error' : '' ?>">
 
                     <label for="category">Categoria:</label>
-                    <select id="category" name="category">
+                    <select id="category" name="category"
+                        class="<?= $fieldsWithErrors && in_array('category', $fieldsWithErrors) ? 'field-error' : '' ?>">
                         <option value="">Selecione uma categoria</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?= htmlspecialchars($category) ?>" <?= $categoryValue === $category ? 'selected' : '' ?>>
@@ -88,7 +92,7 @@ abstract class PizzaView
     public static function renderList(array $pizzas, ?int $deleteId = null): void
     {
     ?>
-        <main class="pizza-management">
+        <main>
             <h1>Gerenciar Pizzas</h1>
 
             <div class="navigation-buttons">

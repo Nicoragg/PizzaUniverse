@@ -27,9 +27,11 @@ $page = $_GET['page'] ?? 'login';
       echo '<link rel="stylesheet" href="./assets/stylesheets/dashboard.css">';
       break;
     case 'users':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
       echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">';
       break;
     case 'pizzas':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
       echo '<link rel="stylesheet" href="./assets/stylesheets/pizzas.css">';
       break;
     case 'menu':
