@@ -87,7 +87,9 @@ abstract class CustomerView
                                 placeholder="Digite o nome completo"
                                 class="<?= $fieldsWithErrors && in_array('name', $fieldsWithErrors) ? 'field-error' : '' ?>">
                         </div>
+                    </div>
 
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="cpf">CPF:</label>
                             <input type="text" id="cpf" name="cpf"
@@ -96,9 +98,6 @@ abstract class CustomerView
                                 maxlength="14"
                                 class="<?= $fieldsWithErrors && in_array('cpf', $fieldsWithErrors) ? 'field-error' : '' ?>">
                         </div>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="phone">Telefone:</label>
                             <input type="text" id="phone" name="phone"
@@ -106,18 +105,6 @@ abstract class CustomerView
                                 placeholder="(00) 00000-0000"
                                 maxlength="15"
                                 class="<?= $fieldsWithErrors && in_array('phone', $fieldsWithErrors) ? 'field-error' : '' ?>">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="status">Status:</label>
-                            <select id="status" name="status"
-                                class="<?= $fieldsWithErrors && in_array('status', $fieldsWithErrors) ? 'field-error' : '' ?>">
-                                <?php foreach ($statusOptions as $value => $label): ?>
-                                    <option value="<?= $value ?>" <?= $statusValue === $value ? 'selected' : '' ?>>
-                                        <?= $label ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
                         </div>
                     </div>
 
@@ -228,6 +215,15 @@ abstract class CustomerView
                                         <a href="?page=customers&action=edit&edit=<?= $customer->id ?>" class="btn-edit">
                                             <i class="bi bi-pencil-square"></i> Editar
                                         </a>
+                                        <?php if ($customer->status === 'active'): ?>
+                                            <a href="?page=customers&deactivate=<?= $customer->id ?>" class="btn-deactivate">
+                                                <i class="bi bi-pause-circle"></i> Desativar
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="?page=customers&activate=<?= $customer->id ?>" class="btn-activate">
+                                                <i class="bi bi-play-circle"></i> Ativar
+                                            </a>
+                                        <?php endif; ?>
                                         <a href="?page=customers&confirm=<?= $customer->id ?>" class="btn-delete">
                                             <i class="bi bi-trash3"></i> Excluir
                                         </a>

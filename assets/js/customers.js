@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (currentPage !== 'customers') return;
 
   const deleteButtons = document.querySelectorAll('a[href*="confirm="]');
-
   deleteButtons.forEach(button => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
@@ -15,6 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
       SweetAlertConfirm.confirmCustomerDeletion(() => {
         window.location.href = `?page=customers&action=delete&id=${customerId}`;
+      });
+    });
+  });
+
+  const deactivateButtons = document.querySelectorAll('a.btn-deactivate[href*="deactivate="]');
+  deactivateButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const href = button.getAttribute('href');
+      const customerId = new URLSearchParams(href.split('?')[1]).get('deactivate');
+
+      SweetAlertConfirm.confirmCustomerDeactivation(() => {
+        window.location.href = `?page=customers&action=status&id=${customerId}&status=inactive`;
+      });
+    });
+  });
+
+  const activateButtons = document.querySelectorAll('a.btn-activate[href*="activate="]');
+  activateButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const href = button.getAttribute('href');
+      const customerId = new URLSearchParams(href.split('?')[1]).get('activate');
+
+      SweetAlertConfirm.confirmCustomerActivation(() => {
+        window.location.href = `?page=customers&action=status&id=${customerId}&status=active`;
       });
     });
   });

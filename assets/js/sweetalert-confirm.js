@@ -75,6 +75,50 @@ class SweetAlertConfirm {
   }
 
   /**
+   * Configuração específica para desativação de clientes
+   * @param {Function} onConfirm - Callback executado quando confirmado
+   */
+  static confirmCustomerDeactivation(onConfirm) {
+    Swal.fire({
+      title: 'Desativar Cliente',
+      text: 'Tem certeza que deseja desativar este cliente?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ffc107',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sim, desativar!',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed && onConfirm) {
+        onConfirm();
+      }
+    });
+  }
+
+  /**
+   * Configuração específica para ativação de clientes
+   * @param {Function} onConfirm - Callback executado quando confirmado
+   */
+  static confirmCustomerActivation(onConfirm) {
+    Swal.fire({
+      title: 'Ativar Cliente',
+      text: 'Tem certeza que deseja ativar este cliente?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sim, ativar!',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed && onConfirm) {
+        onConfirm();
+      }
+    });
+  }
+
+  /**
    * Modal de sucesso
    * @param {string} title - Título do modal
    * @param {string} text - Texto do modal

@@ -28,7 +28,7 @@ abstract class CustomerController
             $name = validateInput($_POST["name"] ?? '');
             $cpf = preg_replace('/[^0-9]/', '', validateInput($_POST["cpf"] ?? ''));
             $phone = preg_replace('/[^0-9]/', '', validateInput($_POST["phone"] ?? ''));
-            $status = validateInput($_POST["status"] ?? 'active');
+            $status = 'active';
             $zipcode = validateInput($_POST["zipcode"] ?? '');
             $neighborhood = validateInput($_POST["neighborhood"] ?? '');
             $street = validateInput($_POST["street"] ?? '');
@@ -209,6 +209,53 @@ abstract class CustomerController
         if (isset($_GET["action"]) && $_GET["action"] === "delete" && isset($_GET["id"])) {
             try {
                 CustomerDao::delete((int) $_GET["id"]);
+                header("Location: ?page=customers");
+                exit;
+            } catch (\Exception $e) {
+                self::$msg = $e->getMessage();
+                self::findAll();
+            }
+            return;
+        }
+
+        self::findAll();
+    }
+
+    public static function updateStatus(): void
+    {
+        if (isset($_GET["action"]) && $_GET["action"] === "status" && isset($_GET["id"]) && isset($_GET["status"])) {
+            $customerId = (int) $_GET["id"];
+            $newStatus = $_GET["status"];
+
+            if (!in_array($newStatus, ['active', 'inactive'])) {
+                self::$msg = "Status inválido.";
+                self::findAll();
+                return;
+            }
+
+            try {
+                $customer = CustomerDao::findById($customerId);
+                if (!$customer) {
+                    self::$msg = "Cliente não encontrado.";
+                    self::findAll();
+                    return;
+                }
+
+                $updatedCustomer = new Customer(
+                    $customer->id,
+                    $customer->name,
+                    $customer->cpf,
+                    $customer->phone,
+                    $newStatus,
+                    $customer->zipcode,
+                    $customer->neighborhood,
+                    $customer->street,
+                    $customer->city,
+                    $customer->state
+                );
+
+                CustomerDao::update($updatedCustomer);
+
                 header("Location: ?page=customers");
                 exit;
             } catch (\Exception $e) {

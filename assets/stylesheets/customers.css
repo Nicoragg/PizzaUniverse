@@ -223,6 +223,24 @@
     background: linear-gradient(135deg, #c82333, #a71e2a) !important;
 }
 
+.btn-activate {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: #ffffff !important;
+}
+
+.btn-activate:hover {
+    background: linear-gradient(135deg, #20c997, #198754) !important;
+}
+
+.btn-deactivate {
+    background: linear-gradient(135deg, #ffc107, #ffb400) !important;
+    color: #212529 !important;
+}
+
+.btn-deactivate:hover {
+    background: linear-gradient(135deg, #ffb400, #ff9500) !important;
+}
+
 /* RESPONSIVE DESIGN FOR CUSTOMERS */
 @media (max-width: 768px) {
     .form-row {
