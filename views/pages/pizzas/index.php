@@ -2,11 +2,6 @@
 
 use App\Controllers\PizzaController;
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ?page=login");
-    exit;
-}
-
 $action = $_GET['action'] ?? 'list';
 
 match ($action) {
