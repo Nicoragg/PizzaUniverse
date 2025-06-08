@@ -11,7 +11,7 @@
     <nav class="main-nav">
       <ul class="nav-list">
         <li><a href="?page=dashboard" class="nav-link">Dashboard</a></li>
-        <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
+        <li><a href="?page=home" class="nav-link">Home</a></li>
         <li class="dropdown">
           <a href="#" class="nav-link dropdown-toggle">Gerenciar <i class="bi bi-chevron-down"></i></a>
           <div class="dropdown-menu">

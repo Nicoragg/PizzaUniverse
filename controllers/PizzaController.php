@@ -205,22 +205,4 @@ abstract class PizzaController
     {
         return PizzaDao::getCategories();
     }
-
-    public static function getMenuPizzas(): array
-    {
-        $pizzas = PizzaDao::findAll();
-        $pizzasByCategory = [];
-
-        foreach ($pizzas as $pizza) {
-            $pizzasByCategory[$pizza->category][] = $pizza;
-        }
-
-        return $pizzasByCategory;
-    }
-
-    public static function menu(): void
-    {
-        $pizzasByCategory = self::getMenuPizzas();
-        PizzaView::renderPublicMenu($pizzasByCategory);
-    }
 }
