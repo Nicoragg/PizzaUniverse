@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Dal\CustomerDao;
 use App\Views\CustomerView;
 use App\Util\Validator;
+use App\Util\CsrfToken;
 use function App\Util\validateInput;
 
 abstract class CustomerController
@@ -17,6 +18,14 @@ abstract class CustomerController
     public static function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                CustomerView::renderForm(self::$msg, null, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $name = validateInput($_POST["name"] ?? '');
             $cpf = preg_replace('/[^0-9]/', '', validateInput($_POST["cpf"] ?? ''));
             $phone = preg_replace('/[^0-9]/', '', validateInput($_POST["phone"] ?? ''));
@@ -63,6 +72,8 @@ abstract class CustomerController
                 try {
                     $customer = new Customer(0, $name, $cpf, $phone, $status, $zipcode, $neighborhood, $street, $city, $state);
                     $id = CustomerDao::create($customer);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=customers");
                     exit;
                 } catch (\Exception $e) {
@@ -81,6 +92,14 @@ abstract class CustomerController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                CustomerView::renderForm(self::$msg, $customer, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $id = (int) validateInput($_POST["id"] ?? '0');
             $name = validateInput($_POST["name"] ?? '');
             $cpf = preg_replace('/[^0-9]/', '', validateInput($_POST["cpf"] ?? ''));
@@ -142,6 +161,8 @@ abstract class CustomerController
                 try {
                     $customer = new Customer($id, $name, $cpf, $phone, $status, $zipcode, $neighborhood, $street, $city, $state);
                     CustomerDao::update($customer);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=customers");
                     exit;
                 } catch (\Exception $e) {

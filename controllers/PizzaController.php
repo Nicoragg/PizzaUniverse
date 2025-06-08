@@ -6,6 +6,7 @@ use App\Models\Pizza;
 use App\Dal\PizzaDao;
 use App\Views\PizzaView;
 use App\Util\Validator;
+use App\Util\CsrfToken;
 use function App\Util\validateInput;
 
 abstract class PizzaController
@@ -17,6 +18,14 @@ abstract class PizzaController
     public static function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                PizzaView::renderForm(self::$msg, null, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $name = validateInput($_POST["name"] ?? '');
             $description = validateInput($_POST["description"] ?? '');
             $price = validateInput($_POST["price"] ?? '');
@@ -58,6 +67,8 @@ abstract class PizzaController
                 try {
                     $pizza = new Pizza(0, $name, $description, (float) $price, $category);
                     $id = PizzaDao::create($pizza);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=pizzas");
                     exit;
                 } catch (\Exception $e) {
@@ -76,6 +87,14 @@ abstract class PizzaController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                PizzaView::renderForm(self::$msg, $pizza, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $id = (int) validateInput($_POST["id"] ?? '0');
             $name = validateInput($_POST["name"] ?? '');
             $description = validateInput($_POST["description"] ?? '');
@@ -127,6 +146,8 @@ abstract class PizzaController
                 try {
                     $pizza = new Pizza($id, $name, $description, (float) $price, $category);
                     PizzaDao::update($pizza);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=pizzas");
                     exit;
                 } catch (\Exception $e) {

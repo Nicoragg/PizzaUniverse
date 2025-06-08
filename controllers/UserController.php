@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Dal\UserDao;
 use App\Views\UserView;
 use App\Util\Validator;
+use App\Util\CsrfToken;
 use function App\Util\validateInput;
 
 abstract class UserController
@@ -17,6 +18,14 @@ abstract class UserController
     public static function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                UserView::renderForm(self::$msg, null, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $username = validateInput($_POST["username"] ?? '');
             $email = validateInput($_POST["email"] ?? '');
             $password = validateInput($_POST["password"] ?? '');
@@ -44,6 +53,8 @@ abstract class UserController
                 try {
                     $user = new User(0, $username, $email, md5($password));
                     $id = UserDao::create($user);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=users");
                     exit;
                 } catch (\Exception $e) {
@@ -62,6 +73,14 @@ abstract class UserController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                UserView::renderForm(self::$msg, $user, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $id = (int) validateInput($_POST["id"] ?? '0');
             $username = validateInput($_POST["username"] ?? '');
             $email = validateInput($_POST["email"] ?? '');
@@ -103,16 +122,13 @@ abstract class UserController
 
                     $user = new User($id, $username, $email, $finalPassword);
                     UserDao::update($user);
+                    // Regenerar token após sucesso
+                    CsrfToken::regenerate();
                     header("Location: ?page=users");
                     exit;
                 } catch (\Exception $e) {
                     self::$msg = $e->getMessage();
                     $user = new User($id, $username, $email, '');
-                    self::$formData = [
-                        'username' => $username,
-                        'email' => $email,
-                        'password' => ''
-                    ];
                 }
             }
         }
@@ -168,6 +184,14 @@ abstract class UserController
     public static function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            // Validar token CSRF
+            $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
+            if (!CsrfToken::validate($token)) {
+                self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
+                UserView::renderLogin(self::$msg, self::$fieldsWithErrors, self::$formData);
+                return;
+            }
+
             $email = validateInput($_POST["email"] ?? '');
             $password = validateInput($_POST["password"] ?? '');
 
@@ -192,6 +216,8 @@ abstract class UserController
                         $_SESSION['user_id'] = $user->id;
                         $_SESSION['username'] = $user->username;
                         $_SESSION['email'] = $user->email;
+                        // Regenerar token após login bem-sucedido
+                        CsrfToken::regenerate();
                         header("Location: ?page=dashboard");
                         exit;
                     } else {

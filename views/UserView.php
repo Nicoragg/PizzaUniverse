@@ -22,6 +22,8 @@ abstract class UserView
                 <?php endif; ?>
 
                 <form method="POST" action="?page=login" class="auth-form">
+                    <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
+
                     <div class="form-group">
                         <label for="email">Email:</label>
                         <input type="email" id="email" name="email"
@@ -68,6 +70,8 @@ abstract class UserView
                 <?php endif; ?>
 
                 <form method="POST" action="<?= $action ?>">
+                    <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
+
                     <?php if ($isEdit): ?>
                         <input type="hidden" name="id" value="<?= $user->id ?>">
                     <?php endif; ?>

@@ -31,6 +31,75 @@ function maskPhone(string $phone): string
   return $phone;
 }
 
+class CsrfToken
+{
+  private const TOKEN_NAME = 'csrf_token';
+  private const TOKEN_LIFETIME = 3600; // 1 hora
+
+  public static function generate(): string
+  {
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    $token = bin2hex(random_bytes(32));
+    $timestamp = time();
+
+    $_SESSION[self::TOKEN_NAME] = [
+      'token' => $token,
+      'timestamp' => $timestamp
+    ];
+
+    return $token;
+  }
+
+  public static function validate(string $token): bool
+  {
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    if (!isset($_SESSION[self::TOKEN_NAME])) {
+      return false;
+    }
+
+    $sessionToken = $_SESSION[self::TOKEN_NAME];
+
+    // Verificar se o token expirou
+    if ((time() - $sessionToken['timestamp']) > self::TOKEN_LIFETIME) {
+      unset($_SESSION[self::TOKEN_NAME]);
+      return false;
+    }
+
+    // Verificar se o token coincide (usando hash_equals para prevenir timing attacks)
+    if (!hash_equals($sessionToken['token'], $token)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public static function getTokenName(): string
+  {
+    return self::TOKEN_NAME;
+  }
+
+  public static function destroy(): void
+  {
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+
+    unset($_SESSION[self::TOKEN_NAME]);
+  }
+
+  public static function regenerate(): string
+  {
+    self::destroy();
+    return self::generate();
+  }
+}
+
 class Validator
 {
   private array $errors = [];

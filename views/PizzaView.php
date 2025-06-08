@@ -38,6 +38,8 @@ abstract class PizzaView
                 <?php endif; ?>
 
                 <form method="POST" action="<?= $action ?>">
+                    <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
+
                     <?php if ($isEdit): ?>
                         <input type="hidden" name="id" value="<?= $pizza->id ?>">
                     <?php endif; ?>
