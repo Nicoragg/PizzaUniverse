@@ -35,6 +35,72 @@
     margin-bottom: 0;
 }
 
+/* STATE FIELD SPECIFIC STYLING */
+#state {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+#state::placeholder {
+    text-transform: none;
+    text-align: left;
+    font-weight: normal;
+    letter-spacing: normal;
+}
+
+/* CEP FIELD AUTO-FILL INDICATION */
+#zipcode:valid {
+    border-color: #28a745;
+    background-image: linear-gradient(45deg, transparent 40%, rgba(40, 167, 69, 0.1) 50%, transparent 60%);
+}
+
+/* ADDRESS FIELDS FILLED BY API */
+.api-filled {
+    background-color: #f8f9fa !important;
+    border-color: #28a745 !important;
+    position: relative;
+}
+
+.api-filled::after {
+    content: "📍";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* LOADING ANIMATION FOR CEP LOOKUP */
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* TEMP MESSAGE ANIMATIONS */
+.temp-message {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 /* STATUS BADGES */
 .status-badge {
     display: inline-block;
@@ -52,11 +118,6 @@
 }
 
 .status-inactive {
-    background: linear-gradient(135deg, #6c757d, #545b62);
-    color: #ffffff;
-}
-
-.status-blocked {
     background: linear-gradient(135deg, #dc3545, #c82333);
     color: #ffffff;
 }

@@ -25,37 +25,6 @@ abstract class CustomerView
         $statusOptions = [
             'active' => 'Ativo',
             'inactive' => 'Inativo',
-            'blocked' => 'Bloqueado'
-        ];
-
-        $brazilianStates = [
-            'AC' => 'Acre',
-            'AL' => 'Alagoas',
-            'AP' => 'Amapá',
-            'AM' => 'Amazonas',
-            'BA' => 'Bahia',
-            'CE' => 'Ceará',
-            'DF' => 'Distrito Federal',
-            'ES' => 'Espírito Santo',
-            'GO' => 'Goiás',
-            'MA' => 'Maranhão',
-            'MT' => 'Mato Grosso',
-            'MS' => 'Mato Grosso do Sul',
-            'MG' => 'Minas Gerais',
-            'PA' => 'Pará',
-            'PB' => 'Paraíba',
-            'PR' => 'Paraná',
-            'PE' => 'Pernambuco',
-            'PI' => 'Piauí',
-            'RJ' => 'Rio de Janeiro',
-            'RN' => 'Rio Grande do Norte',
-            'RS' => 'Rio Grande do Sul',
-            'RO' => 'Rondônia',
-            'RR' => 'Roraima',
-            'SC' => 'Santa Catarina',
-            'SP' => 'São Paulo',
-            'SE' => 'Sergipe',
-            'TO' => 'Tocantins'
         ];
 ?>
         <main>
@@ -159,15 +128,11 @@ abstract class CustomerView
 
                         <div class="form-group">
                             <label for="state">Estado:</label>
-                            <select id="state" name="state"
+                            <input type="text" id="state" name="state"
+                                value="<?= $stateValue ?>"
+                                placeholder="UF"
+                                maxlength="2"
                                 class="<?= $fieldsWithErrors && in_array('state', $fieldsWithErrors) ? 'field-error' : '' ?>">
-                                <option value="">Selecione o estado</option>
-                                <?php foreach ($brazilianStates as $uf => $stateName): ?>
-                                    <option value="<?= $uf ?>" <?= $stateValue === $uf ? 'selected' : '' ?>>
-                                        <?= $stateName ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
                         </div>
                     </div>
 
@@ -226,7 +191,6 @@ abstract class CustomerView
                                             echo match ($customer->status) {
                                                 'active' => 'Ativo',
                                                 'inactive' => 'Inativo',
-                                                'blocked' => 'Bloqueado',
                                                 default => $customer->status
                                             };
                                             ?>
