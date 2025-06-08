@@ -29,7 +29,6 @@ abstract class OrderController
             }
 
             $customerId = (int) validateInput($_POST["customer_id"] ?? '');
-            $deliveryAddress = validateInput($_POST["delivery_address"] ?? '');
             $notes = validateInput($_POST["notes"] ?? '');
             $pizzas = $_POST["pizzas"] ?? [];
 
@@ -65,7 +64,6 @@ abstract class OrderController
                 self::$fieldsWithErrors = $validator->getFieldsWithErrors();
                 self::$formData = [
                     'customer_id' => $customerId,
-                    'delivery_address' => $deliveryAddress,
                     'notes' => $notes,
                     'pizzas' => $pizzas
                 ];
@@ -73,13 +71,27 @@ abstract class OrderController
                 try {
                     $orderNumber = OrderDao::generateOrderNumber();
 
+                    // Buscar dados do cliente para usar como endereço de entrega
+                    $customer = CustomerDao::findById($customerId);
+                    $deliveryAddress = null;
+                    if ($customer) {
+                        $deliveryAddress = trim(sprintf(
+                            "%s\n%s\n%s - %s\nCEP: %s",
+                            $customer->street,
+                            $customer->neighborhood,
+                            $customer->city,
+                            $customer->state,
+                            $customer->zipcode
+                        ));
+                    }
+
                     $order = new Order(
                         0,
                         $customerId,
                         $orderNumber,
                         'pending',
                         $totalAmount,
-                        $deliveryAddress ?: null,
+                        $deliveryAddress,
                         $notes ?: null
                     );
 

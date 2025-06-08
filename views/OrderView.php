@@ -10,7 +10,6 @@ abstract class OrderView
     public static function renderCreateForm(?string $message = null, array $customers = [], array $pizzasByCategory = [], ?array $formData = null): void
     {
         $customerIdValue = $formData['customer_id'] ?? '';
-        $deliveryAddressValue = $formData['delivery_address'] ?? '';
         $notesValue = $formData['notes'] ?? '';
 ?>
         <main>
@@ -31,24 +30,61 @@ abstract class OrderView
                     <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
 
                     <div class="form-section">
-                        <h3>Informações do Cliente</h3>
+                        <h3>Selecionar Cliente</h3>
                         <div class="form-group">
                             <label for="customer_id">Cliente:</label>
                             <select id="customer_id" name="customer_id" required>
                                 <option value="">Selecione um cliente</option>
                                 <?php foreach ($customers as $customer): ?>
-                                    <option value="<?= $customer->id ?>" <?= $customerIdValue == $customer->id ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($customer->name) ?> - <?= htmlspecialchars($customer->phone) ?>
+                                    <option value="<?= $customer->id ?>"
+                                        data-name="<?= htmlspecialchars($customer->name) ?>"
+                                        data-phone="<?= htmlspecialchars($customer->phone) ?>"
+                                        data-cpf="<?= htmlspecialchars($customer->cpf) ?>"
+                                        data-street="<?= htmlspecialchars($customer->street) ?>"
+                                        data-neighborhood="<?= htmlspecialchars($customer->neighborhood) ?>"
+                                        data-city="<?= htmlspecialchars($customer->city) ?>"
+                                        data-state="<?= htmlspecialchars($customer->state) ?>"
+                                        data-zipcode="<?= htmlspecialchars($customer->zipcode) ?>"
+                                        <?= $customerIdValue == $customer->id ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($customer->name) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="delivery_address">Endereço de Entrega:</label>
-                            <textarea id="delivery_address" name="delivery_address"
-                                placeholder="Digite o endereço completo para entrega"
-                                rows="3"><?= htmlspecialchars($deliveryAddressValue) ?></textarea>
+                        <div id="customer-info" class="customer-info-display" style="display: none;">
+                            <div class="customer-card">
+                                <div class="customer-header">
+                                    <h4><i class="bi bi-person-circle"></i> Dados do Cliente</h4>
+                                </div>
+                                <div class="customer-details">
+                                    <div class="customer-row">
+                                        <span class="label">Nome:</span>
+                                        <span id="customer-name">-</span>
+                                    </div>
+                                    <div class="customer-row">
+                                        <span class="label">Telefone:</span>
+                                        <span id="customer-phone">-</span>
+                                    </div>
+                                    <div class="customer-row">
+                                        <span class="label">CPF:</span>
+                                        <span id="customer-cpf">-</span>
+                                    </div>
+                                    <div class="customer-row address-row">
+                                        <span class="label">Endereço:</span>
+                                        <div class="address-details">
+                                            <div id="customer-street">-</div>
+                                            <div id="customer-neighborhood">-</div>
+                                            <div class="city-state">
+                                                <span id="customer-city">-</span> - <span id="customer-state">-</span>
+                                            </div>
+                                            <div class="zipcode">
+                                                CEP: <span id="customer-zipcode">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -57,22 +93,44 @@ abstract class OrderView
 
                         <?php foreach ($pizzasByCategory as $category => $pizzas): ?>
                             <div class="category-section">
-                                <h4><?= htmlspecialchars($category) ?></h4>
+                                <h4><i class="bi bi-grid-3x3-gap-fill"></i> <?= htmlspecialchars($category) ?></h4>
                                 <div class="pizzas-grid">
                                     <?php foreach ($pizzas as $pizza): ?>
-                                        <div class="pizza-item">
-                                            <div class="pizza-info">
-                                                <h5><?= htmlspecialchars($pizza->name) ?></h5>
-                                                <p><?= htmlspecialchars($pizza->description) ?></p>
-                                                <div class="pizza-price">R$ <?= number_format($pizza->price, 2, ',', '.') ?></div>
+                                        <div class="pizza-card" data-pizza-id="<?= $pizza->id ?>">
+                                            <div class="pizza-card-header">
+                                                <div class="pizza-icon">
+                                                    <i class="bi bi-pie-chart-fill"></i>
+                                                </div>
+                                                <div class="pizza-badge">
+                                                    <span class="pizza-category"><?= htmlspecialchars($category) ?></span>
+                                                </div>
                                             </div>
-                                            <div class="pizza-controls">
-                                                <button type="button" class="btn-quantity" onclick="decreaseQuantity(<?= $pizza->id ?>)">-</button>
-                                                <input type="number" name="pizzas[<?= $pizza->id ?>]"
-                                                    id="qty_<?= $pizza->id ?>"
-                                                    class="quantity-input"
-                                                    value="0" min="0" max="99">
-                                                <button type="button" class="btn-quantity" onclick="increaseQuantity(<?= $pizza->id ?>)">+</button>
+
+                                            <div class="pizza-card-body">
+                                                <h5 class="pizza-name"><?= htmlspecialchars($pizza->name) ?></h5>
+                                                <p class="pizza-description"><?= htmlspecialchars($pizza->description) ?></p>
+
+                                                <div class="pizza-price-section">
+                                                    <span class="pizza-price">R$ <?= number_format($pizza->price, 2, ',', '.') ?></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="pizza-card-footer">
+                                                <div class="quantity-controls">
+                                                    <button type="button" class="btn-quantity btn-decrease" onclick="decreaseQuantity(<?= $pizza->id ?>)">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <div class="quantity-display">
+                                                        <input type="number" name="pizzas[<?= $pizza->id ?>]"
+                                                            id="qty_<?= $pizza->id ?>"
+                                                            class="quantity-input"
+                                                            value="0" min="0" max="99"
+                                                            readonly>
+                                                    </div>
+                                                    <button type="button" class="btn-quantity btn-increase" onclick="increaseQuantity(<?= $pizza->id ?>)">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -85,7 +143,7 @@ abstract class OrderView
                         <h3>Resumo do Pedido</h3>
                         <div id="order-summary">
                             <div class="summary-item">
-                                <span>Nenhuma pizza selecionada</span>
+                                <span><i class="bi bi-cart-x"></i> Nenhuma pizza selecionada</span>
                                 <span>R$ 0,00</span>
                             </div>
                         </div>
@@ -101,7 +159,9 @@ abstract class OrderView
                         </div>
                     </div>
 
-                    <button type="submit" id="submit-order" disabled>Finalizar Pedido</button>
+                    <button type="submit" id="submit-order" disabled>
+                        <i class="bi bi-lock"></i> Selecione as pizzas
+                    </button>
                 </form>
             </section>
         </main>
