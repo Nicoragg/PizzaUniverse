@@ -79,14 +79,12 @@ abstract class CustomerView
                         <input type="hidden" name="id" value="<?= $customer->id ?>">
                     <?php endif; ?>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Nome Completo:</label>
-                            <input type="text" id="name" name="name"
-                                value="<?= $nameValue ?>"
-                                placeholder="Digite o nome completo"
-                                class="<?= $fieldsWithErrors && in_array('name', $fieldsWithErrors) ? 'field-error' : '' ?>">
-                        </div>
+                    <div class="form-group full-width">
+                        <label for="name">Nome Completo:</label>
+                        <input type="text" id="name" name="name"
+                            value="<?= $nameValue ?>"
+                            placeholder="Digite o nome completo"
+                            class="<?= $fieldsWithErrors && in_array('name', $fieldsWithErrors) ? 'field-error' : '' ?>">
                     </div>
 
                     <div class="form-row">
@@ -212,20 +210,20 @@ abstract class CustomerView
                                     <td><?= htmlspecialchars($customer->city) ?></td>
                                     <td><?= htmlspecialchars($customer->state) ?></td>
                                     <td class="actions">
-                                        <a href="?page=customers&action=edit&edit=<?= $customer->id ?>" class="btn-edit">
-                                            <i class="bi bi-pencil-square"></i> Editar
+                                        <a href="?page=customers&action=edit&edit=<?= $customer->id ?>" class="btn-edit" title="Editar Cliente">
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <?php if ($customer->status === 'active'): ?>
-                                            <a href="?page=customers&deactivate=<?= $customer->id ?>" class="btn-deactivate">
-                                                <i class="bi bi-pause-circle"></i> Desativar
+                                            <a href="?page=customers&deactivate=<?= $customer->id ?>" class="btn-deactivate" title="Desativar Cliente">
+                                                <i class="bi bi-pause-circle"></i>
                                             </a>
                                         <?php else: ?>
-                                            <a href="?page=customers&activate=<?= $customer->id ?>" class="btn-activate">
-                                                <i class="bi bi-play-circle"></i> Ativar
+                                            <a href="?page=customers&activate=<?= $customer->id ?>" class="btn-activate" title="Ativar Cliente">
+                                                <i class="bi bi-play-circle"></i>
                                             </a>
                                         <?php endif; ?>
-                                        <a href="?page=customers&confirm=<?= $customer->id ?>" class="btn-delete">
-                                            <i class="bi bi-trash3"></i> Excluir
+                                        <a href="?page=customers&confirm=<?= $customer->id ?>" class="btn-delete" title="Excluir Cliente">
+                                            <i class="bi bi-trash3"></i>
                                         </a>
                                     </td>
                                 </tr>
