@@ -47,7 +47,10 @@ abstract class UserView
     ?>
         <main>
             <h1><?= $title ?></h1>
-            <a href="?page=users">← Voltar</a>
+
+            <div class="navigation-buttons">
+                <a href="?page=users"><i class="bi bi-arrow-left"></i> Voltar</a>
+            </div>
 
             <section>
                 <?php if ($message): ?>
@@ -87,14 +90,17 @@ abstract class UserView
     ?>
         <main>
             <h1>Gerenciar Usuários</h1>
-            <a href="?page=users&action=create">+ Novo Usuário</a>
+
+            <div class="navigation-buttons">
+                <a href="?page=users&action=create"><i class="bi bi-plus-lg"></i> Novo Usuário</a>
+            </div>
 
             <?php if ($deleteId): ?>
                 <section>
                     <p>Tem certeza que deseja excluir este usuário?</p>
                     <nav>
-                        <a href="?page=users&action=delete&id=<?= $deleteId ?>">Confirmar Exclusão</a>
-                        <a href="?page=users">Cancelar</a>
+                        <a href="?page=users&action=delete&id=<?= $deleteId ?>"><i class="bi bi-trash3"></i> Confirmar Exclusão</a>
+                        <a href="?page=users"><i class="bi bi-arrow-left"></i> Cancelar</a>
                     </nav>
                 </section>
             <?php endif; ?>
@@ -115,8 +121,8 @@ abstract class UserView
                             <td><?= htmlspecialchars($user->username) ?></td>
                             <td><?= htmlspecialchars($user->email) ?></td>
                             <td>
-                                <a href="?page=users&action=edit&edit=<?= $user->id ?>">Editar</a>
-                                <a href="?page=users&confirm=<?= $user->id ?>">Excluir</a>
+                                <a href="?page=users&action=edit&edit=<?= $user->id ?>"><i class="bi bi-pencil-square"></i> Editar</a>
+                                <a href="?page=users&confirm=<?= $user->id ?>"><i class="bi bi-trash3"></i> Excluir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
