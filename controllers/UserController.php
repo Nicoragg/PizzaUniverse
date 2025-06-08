@@ -212,7 +212,7 @@ abstract class UserController
                         $_SESSION['username'] = $user->username;
                         $_SESSION['email'] = $user->email;
                         CsrfToken::regenerate();
-                        header("Location: ?page=dashboard");
+                        header("Location: ?page=home");
                         exit;
                     } else {
                         self::$msg = "Email ou senha incorretos";
