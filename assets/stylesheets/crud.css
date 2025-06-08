@@ -41,8 +41,10 @@ main h1::after {
 
 /* BACK BUTTON STYLES */
 .navigation-buttons a[href*="?page=users"],
+.navigation-buttons a[href*="?page=customers"],
 .navigation-buttons a[href*="?page=pizzas"],
 main>div.navigation-buttons a[href*="?page=users"],
+main>div.navigation-buttons a[href*="?page=customers"],
 main>div.navigation-buttons a[href*="?page=pizzas"] {
     display: inline-flex !important;
     align-items: center;
@@ -401,14 +403,31 @@ section nav a[href*="?page=pizzas"]:hover {
     color: #6c757d;
 }
 
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #2c1b1b;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
 .empty-state p {
     font-size: 1.1rem;
-    margin-bottom: 20px;
-    background: rgba(255, 180, 0, 0.05);
-    border-radius: 12px;
-    border: 2px dashed rgba(255, 180, 0, 0.3);
-    padding: 3rem 0;
-    font-style: italic;
+    margin-bottom: 2rem;
+    color: #6c757d;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font-style: normal !important;
+}
+
+.empty-state .btn-primary {
+    margin-top: 1rem;
 }
 
 /* FORM ERROR STYLES */
@@ -422,84 +441,4 @@ section nav a[href*="?page=pizzas"]:hover {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
     outline: 0;
-}
-
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-    main {
-        padding: 0 1rem;
-        margin: 1rem auto;
-    }
-
-    main h1 {
-        font-size: 2rem;
-    }
-
-    .navigation-buttons {
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .navigation-buttons a {
-        margin-bottom: 0.5rem;
-    }
-
-    section {
-        padding: 1.5rem;
-    }
-
-    form {
-        gap: 1rem;
-    }
-
-    table {
-        font-size: 0.85rem;
-    }
-
-    table th,
-    table td {
-        padding: 12px 15px;
-    }
-
-    table td a {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        margin-right: 4px;
-        margin-bottom: 4px;
-    }
-
-    section nav {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    section nav a {
-        width: 100%;
-        max-width: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    main h1 {
-        font-size: 1.8rem;
-    }
-
-    form input,
-    form textarea,
-    form select,
-    form button {
-        padding: 12px 16px;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    table th,
-    table td {
-        padding: 10px 12px;
-        min-width: 100px;
-    }
 }

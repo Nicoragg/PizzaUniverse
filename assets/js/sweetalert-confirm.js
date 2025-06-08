@@ -63,6 +63,18 @@ class SweetAlertConfirm {
   }
 
   /**
+   * Configuração específica para exclusão de clientes
+   * @param {Function} onConfirm - Callback executado quando confirmado
+   */
+  static confirmCustomerDeletion(onConfirm) {
+    this.showDeleteConfirmation({
+      title: 'Confirmar Exclusão',
+      text: 'Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.',
+      onConfirm
+    });
+  }
+
+  /**
    * Modal de sucesso
    * @param {string} title - Título do modal
    * @param {string} text - Texto do modal

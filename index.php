@@ -34,11 +34,18 @@ $page = $_GET['page'] ?? 'login';
     'home' => 'home.css',
     'dashboard' => 'dashboard.css',
     'pizzas' => 'pizzas.css',
+    'customers' => 'customers.css',
     'deliver' => 'deliver.css'
   ];
 
   if (isset($pageStyles[$page])) {
-    echo '<link rel="stylesheet" href="./assets/stylesheets/' . $pageStyles[$page] . '">';
+    if (is_array($pageStyles[$page])) {
+      foreach ($pageStyles[$page] as $styleFile) {
+        echo '<link rel="stylesheet" href="./assets/stylesheets/' . $styleFile . '">';
+      }
+    } else {
+      echo '<link rel="stylesheet" href="./assets/stylesheets/' . $pageStyles[$page] . '">';
+    }
   }
   ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
@@ -47,7 +54,7 @@ $page = $_GET['page'] ?? 'login';
   $pageScripts = [
     'pizzas' => ['sweetalert-confirm.js', 'pizzas.js'],
     'users' => ['sweetalert-confirm.js', 'users.js'],
-    'customers' => ['sweetalert-confirm.js', 'users.js']
+    'customers' => ['sweetalert-confirm.js', 'customers.js']
   ];
 
   if (isset($pageScripts[$page])) {
