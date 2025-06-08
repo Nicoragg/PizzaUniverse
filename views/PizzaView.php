@@ -109,35 +109,33 @@ abstract class PizzaView
                 </section>
             <?php endif; ?>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Preço</th>
-                        <th>Categoria</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <?php if (!empty($pizzas)): ?>
+                <div class="pizza-grid">
                     <?php foreach ($pizzas as $pizza): ?>
-                        <tr>
-                            <td><?= $pizza->id ?></td>
-                            <td><?= htmlspecialchars($pizza->name) ?></td>
-                            <td><?= htmlspecialchars(substr($pizza->description, 0, 50)) . (strlen($pizza->description) > 50 ? '...' : '') ?></td>
-                            <td>R$ <?= number_format($pizza->price, 2, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($pizza->category) ?></td>
-                            <td>
-                                <a href="?page=pizzas&action=edit&edit=<?= $pizza->id ?>"><i class="bi bi-pencil-square"></i> Editar</a>
-                                <a href="?page=pizzas&confirm=<?= $pizza->id ?>"><i class="bi bi-trash3"></i> Excluir</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                        <div class="pizza-card">
+                            <div class="pizza-card-header">
+                                <div class="pizza-id">ID: <?= $pizza->id ?></div>
+                                <div class="pizza-category"><?= htmlspecialchars($pizza->category) ?></div>
+                            </div>
 
-            <?php if (empty($pizzas)): ?>
+                            <div class="pizza-card-body">
+                                <h3 class="pizza-title"><?= htmlspecialchars($pizza->name) ?></h3>
+                                <p class="pizza-description"><?= htmlspecialchars($pizza->description) ?></p>
+                                <div class="pizza-price">R$ <?= number_format($pizza->price, 2, ',', '.') ?></div>
+                            </div>
+
+                            <div class="pizza-card-actions">
+                                <a href="?page=pizzas&action=edit&edit=<?= $pizza->id ?>" class="btn-edit">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a href="?page=pizzas&confirm=<?= $pizza->id ?>" class="btn-delete">
+                                    <i class="bi bi-trash3"></i> Excluir
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
                 <div class="empty-state">
                     <p>Nenhuma pizza encontrada.</p>
                 </div>

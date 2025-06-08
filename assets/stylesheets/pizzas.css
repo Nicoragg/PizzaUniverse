@@ -7,6 +7,146 @@
 
 /* PIZZA-SPECIFIC STYLES */
 
+/* Pizza Grid Layout */
+.pizza-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Pizza Card Styles */
+.pizza-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 180, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.pizza-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 180, 0, 0.3);
+}
+
+/* Card Header */
+.pizza-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.pizza-id {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6c757d;
+    background: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.pizza-category {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffb400, #ffd700);
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Card Body */
+.pizza-card-body {
+    padding: 1.25rem;
+}
+
+.pizza-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c1b1b;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+.pizza-description {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+    text-align: justify;
+    min-height: 3rem;
+}
+
+.pizza-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #e74c3c;
+    text-align: center;
+    background: linear-gradient(135deg, #fff5f5, #ffeaea);
+    border: 2px solid #fecaca;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+/* Card Actions */
+.pizza-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pizza-card-actions .btn-edit,
+.pizza-card-actions .btn-delete {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.pizza-card-actions .btn-edit {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.pizza-card-actions .btn-edit:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.pizza-card-actions .btn-delete {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+}
+
+.pizza-card-actions .btn-delete:hover {
+    background: linear-gradient(135deg, #c82333, #a71e2a);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
 /* Campo de nova categoria */
 #new-category-field {
     margin-top: 15px;
@@ -86,7 +226,7 @@
     line-height: 1.5;
 }
 
-.pizza-price {
+.pizza-item .pizza-price {
     font-weight: bold;
     color: #e74c3c;
     font-size: 1.2em;
@@ -98,19 +238,53 @@
     border: 1px solid #fecaca;
 }
 
-/* Responsividade para menu público */
+/* Responsividade */
 @media (max-width: 768px) {
+    .pizza-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pizza-card-actions {
+        flex-direction: column;
+    }
+
+    .pizza-card-actions .btn-edit,
+    .pizza-card-actions .btn-delete {
+        flex: none;
+    }
+
     .pizza-item {
         flex-direction: column;
         gap: 15px;
     }
 
-    .pizza-price {
+    .pizza-item .pizza-price {
         margin-left: 0;
         align-self: flex-end;
     }
 
     .menu-title {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pizza-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pizza-card-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .pizza-title {
+        font-size: 1.2rem;
+    }
+
+    .pizza-description {
+        min-height: auto;
     }
 }
