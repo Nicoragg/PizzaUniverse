@@ -32,15 +32,15 @@ abstract class UserDao
             $pdo = Connection::getConnection();
             $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id");
             $stmt->execute();
-            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $users = [];
-            foreach ($resultado as $dados) {
+            foreach ($res as $data) {
                 $users[] = new User(
-                    (int) $dados["id"],
-                    $dados["username"],
-                    $dados["email"],
-                    $dados["password"]
+                    (int) $data["id"],
+                    $data["username"],
+                    $data["email"],
+                    $data["password"]
                 );
             }
 
@@ -57,15 +57,15 @@ abstract class UserDao
             $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
             $stmt->execute([$id]);
 
-            $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$dados) return null;
+            if (!$data) return null;
 
             return new User(
-                (int) $dados["id"],
-                $dados["username"],
-                $dados["email"],
-                $dados["password"]
+                (int) $data["id"],
+                $data["username"],
+                $data["email"],
+                $data["password"]
             );
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao buscar usuário: " . $e->getMessage());
@@ -79,15 +79,15 @@ abstract class UserDao
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute([$email]);
 
-            $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$dados) return null;
+            if (!$data) return null;
 
             return new User(
-                (int) $dados["id"],
-                $dados["username"],
-                $dados["email"],
-                $dados["password"]
+                (int) $data["id"],
+                $data["username"],
+                $data["email"],
+                $data["password"]
             );
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao buscar usuário por email: " . $e->getMessage());
@@ -132,15 +132,15 @@ abstract class UserDao
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
             $stmt->execute([$email, md5($password)]);
 
-            $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$dados) return null;
+            if (!$data) return null;
 
             return new User(
-                (int) $dados["id"],
-                $dados["username"],
-                $dados["email"],
-                $dados["password"]
+                (int) $data["id"],
+                $data["username"],
+                $data["email"],
+                $data["password"]
             );
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao autenticar usuário: " . $e->getMessage());
