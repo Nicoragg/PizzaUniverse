@@ -133,8 +133,8 @@ abstract class UserDao
     {
         try {
             $pdo = Connection::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND password = MD5(?)");
-            $stmt->execute([$email, $password]);
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+            $stmt->execute([$email, md5($password)]);
 
             $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
