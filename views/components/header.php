@@ -21,7 +21,7 @@
             <a href="?page=orders" class="dropdown-item">Pedidos</a>
           </div>
         </li>
-        <li><a href="?page=orders&action=create" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Novo Pedido</a></li>
+        <li><a href="?page=logout" class="nav-link cta-button"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
       </ul>
     </nav>
   </div>
