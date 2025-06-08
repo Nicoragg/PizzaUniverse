@@ -13,6 +13,7 @@
         <li><a href="?page=home" class="nav-link">Página Inicial</a></li>
         <li><a href="?page=dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
+        <li><a href="?page=pizzas" class="nav-link">Pizzas</a></li>
         <li><a href="?page=users" class="nav-link">Usuários</a></li>
         <li><a href="?page=deliver" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Pedido</a></li>
       </ul>

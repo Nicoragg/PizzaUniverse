@@ -60,6 +60,13 @@ class Validator
     return $this;
   }
 
+  public function addError(string $field, string $message): self
+  {
+    $this->errors[$field] = $message;
+    $this->fieldsWithErrors[] = $field;
+    return $this;
+  }
+
   public function hasErrors(): bool
   {
     return !empty($this->errors);

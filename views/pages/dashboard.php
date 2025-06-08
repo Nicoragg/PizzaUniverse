@@ -28,15 +28,21 @@ $email = $_SESSION['email'] ?? '';
             </div>
 
             <div class="dashboard-card">
-                <h3>🍕 Cardápio</h3>
-                <p>Gerenciar produtos e categorias</p>
-                <a href="?page=menu-admin" class="btn-primary">Acessar</a>
+                <h3>🍕 Pizzas</h3>
+                <p>Gerenciar pizzas e categorias</p>
+                <a href="?page=pizzas" class="btn-primary">Acessar</a>
             </div>
 
             <div class="dashboard-card">
-                <h3>📋 Pedidos</h3>
-                <p>Visualizar e gerenciar pedidos</p>
-                <a href="?page=orders" class="btn-primary">Acessar</a>
+                <h3>📋 Cardápio</h3>
+                <p>Visualizar cardápio público</p>
+                <a href="?page=menu" class="btn-primary">Acessar</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>🚚 Pedidos</h3>
+                <p>Criar e gerenciar pedidos</p>
+                <a href="?page=deliver" class="btn-primary">Acessar</a>
             </div>
 
             <div class="dashboard-card">
@@ -49,12 +55,6 @@ $email = $_SESSION['email'] ?? '';
                 <h3>⚙️ Configurações</h3>
                 <p>Configurações do sistema</p>
                 <a href="?page=settings" class="btn-primary">Acessar</a>
-            </div>
-
-            <div class="dashboard-card">
-                <h3>🌐 Ver Site</h3>
-                <p>Visualizar site público</p>
-                <a href="./index.php" class="btn-secondary" target="_blank">Abrir</a>
             </div>
         </div>
 

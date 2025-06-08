@@ -29,6 +29,9 @@ $page = $_GET['page'] ?? 'login';
     case 'users':
       echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">';
       break;
+    case 'pizzas':
+      echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">'; // Reutilizando o CSS dos usuários
+      break;
     case 'menu':
       echo '<link rel="stylesheet" href="./assets/stylesheets/menu.css">';
       break;
@@ -60,6 +63,7 @@ $page = $_GET['page'] ?? 'login';
     'login'     => require './views/pages/login.php',
     'dashboard' => require './views/pages/dashboard.php',
     'users'     => require './views/pages/users/index.php',
+    'pizzas'    => require './views/pages/pizzas/index.php',
     'home'      => require './views/pages/home.php',
     'menu'      => require './views/pages/menu.php',
     'deliver'   => require './views/pages/deliver.php',
