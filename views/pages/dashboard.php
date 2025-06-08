@@ -28,6 +28,12 @@ $email = $_SESSION['email'] ?? '';
             </div>
 
             <div class="dashboard-card">
+                <h3>👤 Clientes</h3>
+                <p>Gerenciar clientes e dados pessoais</p>
+                <a href="?page=customers" class="btn-primary">Acessar</a>
+            </div>
+
+            <div class="dashboard-card">
                 <h3>🍕 Pizzas</h3>
                 <p>Gerenciar pizzas e categorias</p>
                 <a href="?page=pizzas" class="btn-primary">Acessar</a>

@@ -30,6 +30,26 @@ CREATE INDEX idx_pizzas_category ON pizzas(category);
 CREATE INDEX idx_pizzas_name ON pizzas(name);
 CREATE INDEX idx_pizzas_price ON pizzas(price);
 
+CREATE TABLE IF NOT EXISTS customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) NOT NULL UNIQUE,
+    phone VARCHAR(20) NOT NULL,
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    zipcode VARCHAR(10) NOT NULL,
+    neighborhood VARCHAR(100) NOT NULL,
+    street VARCHAR(200) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_customers_cpf ON customers(cpf);
+CREATE INDEX idx_customers_status ON customers(status);
+CREATE INDEX idx_customers_city ON customers(city);
+CREATE INDEX idx_customers_state ON customers(state);
+
 INSERT INTO users (username, email, password) VALUES 
 ('admin', 'admin@admin.com', MD5('admin123'));
 
@@ -86,3 +106,8 @@ INSERT INTO pizzas (name, description, price, category) VALUES
 ('Dois Amores', 'Pizza doce com chocolate ao leite e branco', 39.90, 'Doces'),
 ('Marciana', 'Pizza doce com sabores de Marte', 44.90, 'Doces'),
 ('Brigadeiro', 'Pizza doce com cobertura de brigadeiro', 36.90, 'Doces');
+
+INSERT INTO customers (name, cpf, phone, status, zipcode, neighborhood, street, city, state) VALUES 
+('Maria Silva Santos', '123.456.789-01', '(41) 99876-5432', 'active', '80020-100', 'Centro', 'Praça Tiradentes', 'Curitiba', 'Paraná'),
+('João Carlos Oliveira', '987.654.321-02', '(41) 98765-4321', 'active', '80020-110', 'Centro', 'Rua do Rosário', 'Curitiba', 'Paraná'),
+('Ana Paula Ferreira', '456.789.123-03', '(41) 97654-3210', 'active', '80020-010', 'Centro', 'Praça General Osório', 'Curitiba', 'Paraná');

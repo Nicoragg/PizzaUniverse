@@ -60,6 +60,98 @@ class Validator
     return $this;
   }
 
+  public function validateCpf(string $field, string $cpf): self
+  {
+    if (!empty($cpf)) {
+      // Remove formatting
+      $cpf = preg_replace('/[^0-9]/', '', $cpf);
+
+      // Check if it has 11 digits
+      if (strlen($cpf) !== 11) {
+        $this->errors[$field] = "CPF deve ter 11 dígitos.";
+        $this->fieldsWithErrors[] = $field;
+        return $this;
+      }
+
+      // Check if all digits are the same
+      if (preg_match('/(\d)\1{10}/', $cpf)) {
+        $this->errors[$field] = "CPF inválido.";
+        $this->fieldsWithErrors[] = $field;
+        return $this;
+      }
+
+      // Validate CPF algorithm
+      $sum = 0;
+      for ($i = 0; $i < 9; $i++) {
+        $sum += intval($cpf[$i]) * (10 - $i);
+      }
+      $remainder = $sum % 11;
+      $digit1 = $remainder < 2 ? 0 : 11 - $remainder;
+
+      if (intval($cpf[9]) !== $digit1) {
+        $this->errors[$field] = "CPF inválido.";
+        $this->fieldsWithErrors[] = $field;
+        return $this;
+      }
+
+      $sum = 0;
+      for ($i = 0; $i < 10; $i++) {
+        $sum += intval($cpf[$i]) * (11 - $i);
+      }
+      $remainder = $sum % 11;
+      $digit2 = $remainder < 2 ? 0 : 11 - $remainder;
+
+      if (intval($cpf[10]) !== $digit2) {
+        $this->errors[$field] = "CPF inválido.";
+        $this->fieldsWithErrors[] = $field;
+      }
+    }
+    return $this;
+  }
+
+  public function validateUniqueCpf(string $field, string $cpf, ?int $excludeId = null): self
+  {
+    if (!empty($cpf)) {
+      $cpf = preg_replace('/[^0-9]/', '', $cpf);
+      $existingCustomer = \App\Dal\CustomerDao::findByCpf($cpf);
+      if ($existingCustomer && ($excludeId === null || $existingCustomer->id !== $excludeId)) {
+        $this->errors[$field] = "Este CPF já está sendo usado por outro cliente.";
+        $this->fieldsWithErrors[] = $field;
+      }
+    }
+    return $this;
+  }
+
+  public function validatePhone(string $field, string $phone): self
+  {
+    if (!empty($phone)) {
+      // Remove formatting
+      $phone = preg_replace('/[^0-9]/', '', $phone);
+
+      // Check if it has 10 or 11 digits (landline or mobile)
+      if (strlen($phone) < 10 || strlen($phone) > 11) {
+        $this->errors[$field] = "Telefone deve ter 10 ou 11 dígitos.";
+        $this->fieldsWithErrors[] = $field;
+      }
+    }
+    return $this;
+  }
+
+  public function validateZipcode(string $field, string $zipcode): self
+  {
+    if (!empty($zipcode)) {
+      // Remove formatting
+      $zipcode = preg_replace('/[^0-9]/', '', $zipcode);
+
+      // Check if it has 8 digits
+      if (strlen($zipcode) !== 8) {
+        $this->errors[$field] = "CEP deve ter 8 dígitos.";
+        $this->fieldsWithErrors[] = $field;
+      }
+    }
+    return $this;
+  }
+
   public function addError(string $field, string $message): self
   {
     $this->errors[$field] = $message;

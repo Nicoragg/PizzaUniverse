@@ -16,7 +16,7 @@ $page = $_GET['page'] ?? 'login';
   <title>Pizza Universe - Admin</title>
   <link rel="stylesheet" href="./assets/stylesheets/style.css">
   <?php
-  $crudPages = ['users', 'pizzas'];
+  $crudPages = ['users', 'pizzas', 'customers'];
 
   if (in_array($page, $crudPages)) {
     echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
@@ -35,6 +35,7 @@ $page = $_GET['page'] ?? 'login';
     'dashboard' => 'dashboard.css',
     'users' => 'users.css',
     'pizzas' => 'pizzas.css',
+    'customers' => 'users.css',
     'deliver' => 'deliver.css'
   ];
 
@@ -47,7 +48,8 @@ $page = $_GET['page'] ?? 'login';
   <?php
   $pageScripts = [
     'pizzas' => ['sweetalert-confirm.js', 'pizzas.js'],
-    'users' => ['sweetalert-confirm.js', 'users.js']
+    'users' => ['sweetalert-confirm.js', 'users.js'],
+    'customers' => ['sweetalert-confirm.js', 'users.js']
   ];
 
   if (isset($pageScripts[$page])) {
@@ -79,6 +81,7 @@ $page = $_GET['page'] ?? 'login';
     'dashboard' => require './views/pages/dashboard.php',
     'users'     => require './views/pages/users/index.php',
     'pizzas'    => require './views/pages/pizzas/index.php',
+    'customers' => require './views/pages/customers/index.php',
     'home'      => require './views/pages/home.php',
     'deliver'   => require './views/pages/deliver.php',
     default     => require './views/pages/404.php',
