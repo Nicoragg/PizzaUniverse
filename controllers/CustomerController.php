@@ -18,7 +18,6 @@ abstract class CustomerController
     public static function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            // Validar token CSRF
             $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
             if (!CsrfToken::validate($token)) {
                 self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
@@ -72,7 +71,6 @@ abstract class CustomerController
                 try {
                     $customer = new Customer(0, $name, $cpf, $phone, $status, $zipcode, $neighborhood, $street, $city, $state);
                     $id = CustomerDao::create($customer);
-                    // Regenerar token após sucesso
                     CsrfToken::regenerate();
                     header("Location: ?page=customers");
                     exit;
@@ -92,7 +90,6 @@ abstract class CustomerController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            // Validar token CSRF
             $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
             if (!CsrfToken::validate($token)) {
                 self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
@@ -161,7 +158,6 @@ abstract class CustomerController
                 try {
                     $customer = new Customer($id, $name, $cpf, $phone, $status, $zipcode, $neighborhood, $street, $city, $state);
                     CustomerDao::update($customer);
-                    // Regenerar token após sucesso
                     CsrfToken::regenerate();
                     header("Location: ?page=customers");
                     exit;

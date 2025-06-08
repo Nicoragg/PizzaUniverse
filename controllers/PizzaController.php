@@ -18,7 +18,6 @@ abstract class PizzaController
     public static function create(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            // Validar token CSRF
             $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
             if (!CsrfToken::validate($token)) {
                 self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
@@ -67,7 +66,6 @@ abstract class PizzaController
                 try {
                     $pizza = new Pizza(0, $name, $description, (float) $price, $category);
                     $id = PizzaDao::create($pizza);
-                    // Regenerar token após sucesso
                     CsrfToken::regenerate();
                     header("Location: ?page=pizzas");
                     exit;
@@ -87,7 +85,6 @@ abstract class PizzaController
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            // Validar token CSRF
             $token = validateInput($_POST[CsrfToken::getTokenName()] ?? '');
             if (!CsrfToken::validate($token)) {
                 self::$msg = "Token de segurança inválido. Por favor, tente novamente.";
@@ -146,7 +143,6 @@ abstract class PizzaController
                 try {
                     $pizza = new Pizza($id, $name, $description, (float) $price, $category);
                     PizzaDao::update($pizza);
-                    // Regenerar token após sucesso
                     CsrfToken::regenerate();
                     header("Location: ?page=pizzas");
                     exit;
