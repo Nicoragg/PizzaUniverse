@@ -10,12 +10,16 @@
 
     <nav class="main-nav">
       <ul class="nav-list">
-        <li><a href="?page=home" class="nav-link">Página Inicial</a></li>
         <li><a href="?page=dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="?page=menu" class="nav-link">Cardápio</a></li>
-        <li><a href="?page=pizzas" class="nav-link">Pizzas</a></li>
-        <li><a href="?page=users" class="nav-link">Usuários</a></li>
-        <li><a href="?page=deliver" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Pedido</a></li>
+        <li class="dropdown">
+          <a href="#" class="nav-link dropdown-toggle">Gerenciar <i class="bi bi-chevron-down"></i></a>
+          <div class="dropdown-menu">
+            <a href="?page=pizzas" class="dropdown-item">Pizzas</a>
+            <a href="?page=users" class="dropdown-item">Usuários</a>
+          </div>
+        </li>
+        <li><a href="?page=deliver" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Novo Pedido</a></li>
       </ul>
     </nav>
   </div>

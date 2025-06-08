@@ -74,7 +74,6 @@ abstract class PizzaView
                         </option>
                     </select>
 
-                    <!-- Campo para digitar nova categoria -->
                     <div id="new-category-field" style="display: none;">
                         <label for="new_category">Nome da Nova Categoria:</label>
                         <input type="text" id="new_category" name="new_category"
