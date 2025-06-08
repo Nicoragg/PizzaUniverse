@@ -23,6 +23,11 @@ $page = $_GET['page'] ?? 'login';
     echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
   }
 
+  if ($page === 'orders') {
+    echo '<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">';
+    echo '<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>';
+  }
+
   if ($page === 'menu') {
     $_GET['page'] = 'pizzas';
     $_GET['action'] = 'menu';
@@ -48,7 +53,8 @@ $page = $_GET['page'] ?? 'login';
   $pageScripts = [
     'pizzas' => ['sweetalert-confirm.js', 'pizzas.js'],
     'users' => ['sweetalert-confirm.js', 'users.js'],
-    'customers' => ['sweetalert-confirm.js', 'customers.js']
+    'customers' => ['sweetalert-confirm.js', 'customers.js'],
+    'orders' => ['orders.js']
   ];
 
   if (isset($pageScripts[$page])) {

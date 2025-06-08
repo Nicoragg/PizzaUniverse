@@ -112,87 +112,17 @@ abstract class OrderView
         </main>
 
         <script>
-            const pizzaPrices = <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
-                                    $carry[$pizza->id] = $pizza->price;
-                                    return $carry;
-                                }, [])) ?>;
-
-            const pizzaNames = <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
-                                    $carry[$pizza->id] = $pizza->name;
-                                    return $carry;
-                                }, [])) ?>;
-
-            function increaseQuantity(pizzaId) {
-                const input = document.getElementById('qty_' + pizzaId);
-                const currentValue = parseInt(input.value);
-                if (currentValue < 99) {
-                    input.value = currentValue + 1;
-                    updateOrderSummary();
-                }
-            }
-
-            function decreaseQuantity(pizzaId) {
-                const input = document.getElementById('qty_' + pizzaId);
-                const currentValue = parseInt(input.value);
-                if (currentValue > 0) {
-                    input.value = currentValue - 1;
-                    updateOrderSummary();
-                }
-            }
-
-            function updateOrderSummary() {
-                const summaryDiv = document.getElementById('order-summary');
-                const submitBtn = document.getElementById('submit-order');
-                let total = 0;
-                let items = [];
-
-                // Percorrer todas as inputs de quantidade
-                document.querySelectorAll('.quantity-input').forEach(input => {
-                    const pizzaId = input.id.replace('qty_', '');
-                    const quantity = parseInt(input.value);
-
-                    if (quantity > 0) {
-                        const price = pizzaPrices[pizzaId];
-                        const name = pizzaNames[pizzaId];
-                        const subtotal = price * quantity;
-
-                        items.push({
-                            name: name,
-                            quantity: quantity,
-                            price: price,
-                            subtotal: subtotal
-                        });
-
-                        total += subtotal;
-                    }
-                });
-
-                // Atualizar o resumo
-                if (items.length === 0) {
-                    summaryDiv.innerHTML = '<div class="summary-item"><span>Nenhuma pizza selecionada</span><span>R$ 0,00</span></div>';
-                    submitBtn.disabled = true;
-                } else {
-                    let html = '';
-                    items.forEach(item => {
-                        html += `<div class="summary-item">
-                            <span>${item.quantity}x ${item.name}</span>
-                            <span>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</span>
-                        </div>`;
-                    });
-                    html += `<div class="summary-item total">
-                        <span>Total</span>
-                        <span>R$ ${total.toFixed(2).replace('.', ',')}</span>
-                    </div>`;
-
-                    summaryDiv.innerHTML = html;
-                    submitBtn.disabled = false;
-                }
-            }
-
-            // Adicionar event listeners para inputs manuais
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                input.addEventListener('input', updateOrderSummary);
-            });
+            // Inicializar dados das pizzas
+            initializePizzaData(
+                <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
+                    $carry[$pizza->id] = $pizza->price;
+                    return $carry;
+                }, [])) ?>,
+                <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
+                    $carry[$pizza->id] = $pizza->name;
+                    return $carry;
+                }, [])) ?>
+            );
         </script>
     <?php
     }
