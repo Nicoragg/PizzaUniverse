@@ -120,7 +120,6 @@ class OrderManager {
       create: false,
       maxOptions: null,
       loadThrottle: 300,
-      hideSelected: true,
       closeAfterSelect: true,
       render: {
         option: (data, escape) => {
@@ -142,9 +141,9 @@ class OrderManager {
           `;
         },
         item: (data, escape) => `
-          <div class="tom-select-item">
-            <i class="bi bi-person-check"></i>
-            ${escape(data.text)}
+          <div class="tom-select-item" style="line-height: 1.4; padding: 8px 12px;">
+            <i class="bi bi-person-check" style="margin-right: 6px;"></i>
+            <span>${escape(data.text)}</span>
           </div>
         `,
         no_results: () => `
@@ -163,9 +162,22 @@ class OrderManager {
     const wrapper = this.tomSelectInstance.wrapper;
     wrapper.classList.add('orders-tom-select');
 
+    // Corrigir cursor para seleção única
+    const control = this.tomSelectInstance.control;
+    control.style.cursor = 'pointer';
+
+    // Garantir que o input não seja editável após seleção
+    this.tomSelectInstance.control_input.style.cursor = 'pointer';
+    this.tomSelectInstance.control_input.readOnly = true;
+
     // Event listener para mudanças
     this.tomSelectInstance.on('change', () => {
       this.addSelectionAnimation();
+      // Garantir que o cursor seja removido após seleção
+      setTimeout(() => {
+        this.tomSelectInstance.blur();
+        this.tomSelectInstance.control_input.blur();
+      }, 100);
     });
   }
 
@@ -718,18 +730,103 @@ class OrderSummaryHandler {
    */
   updateSubmitButton(hasItems) {
     const submitBtn = this.orderManager.elements.submitBtn;
+    const submitContainer = document.getElementById('submit-container');
+    const submitText = document.getElementById('submit-text');
+
     if (!submitBtn) return;
 
+    // Atualizar estado do botão
     submitBtn.disabled = !hasItems;
-    submitBtn.innerHTML = hasItems
-      ? '<i class="bi bi-check-circle"></i> Finalizar Pedido'
-      : '<i class="bi bi-lock"></i> Selecione as pizzas';
 
-    // Adicionar animação quando habilitar/desabilitar
-    submitBtn.style.transform = 'scale(0.98)';
+    // Atualizar ícone e texto do botão
+    if (hasItems) {
+      submitBtn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Finalizar Pedido';
+      submitBtn.classList.remove('loading');
+    } else {
+      submitBtn.innerHTML = '<i class="bi bi-lock-fill"></i> Finalizar Pedido';
+      submitBtn.classList.remove('loading');
+    }
+
+    // Atualizar container e texto de estado
+    if (submitContainer) {
+      if (hasItems) {
+        submitContainer.classList.remove('disabled');
+        submitContainer.classList.add('ready');
+      } else {
+        submitContainer.classList.add('disabled');
+        submitContainer.classList.remove('ready');
+      }
+    }
+
+    if (submitText) {
+      if (hasItems) {
+        submitText.className = 'orders-submit-text ready';
+        submitText.innerHTML = '<i class="bi bi-check-circle"></i> Tudo pronto! Clique para finalizar o pedido';
+      } else {
+        submitText.className = 'orders-submit-text disabled';
+        submitText.innerHTML = '<i class="bi bi-info-circle"></i> Selecione pelo menos uma pizza para continuar';
+      }
+    }
+
+    // Adicionar animação de estado
+    this.addSubmitButtonAnimation(submitBtn, hasItems);
+  }
+
+  /**
+   * Adiciona animação ao botão de submit
+   */
+  addSubmitButtonAnimation(submitBtn, isEnabled) {
+    // Animação de escala
+    submitBtn.style.transform = 'scale(0.95)';
+
     setTimeout(() => {
       submitBtn.style.transform = '';
+
+      // Se habilitado, adicionar efeito de pulso
+      if (isEnabled) {
+        submitBtn.classList.add('orders-pulse');
+        setTimeout(() => {
+          submitBtn.classList.remove('orders-pulse');
+        }, 1500);
+      }
     }, 150);
+
+    // Adicionar efeito de brilho quando habilitar
+    if (isEnabled) {
+      this.addSubmitGlowEffect(submitBtn);
+    }
+  }
+
+  /**
+   * Adiciona efeito de brilho ao botão
+   */
+  addSubmitGlowEffect(submitBtn) {
+    const glowElement = document.createElement('div');
+    glowElement.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+      pointer-events: none;
+      z-index: 1;
+    `;
+
+    submitBtn.style.position = 'relative';
+    submitBtn.style.overflow = 'hidden';
+    submitBtn.appendChild(glowElement);
+
+    // Trigger glow animation
+    setTimeout(() => {
+      glowElement.style.left = '100%';
+    }, 100);
+
+    // Remove glow element
+    setTimeout(() => {
+      glowElement.remove();
+    }, 700);
   }
 
   /**

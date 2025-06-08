@@ -164,14 +164,31 @@
     transition: var(--orders-transition);
     cursor: pointer;
     font-size: 1rem;
-    box-shadow: var(--orders-shadow-sm);
+    box-shadow: 0 4px 12px rgba(255, 180, 0, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.orders-btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.4s;
+}
+
+.orders-btn-primary:hover::before {
+    left: 100%;
 }
 
 .orders-btn-primary:hover {
     background: linear-gradient(135deg, var(--orders-secondary), #444);
     color: var(--orders-primary);
     transform: translateY(-2px);
-    box-shadow: var(--orders-shadow-md);
+    box-shadow: 0 8px 20px rgba(255, 180, 0, 0.35);
 }
 
 .orders-btn-primary:disabled {
@@ -180,6 +197,183 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+
+.orders-btn-primary:disabled::before {
+    display: none;
+}
+
+/* ==== ENHANCED SUBMIT BUTTON ==== */
+.orders-btn-submit {
+    background: linear-gradient(135deg, var(--orders-success), #20c997);
+    color: var(--orders-white);
+    padding: 1.25rem 2.5rem;
+    border: none;
+    border-radius: var(--orders-radius-xl);
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: var(--orders-transition);
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 280px;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 400px;
+}
+
+.orders-btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.orders-btn-submit:hover::before {
+    left: 100%;
+}
+
+.orders-btn-submit:hover {
+    background: linear-gradient(135deg, #1e7e34, #28a745);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+    animation: ordersPulseGlow 1.5s infinite;
+}
+
+.orders-btn-submit:active {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.35);
+}
+
+.orders-btn-submit:disabled {
+    background: linear-gradient(135deg, var(--orders-text-muted), #6c757d);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
+    animation: none;
+}
+
+.orders-btn-submit:disabled::before {
+    display: none;
+}
+
+.orders-btn-submit:disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
+    animation: none;
+}
+
+.orders-btn-submit i {
+    font-size: 1.3rem;
+    transition: var(--orders-transition);
+}
+
+.orders-btn-submit:hover i {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.orders-btn-submit:disabled i {
+    transform: none;
+}
+
+/* Submit Button Animation */
+@keyframes ordersPulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 12px 35px rgba(40, 167, 69, 0.6), 0 0 30px rgba(40, 167, 69, 0.3);
+    }
+}
+
+/* Submit Button Loading State */
+.orders-btn-submit.loading {
+    pointer-events: none;
+    position: relative;
+}
+
+.orders-btn-submit.loading i {
+    opacity: 0;
+}
+
+.orders-btn-submit.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid var(--orders-white);
+    border-radius: 50%;
+    animation: ordersSpinner 1s linear infinite;
+}
+
+/* Success State for Submit Button */
+.orders-btn-submit.success {
+    background: linear-gradient(135deg, var(--orders-success), #20c997);
+    animation: ordersSuccessPulse 0.6s ease;
+}
+
+@keyframes ordersSuccessPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Container for Submit Button */
+.orders-submit-container {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.05), rgba(32, 201, 151, 0.05));
+    border-radius: var(--orders-radius-lg);
+    border: 2px dashed rgba(40, 167, 69, 0.2);
+}
+
+.orders-submit-container.disabled {
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.05), rgba(108, 117, 125, 0.05));
+    border-color: rgba(108, 117, 125, 0.2);
+}
+
+/* Submit Button States Text */
+.orders-submit-text {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--orders-text);
+    transition: var(--orders-transition);
+}
+
+.orders-submit-text.disabled {
+    color: var(--orders-text-muted);
+    font-style: italic;
+}
+
+.orders-submit-text.ready {
+    color: var(--orders-success);
 }
 
 /* ==== FORM COMPONENTS ==== */
@@ -881,6 +1075,75 @@
     background: #d1ecf1;
     color: #0c5460;
     border: 2px solid #bee5eb;
+}
+
+/* ==== TOMSELECT CURSOR FIX FOR SINGLE SELECTION ==== */
+.orders-container .ts-control.single {
+    cursor: pointer !important;
+}
+
+.orders-container .ts-control.single input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
+    user-select: none !important;
+}
+
+.orders-container .ts-control.single.has-items input {
+    cursor: pointer !important;
+    pointer-events: none !important;
+    background: transparent !important;
+}
+
+.orders-container .ts-control.single.has-items {
+    cursor: pointer !important;
+}
+
+.orders-container .ts-control.single .ts-input {
+    cursor: pointer !important;
+}
+
+.orders-container .ts-control.single .ts-input input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
+    text-shadow: none !important;
+}
+
+/* Remover cursor de texto quando item está selecionado */
+.orders-container .ts-control.has-items input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+/* Garantir que o controle inteiro seja clicável */
+.orders-container .ts-control.single:not(.focus) {
+    cursor: pointer !important;
+}
+
+.orders-container .ts-control.single:not(.focus) * {
+    cursor: pointer !important;
+}
+
+/* Estilo específico para TomSelect do Orders */
+.orders-tom-select .ts-control {
+    cursor: pointer !important;
+}
+
+.orders-tom-select .ts-control input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
+}
+
+.orders-tom-select .ts-control.has-items input {
+    pointer-events: none !important;
+    user-select: none !important;
+}
+
+/* Quando não tem foco, deve ser pointer */
+.orders-tom-select .ts-control:not(.focus) input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
 }
 
 /* ==== TOMSELECT CUSTOMIZATION ==== */

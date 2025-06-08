@@ -154,9 +154,14 @@ abstract class OrderView
                             </div>
                         </div>
 
-                        <button type="submit" id="submit-order" class="orders-btn-primary" disabled>
-                            <i class="bi bi-lock"></i> Selecione as pizzas
-                        </button>
+                        <div class="orders-submit-container" id="submit-container">
+                            <div class="orders-submit-text disabled" id="submit-text">
+                                <i class="bi bi-info-circle"></i> Selecione pelo menos uma pizza para continuar
+                            </div>
+                            <button type="submit" id="submit-order" class="orders-btn-submit" disabled>
+                                <i class="bi bi-lock-fill"></i> Finalizar Pedido
+                            </button>
+                        </div>
                     </form>
                 </section>
             </div>
