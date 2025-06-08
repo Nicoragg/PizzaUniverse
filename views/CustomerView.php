@@ -233,7 +233,7 @@ abstract class CustomerView
                 </div>
             <?php else: ?>
                 <div class="empty-state">
-                    <div class="empty-icon">👥</div>
+                    <div class="empty-icon"><i class="bi bi-people"></i></div>
                     <h3>Nenhum cliente encontrado</h3>
                     <p>Comece criando seu primeiro cliente.</p>
                     <a href="?page=customers&action=create" class="btn-primary">Criar Primeiro Cliente</a>

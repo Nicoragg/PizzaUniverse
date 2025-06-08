@@ -406,6 +406,11 @@ section nav a[href*="?page=pizzas"]:hover {
     font-size: 4rem;
     margin-bottom: 1rem;
     opacity: 0.5;
+    color: #6c757d;
+}
+
+.empty-icon i {
+    font-size: 4rem;
 }
 
 .empty-state h3 {

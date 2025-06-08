@@ -128,7 +128,10 @@ abstract class PizzaView
                 </div>
             <?php else: ?>
                 <div class="empty-state">
-                    <p>Nenhuma pizza encontrada.</p>
+                    <div class="empty-icon"><i class="bi bi-pizza"></i></div>
+                    <h3>Nenhuma pizza encontrada</h3>
+                    <p>Comece criando sua primeira pizza.</p>
+                    <a href="?page=pizzas&action=create" class="btn-primary">Criar Primeira Pizza</a>
                 </div>
             <?php endif; ?>
         </main>
@@ -156,16 +159,16 @@ abstract class PizzaView
                         <div class="category-header">
                             <h2 class="category-title">
                                 <span class="category-icon">
-                                    <?php
-                                    echo match (strtolower($category)) {
-                                        'tradicionais' => '🏛️',
-                                        'especiais' => '⭐',
-                                        'doces' => '🍰',
-                                        'vegetarianas' => '🌱',
-                                        'premium' => '💎',
-                                        default => '🍕'
-                                    };
-                                    ?>
+                                    <i class="bi bi-<?php
+                                                    echo match (strtolower($category)) {
+                                                        'tradicionais' => 'house-fill',
+                                                        'especiais' => 'star-fill',
+                                                        'doces' => 'heart-fill',
+                                                        'vegetarianas' => 'leaf-fill',
+                                                        'premium' => 'gem',
+                                                        default => 'pizza'
+                                                    };
+                                                    ?>"></i>
                                 </span>
                                 <?= htmlspecialchars($category) ?>
                             </h2>
@@ -202,7 +205,7 @@ abstract class PizzaView
 
                 <?php if (empty($pizzasByCategory)): ?>
                     <div class="empty-menu">
-                        <div class="empty-icon">🍕</div>
+                        <div class="empty-icon"><i class="bi bi-pizza"></i></div>
                         <h3>Cardápio em construção</h3>
                         <p>Estamos preparando pizzas incríveis para você!</p>
                     </div>
@@ -211,7 +214,7 @@ abstract class PizzaView
 
             <div class="menu-footer">
                 <div class="contact-info">
-                    <h3>📞 Faça seu pedido</h3>
+                    <h3><i class="bi bi-telephone"></i> Faça seu pedido</h3>
                     <p>Entre em contato conosco para realizar seu pedido</p>
                     <a href="#" class="order-btn">
                         <i class="bi bi-telephone"></i>

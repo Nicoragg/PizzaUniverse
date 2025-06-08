@@ -4,7 +4,6 @@ namespace App\Views;
 
 use App\Models\Order;
 use App\Models\Customer;
-use App\Models\Pizza;
 
 abstract class OrderView
 {
@@ -31,7 +30,6 @@ abstract class OrderView
                 <form method="POST" action="?page=orders&action=create" class="order-form">
                     <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
 
-                    <!-- Seleção do Cliente -->
                     <div class="form-section">
                         <h3>Informações do Cliente</h3>
                         <div class="form-group">
@@ -54,7 +52,6 @@ abstract class OrderView
                         </div>
                     </div>
 
-                    <!-- Seleção de Pizzas -->
                     <div class="form-section">
                         <h3>Selecionar Pizzas</h3>
 
@@ -84,7 +81,6 @@ abstract class OrderView
                         <?php endforeach; ?>
                     </div>
 
-                    <!-- Resumo do Pedido -->
                     <div class="form-section">
                         <h3>Resumo do Pedido</h3>
                         <div id="order-summary">
@@ -95,7 +91,6 @@ abstract class OrderView
                         </div>
                     </div>
 
-                    <!-- Observações -->
                     <div class="form-section">
                         <h3>Observações</h3>
                         <div class="form-group">
@@ -112,7 +107,6 @@ abstract class OrderView
         </main>
 
         <script>
-            // Inicializar dados das pizzas
             initializePizzaData(
                 <?= json_encode(array_reduce(array_merge(...array_values($pizzasByCategory)), function ($carry, $pizza) {
                     $carry[$pizza->id] = $pizza->price;
@@ -183,7 +177,7 @@ abstract class OrderView
                 </div>
             <?php else: ?>
                 <div class="empty-state">
-                    <div class="empty-icon">📋</div>
+                    <div class="empty-icon"><i class="bi bi-clipboard"></i></div>
                     <h3>Nenhum pedido encontrado</h3>
                     <p>Comece criando seu primeiro pedido.</p>
                     <a href="?page=orders&action=create" class="btn-primary">Criar Primeiro Pedido</a>
