@@ -9,16 +9,16 @@ abstract class UserView
     public static function renderLogin(?string $message = null): void
     {
 ?>
-        <div class="login-page">
-            <div class="login-container">
+        <section class="login-page">
+            <section class="login-container">
                 <img src="./assets/images/logo.png" alt="Pizza Universe Logo" height="80">
                 <h1>Pizza Universe</h1>
                 <p>Painel Administrativo</p>
 
                 <?php if ($message): ?>
-                    <div class="message error">
+                    <p class="message error">
                         <?= htmlspecialchars($message) ?>
-                    </div>
+                    </p>
                 <?php endif; ?>
 
                 <form method="POST" action="?page=login" class="auth-form">
@@ -34,8 +34,8 @@ abstract class UserView
 
                     <button type="submit" class="auth-button">Entrar</button>
                 </form>
-            </div>
-        </div>
+            </section>
+        </section>
     <?php
     }
 
@@ -49,11 +49,11 @@ abstract class UserView
             <h1><?= $title ?></h1>
             <a href="?page=users">← Voltar</a>
 
-            <div>
+            <section>
                 <?php if ($message): ?>
-                    <div>
+                    <p>
                         <?= htmlspecialchars($message) ?>
-                    </div>
+                    </p>
                 <?php endif; ?>
 
                 <form method="POST" action="<?= $action ?>">
@@ -61,29 +61,23 @@ abstract class UserView
                         <input type="hidden" name="id" value="<?= $user->id ?>">
                     <?php endif; ?>
 
-                    <div>
-                        <label for="username">Nome de usuário:</label>
-                        <input type="text" id="username" name="username" required
-                            value="<?= $user ? htmlspecialchars($user->username) : '' ?>"
-                            placeholder="Digite o nome de usuário">
-                    </div>
+                    <label for="username">Nome de usuário:</label>
+                    <input type="text" id="username" name="username" required
+                        value="<?= $user ? htmlspecialchars($user->username) : '' ?>"
+                        placeholder="Digite o nome de usuário">
 
-                    <div>
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required
-                            value="<?= $user ? htmlspecialchars($user->email) : '' ?>"
-                            placeholder="Digite o email">
-                    </div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required
+                        value="<?= $user ? htmlspecialchars($user->email) : '' ?>"
+                        placeholder="Digite o email">
 
-                    <div>
-                        <label for="password">Senha:</label>
-                        <input type="password" id="password" name="password" required
-                            placeholder="<?= $isEdit ? 'Nova senha' : 'Digite a senha' ?>">
-                    </div>
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required
+                        placeholder="<?= $isEdit ? 'Nova senha' : 'Digite a senha' ?>">
 
                     <button type="submit"><?= $isEdit ? 'Atualizar' : 'Criar' ?> Usuário</button>
                 </form>
-            </div>
+            </section>
         </main>
     <?php
     }
@@ -96,13 +90,13 @@ abstract class UserView
             <a href="?page=users&action=create">+ Novo Usuário</a>
 
             <?php if ($deleteId): ?>
-                <div>
+                <section>
                     <p>Tem certeza que deseja excluir este usuário?</p>
-                    <div>
+                    <nav>
                         <a href="?page=users&action=delete&id=<?= $deleteId ?>">Confirmar Exclusão</a>
                         <a href="?page=users">Cancelar</a>
-                    </div>
-                </div>
+                    </nav>
+                </section>
             <?php endif; ?>
 
             <table>
