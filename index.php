@@ -35,7 +35,6 @@ $page = $_GET['page'] ?? 'login';
     'dashboard' => 'dashboard.css',
     'pizzas' => 'pizzas.css',
     'customers' => 'customers.css',
-    'deliver' => 'deliver.css'
   ];
 
   if (isset($pageStyles[$page])) {
@@ -88,7 +87,6 @@ $page = $_GET['page'] ?? 'login';
     'pizzas'    => require './views/pages/pizzas/index.php',
     'customers' => require './views/pages/customers/index.php',
     'home'      => require './views/pages/home.php',
-    'deliver'   => require './views/pages/deliver.php',
     default     => require './views/pages/404.php',
   };
 

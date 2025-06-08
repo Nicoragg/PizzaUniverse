@@ -213,7 +213,7 @@ abstract class PizzaView
                 <div class="contact-info">
                     <h3>📞 Faça seu pedido</h3>
                     <p>Entre em contato conosco para realizar seu pedido</p>
-                    <a href="?page=deliver" class="order-btn">
+                    <a href="#" class="order-btn">
                         <i class="bi bi-telephone"></i>
                         Fazer Pedido
                     </a>

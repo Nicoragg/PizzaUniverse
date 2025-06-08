@@ -50,6 +50,40 @@ CREATE INDEX idx_customers_status ON customers(status);
 CREATE INDEX idx_customers_city ON customers(city);
 CREATE INDEX idx_customers_state ON customers(state);
 
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    order_number VARCHAR(20) NOT NULL UNIQUE,
+    status ENUM('pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled') DEFAULT 'pending',
+    total_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    delivery_address TEXT,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_orders_customer_id ON orders(customer_id);
+CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_orders_order_number ON orders(order_number);
+CREATE INDEX idx_orders_created_at ON orders(created_at);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    pizza_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    unit_price DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (pizza_id) REFERENCES pizzas(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+CREATE INDEX idx_order_items_pizza_id ON order_items(pizza_id);
+
 INSERT INTO users (username, email, password) VALUES 
 ('admin', 'admin@admin.com', MD5('admin123'));
 

@@ -5,7 +5,7 @@
       <p>Sabores que desafiam a gravidade.<br />Cada fatia, uma viagem interestelar de sabor e qualidade.</p>
       <div class="hero-buttons">
         <a href="?page=menu" class="hero-button primary">Explorar Cardápio</a>
-        <a href="?page=deliver" class="hero-button secondary">Fazer Pedido</a>
+        <a href="#" class="hero-button secondary">Fazer Pedido</a>
       </div>
     </div>
     <div class="hero-image">
