@@ -7,6 +7,17 @@ function validateInput($str): string
   return htmlspecialchars(trim($str));
 }
 
+function maskCpf(string $cpf): string
+{
+  $cpf = preg_replace('/[^0-9]/', '', $cpf);
+
+  if (strlen($cpf) !== 11) {
+    return $cpf; // Retorna original se não for válido
+  }
+
+  return substr($cpf, 0, 3) . '-XXX-XXX-' . substr($cpf, -2);
+}
+
 class Validator
 {
   private array $errors = [];

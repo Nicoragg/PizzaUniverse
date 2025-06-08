@@ -3,6 +3,7 @@
 namespace App\Views;
 
 use App\Models\Customer;
+use App\Util;
 
 abstract class CustomerView
 {
@@ -153,16 +154,6 @@ abstract class CustomerView
                 <a href="?page=customers&action=create" class="btn-primary"><i class="bi bi-plus-lg"></i> Novo Cliente</a>
             </div>
 
-            <?php if ($deleteId): ?>
-                <div class="confirmation-dialog">
-                    <p>Tem certeza que deseja excluir este cliente?</p>
-                    <div class="confirmation-buttons">
-                        <a href="?page=customers&action=delete&id=<?= $deleteId ?>" class="btn-danger">Sim, excluir</a>
-                        <a href="?page=customers" class="btn-secondary">Cancelar</a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if (!empty($customers)): ?>
                 <div class="customers-table-container">
                     <table class="customers-table">
@@ -183,7 +174,7 @@ abstract class CustomerView
                                 <tr class="customer-row">
                                     <td><?= $customer->id ?></td>
                                     <td class="customer-name"><?= htmlspecialchars($customer->name) ?></td>
-                                    <td class="customer-cpf"><?= htmlspecialchars($customer->cpf) ?></td>
+                                    <td><?= Util\maskCpf($customer->cpf) ?></td>
                                     <td><?= htmlspecialchars($customer->phone) ?></td>
                                     <td>
                                         <span class="status-badge status-<?= $customer->status ?>">
