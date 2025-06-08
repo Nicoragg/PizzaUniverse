@@ -17,6 +17,7 @@
           <div class="dropdown-menu">
             <a href="?page=pizzas" class="dropdown-item">Pizzas</a>
             <a href="?page=users" class="dropdown-item">Usuários</a>
+            <a href="?page=customers" class="dropdown-item">Clientes</a>
           </div>
         </li>
         <li><a href="?page=deliver" class="nav-link cta-button"><i class="bi bi-plus-lg"></i> Novo Pedido</a></li>

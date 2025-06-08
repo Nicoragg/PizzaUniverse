@@ -33,9 +33,7 @@ $page = $_GET['page'] ?? 'login';
     'login' => 'auth.css',
     'home' => 'home.css',
     'dashboard' => 'dashboard.css',
-    'users' => 'users.css',
     'pizzas' => 'pizzas.css',
-    'customers' => 'users.css',
     'deliver' => 'deliver.css'
   ];
 

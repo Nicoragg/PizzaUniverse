@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentPage = urlParams.get('page');
+
+  if (currentPage !== 'users') return;
+
   const deleteButtons = document.querySelectorAll('a[href*="confirm="]');
 
   deleteButtons.forEach(button => {

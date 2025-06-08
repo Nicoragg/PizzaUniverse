@@ -72,8 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Modal de confirmação para exclusão de pizzas
 document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentPage = urlParams.get('page');
+
+  if (currentPage !== 'pizzas') return;
+
   const deleteButtons = document.querySelectorAll('.btn-delete');
 
   deleteButtons.forEach(button => {

@@ -8,8 +8,8 @@ class SweetAlertConfirm {
   static defaultConfig = {
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
+    confirmButtonColor: '#c82333',
+    cancelButtonColor: '#6c757d',
     confirmButtonText: 'Sim, excluir!',
     cancelButtonText: 'Cancelar',
     reverseButtons: true
