@@ -1,0 +1,339 @@
+/* ORDERS SPECIFIC STYLES */
+
+/* ORDER FORM LAYOUT */
+.order-form {
+    max-width: 1000px !important;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #ffb400;
+}
+
+.form-section h3 {
+    color: #2c1b1b;
+    font-size: 1.3rem;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ffb400;
+    font-weight: 700;
+}
+
+/* PIZZA SELECTION STYLES */
+.category-section {
+    margin-bottom: 2rem;
+}
+
+.category-section h4 {
+    color: #2c1b1b;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.pizzas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.pizza-item {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.pizza-item:hover {
+    border-color: #ffb400;
+    box-shadow: 0 4px 12px rgba(255, 180, 0, 0.2);
+}
+
+.pizza-info h5 {
+    margin: 0 0 0.5rem 0;
+    color: #2c1b1b;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.pizza-info p {
+    margin: 0 0 0.5rem 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.pizza-price {
+    color: #28a745;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.pizza-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-quantity {
+    background: #ffb400;
+    color: #2c1b1b;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-quantity:hover {
+    background: #ffd700;
+    transform: scale(1.1);
+}
+
+.quantity-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 0.25rem;
+    font-weight: 600;
+}
+
+/* ORDER SUMMARY */
+#order-summary {
+    background: #ffffff;
+    border: 2px solid #ffb400;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item.total {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #28a745;
+    border-top: 2px solid #ffb400;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+}
+
+/* ORDERS TABLE */
+.orders-table-container {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.orders-table {
+    min-width: 800px;
+}
+
+.order-row:hover .order-number {
+    color: #ffb400;
+    font-weight: 600;
+}
+
+.order-number {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
+
+.customer-info {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.order-total {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.status-select {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: #ffffff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.status-select:focus {
+    border-color: #ffb400;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 180, 0, 0.2);
+}
+
+/* ACTION BUTTONS */
+.btn-view {
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
+    color: #ffffff !important;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin-right: 0.25rem;
+}
+
+.btn-view:hover {
+    background: linear-gradient(135deg, #138496, #117a8b) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* ORDER DETAILS PAGE */
+.order-details {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 8px;
+    border-left: 4px solid #ffb400;
+}
+
+.order-info h2 {
+    margin: 0 0 0.5rem 0;
+    color: #2c1b1b;
+    font-size: 1.8rem;
+}
+
+.order-date {
+    color: #6c757d;
+    margin: 0;
+    font-style: italic;
+}
+
+.order-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-status label {
+    font-weight: 600;
+    color: #2c1b1b;
+}
+
+.order-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.customer-section,
+.items-section,
+.notes-section {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.customer-section h3,
+.items-section h3,
+.notes-section h3 {
+    margin: 0 0 1rem 0;
+    color: #2c1b1b;
+    font-size: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ffb400;
+}
+
+.customer-section p {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.items-section {
+    grid-column: 1 / -1;
+}
+
+.items-table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.items-table th,
+.items-table td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.items-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c1b1b;
+}
+
+.order-total {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #28a745;
+    padding: 1rem 0;
+    border-top: 2px solid #ffb400;
+}
+
+.notes-section {
+    grid-column: 1 / -1;
+    margin-top: 1rem;
+}
+
+.notes-section p {
+    line-height: 1.6;
+    color: #495057;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .pizzas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .order-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .customer-section,
+    .items-section,
+    .notes-section {
+        grid-column: 1;
+    }
+
+    .orders-table-container {
+        font-size: 0.9rem;
+    }
+}

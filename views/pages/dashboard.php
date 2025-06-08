@@ -48,7 +48,7 @@ $email = $_SESSION['email'] ?? '';
             <div class="dashboard-card">
                 <h3>🚚 Pedidos</h3>
                 <p>Criar e gerenciar pedidos</p>
-                <a href="?page=deliver" class="btn-primary">Acessar</a>
+                <a href="#" class="btn-primary">Acessar</a>
             </div>
 
             <div class="dashboard-card">

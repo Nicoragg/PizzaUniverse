@@ -35,16 +35,11 @@ $page = $_GET['page'] ?? 'login';
     'dashboard' => 'dashboard.css',
     'pizzas' => 'pizzas.css',
     'customers' => 'customers.css',
+    'orders' => 'orders.css',
   ];
 
   if (isset($pageStyles[$page])) {
-    if (is_array($pageStyles[$page])) {
-      foreach ($pageStyles[$page] as $styleFile) {
-        echo '<link rel="stylesheet" href="./assets/stylesheets/' . $styleFile . '">';
-      }
-    } else {
-      echo '<link rel="stylesheet" href="./assets/stylesheets/' . $pageStyles[$page] . '">';
-    }
+    echo '<link rel="stylesheet" href="./assets/stylesheets/' . $pageStyles[$page] . '">';
   }
   ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
@@ -86,6 +81,7 @@ $page = $_GET['page'] ?? 'login';
     'users'     => require './views/pages/users/index.php',
     'pizzas'    => require './views/pages/pizzas/index.php',
     'customers' => require './views/pages/customers/index.php',
+    'orders'    => require './views/pages/orders/index.php',
     'home'      => require './views/pages/home.php',
     default     => require './views/pages/404.php',
   };
