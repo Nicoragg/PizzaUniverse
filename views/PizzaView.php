@@ -17,14 +17,13 @@ abstract class PizzaView
         $priceValue = $formData['price'] ?? ($pizza ? number_format($pizza->price, 2) : '');
         $categoryValue = $formData['category'] ?? ($pizza ? htmlspecialchars($pizza->category) : '');
 
-        // Carregar categorias dinamicamente do banco
         try {
             $categories = \App\Dal\PizzaDao::getCategories();
         } catch (\Exception $e) {
-            $categories = ['Tradicionais', 'Especiais', 'Doces']; // fallback
+            $categories = ['Tradicionais', 'Especiais', 'Doces'];
         }
 ?>
-        <main>
+        <main class="pizza-management">
             <h1><?= $title ?></h1>
 
             <div class="navigation-buttons">
@@ -38,7 +37,7 @@ abstract class PizzaView
                     </p>
                 <?php endif; ?>
 
-                <form method="POST" action="<?= $action ?>">
+                <form method="POST" action="<?= $action ?>" class="pizza-form">
                     <?php if ($isEdit): ?>
                         <input type="hidden" name="id" value="<?= $pizza->id ?>">
                     <?php endif; ?>
@@ -76,7 +75,7 @@ abstract class PizzaView
                     </select>
 
                     <!-- Campo para digitar nova categoria -->
-                    <div id="new-category-field" style="display: none; margin-top: 10px;">
+                    <div id="new-category-field" style="display: none;">
                         <label for="new_category">Nome da Nova Categoria:</label>
                         <input type="text" id="new_category" name="new_category"
                             placeholder="Digite o nome da nova categoria"
@@ -87,171 +86,13 @@ abstract class PizzaView
                 </form>
             </section>
         </main>
-
-        <script>
-            document.getElementById('category').addEventListener('change', function() {
-                const newCategoryField = document.getElementById('new-category-field');
-                const newCategoryInput = document.getElementById('new_category');
-
-                if (this.value === 'Nova Categoria') {
-                    newCategoryField.style.display = 'block';
-                    newCategoryInput.required = true;
-                } else {
-                    newCategoryField.style.display = 'none';
-                    newCategoryInput.required = false;
-                    newCategoryInput.value = '';
-                }
-            });
-
-            // Mostrar campo se já existe uma categoria personalizada
-            window.addEventListener('load', function() {
-                const categorySelect = document.getElementById('category');
-                const selectedValue = categorySelect.value;
-                const newCategoryField = document.getElementById('new-category-field');
-
-                if (selectedValue && categorySelect.querySelector(`option[value="${selectedValue}"]`) === null) {
-                    // Se a categoria atual não está nas opções padrão, mostrar campo
-                    categorySelect.value = 'Nova Categoria';
-                    newCategoryField.style.display = 'block';
-                    document.getElementById('new_category').required = true;
-                }
-            });
-        </script>
-
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-
-            th,
-            td {
-                padding: 12px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-
-            th {
-                background-color: #f2f2f2;
-                font-weight: bold;
-            }
-
-            tr:hover {
-                background-color: #f5f5f5;
-            }
-
-            .navigation-buttons {
-                margin: 20px 0;
-            }
-
-            .navigation-buttons a {
-                background-color: #007bff;
-                color: white;
-                padding: 10px 15px;
-                text-decoration: none;
-                border-radius: 5px;
-                margin-right: 10px;
-            }
-
-            .navigation-buttons a:hover {
-                background-color: #0056b3;
-            }
-
-            .field-error {
-                border-color: #dc3545;
-                background-color: #f8d7da;
-            }
-
-            .message.error {
-                color: #721c24;
-                background-color: #f8d7da;
-                border: 1px solid #f5c6cb;
-                padding: 10px;
-                border-radius: 5px;
-                margin: 10px 0;
-            }
-
-            form {
-                max-width: 600px;
-            }
-
-            label {
-                display: block;
-                margin-top: 15px;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-
-            input,
-            textarea,
-            select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 16px;
-            }
-
-            button {
-                background-color: #28a745;
-                color: white;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                margin-top: 20px;
-            }
-
-            button:hover {
-                background-color: #218838;
-            }
-
-            .pizza-list {
-                display: grid;
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .pizza-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 15px;
-                border: 1px solid #eee;
-                border-radius: 8px;
-                background-color: #fff;
-            }
-
-            .pizza-info h3 {
-                margin: 0 0 8px 0;
-                color: #333;
-                font-size: 1.1em;
-            }
-
-            .pizza-info p {
-                margin: 0;
-                color: #666;
-                font-size: 0.9em;
-                line-height: 1.4;
-            }
-
-            .pizza-price {
-                font-weight: bold;
-                color: #e74c3c;
-                font-size: 1.1em;
-                white-space: nowrap;
-                margin-left: 15px;
-            }
-        </style>
     <?php
     }
 
     public static function renderList(array $pizzas, ?int $deleteId = null): void
     {
     ?>
-        <main>
+        <main class="pizza-management">
             <h1>Gerenciar Pizzas</h1>
 
             <div class="navigation-buttons">
@@ -259,10 +100,10 @@ abstract class PizzaView
             </div>
 
             <?php if ($deleteId): ?>
-                <section>
+                <section class="delete-confirmation">
                     <p>Tem certeza que deseja excluir esta pizza?</p>
                     <nav>
-                        <a href="?page=pizzas&action=delete&id=<?= $deleteId ?>"><i class="bi bi-trash3"></i> Confirmar Exclusão</a>
+                        <a href="?page=pizzas&action=delete&id=<?= $deleteId ?>" class="btn-danger"><i class="bi bi-trash3"></i> Confirmar Exclusão</a>
                         <a href="?page=pizzas"><i class="bi bi-arrow-left"></i> Cancelar</a>
                     </nav>
                 </section>
@@ -297,7 +138,9 @@ abstract class PizzaView
             </table>
 
             <?php if (empty($pizzas)): ?>
-                <p>Nenhuma pizza encontrada.</p>
+                <div class="empty-state">
+                    <p>Nenhuma pizza encontrada.</p>
+                </div>
             <?php endif; ?>
         </main>
     <?php
@@ -330,49 +173,12 @@ abstract class PizzaView
                 <?php endforeach; ?>
 
                 <?php if (empty($pizzasByCategory)): ?>
-                    <p>Nenhuma pizza disponível no momento.</p>
+                    <div class="empty-state">
+                        <p>Nenhuma pizza disponível no momento.</p>
+                    </div>
                 <?php endif; ?>
             </section>
         </main>
-
-        <style>
-            .pizza-list {
-                display: grid;
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .pizza-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 15px;
-                border: 1px solid #eee;
-                border-radius: 8px;
-                background-color: #fff;
-            }
-
-            .pizza-info h3 {
-                margin: 0 0 8px 0;
-                color: #333;
-                font-size: 1.1em;
-            }
-
-            .pizza-info p {
-                margin: 0;
-                color: #666;
-                font-size: 0.9em;
-                line-height: 1.4;
-            }
-
-            .pizza-price {
-                font-weight: bold;
-                color: #e74c3c;
-                font-size: 1.1em;
-                white-space: nowrap;
-                margin-left: 15px;
-            }
-        </style>
 <?php
     }
 }

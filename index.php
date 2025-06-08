@@ -30,7 +30,7 @@ $page = $_GET['page'] ?? 'login';
       echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">';
       break;
     case 'pizzas':
-      echo '<link rel="stylesheet" href="./assets/stylesheets/users.css">'; // Reutilizando o CSS dos usuários
+      echo '<link rel="stylesheet" href="./assets/stylesheets/pizzas.css">';
       break;
     case 'menu':
       echo '<link rel="stylesheet" href="./assets/stylesheets/menu.css">';
@@ -41,6 +41,19 @@ $page = $_GET['page'] ?? 'login';
   }
   ?>
   <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
+
+  <?php
+  $jsFiles = [];
+  switch ($page) {
+    case 'pizzas':
+      $jsFiles[] = './assets/js/pizzas.js';
+      break;
+  }
+
+  foreach ($jsFiles as $jsFile) {
+    echo '<script src="' . $jsFile . '" defer></script>';
+  }
+  ?>
 </head>
 
 <body>

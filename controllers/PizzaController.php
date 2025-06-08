@@ -23,7 +23,6 @@ abstract class PizzaController
             $category = validateInput($_POST["category"] ?? '');
             $newCategory = validateInput($_POST["new_category"] ?? '');
 
-            // Se selecionou "Nova Categoria", usar o valor do campo new_category
             if ($category === 'Nova Categoria' && !empty($newCategory)) {
                 $category = $newCategory;
             }
@@ -40,7 +39,6 @@ abstract class PizzaController
                 ->validateRequired('category', $category, 'Categoria')
                 ->validateMaxLength('category', $category, 50, 'Categoria');
 
-            // Validar se o preço é um número válido
             if (!empty($price) && !is_numeric($price)) {
                 $validator->addError('price', 'O campo Preço deve ser um número válido.');
             } elseif (!empty($price) && (float) $price <= 0) {
@@ -85,7 +83,6 @@ abstract class PizzaController
             $category = validateInput($_POST["category"] ?? '');
             $newCategory = validateInput($_POST["new_category"] ?? '');
 
-            // Se selecionou "Nova Categoria", usar o valor do campo new_category
             if ($category === 'Nova Categoria' && !empty($newCategory)) {
                 $category = $newCategory;
             }
@@ -102,7 +99,6 @@ abstract class PizzaController
                 ->validateRequired('category', $category, 'Categoria')
                 ->validateMaxLength('category', $category, 50, 'Categoria');
 
-            // Validar se o preço é um número válido
             if (!empty($price) && !is_numeric($price)) {
                 $validator->addError('price', 'O campo Preço deve ser um número válido.');
             } elseif (!empty($price) && (float) $price <= 0) {
