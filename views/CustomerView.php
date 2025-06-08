@@ -27,6 +27,36 @@ abstract class CustomerView
             'active' => 'Ativo',
             'inactive' => 'Inativo',
         ];
+
+        $stateOptions = [
+            'Acre' => 'Acre',
+            'Alagoas' => 'Alagoas',
+            'Amapá' => 'Amapá',
+            'Amazonas' => 'Amazonas',
+            'Bahia' => 'Bahia',
+            'Ceará' => 'Ceará',
+            'Distrito Federal' => 'Distrito Federal',
+            'Espírito Santo' => 'Espírito Santo',
+            'Goiás' => 'Goiás',
+            'Maranhão' => 'Maranhão',
+            'Mato Grosso' => 'Mato Grosso',
+            'Mato Grosso do Sul' => 'Mato Grosso do Sul',
+            'Minas Gerais' => 'Minas Gerais',
+            'Pará' => 'Pará',
+            'Paraíba' => 'Paraíba',
+            'Paraná' => 'Paraná',
+            'Pernambuco' => 'Pernambuco',
+            'Piauí' => 'Piauí',
+            'Rio de Janeiro' => 'Rio de Janeiro',
+            'Rio Grande do Norte' => 'Rio Grande do Norte',
+            'Rio Grande do Sul' => 'Rio Grande do Sul',
+            'Rondônia' => 'Rondônia',
+            'Roraima' => 'Roraima',
+            'Santa Catarina' => 'Santa Catarina',
+            'São Paulo' => 'São Paulo',
+            'Sergipe' => 'Sergipe',
+            'Tocantins' => 'Tocantins',
+        ];
 ?>
         <main>
             <h1><?= $title ?></h1>
@@ -129,11 +159,14 @@ abstract class CustomerView
 
                         <div class="form-group">
                             <label for="state">Estado:</label>
-                            <input type="text" id="state" name="state"
-                                value="<?= $stateValue ?>"
-                                placeholder="UF"
-                                maxlength="2"
+                            <select id="state" name="state"
                                 class="<?= $fieldsWithErrors && in_array('state', $fieldsWithErrors) ? 'field-error' : '' ?>">
+                                <?php foreach ($stateOptions as $value => $label): ?>
+                                    <option value="<?= $value ?>" <?= $stateValue === $value ? 'selected' : '' ?>>
+                                        <?= $label ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
 

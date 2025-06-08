@@ -55,12 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // CEP lookup functionality
     zipcodeInput.addEventListener('blur', async (e) => {
       const cep = e.target.value.replace(/\D/g, '');
       if (cep.length === 8) {
         try {
-          // Add loading indicator
           const originalPlaceholder = e.target.placeholder;
           e.target.placeholder = 'Buscando endereço...';
           e.target.style.background = 'linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%)';
@@ -70,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
           const data = await response.json();
 
-          // Reset loading state
           e.target.placeholder = originalPlaceholder;
           e.target.style.background = '';
           e.target.style.animation = '';
@@ -81,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const cityInput = document.getElementById('city');
             const stateInput = document.getElementById('state');
 
-            // Fill fields and add visual indicators
             if (neighborhoodInput && data.bairro) {
               neighborhoodInput.value = data.bairro;
               neighborhoodInput.classList.add('api-filled');
@@ -94,19 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
               cityInput.value = data.localidade;
               cityInput.classList.add('api-filled');
             }
-            if (stateInput && data.uf) {
-              stateInput.value = data.uf.toUpperCase();
+            if (stateInput && data.estado) {
+              stateInput.value = data.estado;
               stateInput.classList.add('api-filled');
             }
 
-            // Add success indicator to CEP field
             e.target.style.borderColor = '#28a745';
             e.target.style.backgroundColor = '#f8fff9';
 
-            // Show success message
             showTemporaryMessage('✅ Endereço encontrado e preenchido automaticamente!', 'success');
           } else {
-            // CEP not found
             e.target.style.borderColor = '#ffc107';
             e.target.style.backgroundColor = '#fffdf7';
             showTemporaryMessage('⚠️ CEP não encontrado. Preencha o endereço manualmente.', 'warning');
@@ -121,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Remove API-filled class when user manually edits fields
   const addressFields = ['neighborhood', 'street', 'city', 'state'];
   addressFields.forEach(fieldId => {
     const field = document.getElementById(fieldId);
@@ -132,15 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Helper function to show temporary messages
   function showTemporaryMessage(message, type = 'info') {
-    // Remove existing temporary messages
     const existingMessage = document.querySelector('.temp-message');
     if (existingMessage) {
       existingMessage.remove();
     }
 
-    // Create message element
     const messageEl = document.createElement('div');
     messageEl.className = `temp-message temp-message-${type}`;
     messageEl.textContent = message;
@@ -158,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
       transition: transform 0.3s ease;
     `;
 
-    // Set colors based on type
     switch (type) {
       case 'success':
         messageEl.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
@@ -179,12 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.body.appendChild(messageEl);
 
-    // Animate in
     setTimeout(() => {
       messageEl.style.transform = 'translateX(0)';
     }, 100);
 
-    // Auto remove after 4 seconds
     setTimeout(() => {
       messageEl.style.transform = 'translateX(400px)';
       setTimeout(() => {

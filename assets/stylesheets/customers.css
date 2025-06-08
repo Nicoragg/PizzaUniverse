@@ -37,17 +37,11 @@
 
 /* STATE FIELD SPECIFIC STYLING */
 #state {
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: 600;
-    letter-spacing: 1px;
+    cursor: pointer;
 }
 
-#state::placeholder {
-    text-transform: none;
-    text-align: left;
-    font-weight: normal;
-    letter-spacing: normal;
+#state option {
+    padding: 8px;
 }
 
 /* CEP FIELD AUTO-FILL INDICATION */
