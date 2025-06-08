@@ -200,4 +200,10 @@ abstract class PizzaController
 
         return $pizzasByCategory;
     }
+
+    public static function menu(): void
+    {
+        $pizzasByCategory = self::getMenuPizzas();
+        PizzaView::renderPublicMenu($pizzasByCategory);
+    }
 }

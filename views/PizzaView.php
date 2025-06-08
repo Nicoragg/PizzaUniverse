@@ -136,22 +136,61 @@ abstract class PizzaView
     public static function renderPublicMenu(array $pizzasByCategory): void
     {
     ?>
-        <main class="container">
-            <section class="menu-section">
-                <h1 class="menu-title">Cardápio de Pizzas</h1>
+        <main class="menu-container">
+            <section class="menu-hero">
+                <div class="menu-hero-content">
+                    <h1 class="menu-title">
+                        <span class="menu-icon">🍕</span>
+                        Cardápio Pizza Universe
+                        <span class="menu-icon">🍕</span>
+                    </h1>
+                    <p class="menu-subtitle">Sabores que conquistam o universo</p>
+                </div>
+            </section>
 
+            <div class="menu-content">
                 <?php foreach ($pizzasByCategory as $category => $pizzas): ?>
                     <div class="menu-category">
-                        <h2><?= htmlspecialchars($category) ?></h2>
-                        <div class="pizza-list">
+                        <div class="category-header">
+                            <h2 class="category-title">
+                                <span class="category-icon">
+                                    <?php
+                                    echo match (strtolower($category)) {
+                                        'tradicionais' => '🏛️',
+                                        'especiais' => '⭐',
+                                        'doces' => '🍰',
+                                        'vegetarianas' => '🌱',
+                                        'premium' => '💎',
+                                        default => '🍕'
+                                    };
+                                    ?>
+                                </span>
+                                <?= htmlspecialchars($category) ?>
+                            </h2>
+                            <div class="category-line"></div>
+                        </div>
+
+                        <div class="pizzas-grid">
                             <?php foreach ($pizzas as $pizza): ?>
-                                <div class="pizza-item">
-                                    <div class="pizza-info">
-                                        <h3><?= htmlspecialchars($pizza->name) ?></h3>
-                                        <p><?= htmlspecialchars($pizza->description) ?></p>
-                                    </div>
-                                    <div class="pizza-price">
-                                        R$ <?= number_format($pizza->price, 2, ',', '.') ?>
+                                <div class="menu-pizza-card">
+                                    <div class="pizza-card-content">
+                                        <div class="pizza-header">
+                                            <h3 class="pizza-name"><?= htmlspecialchars($pizza->name) ?></h3>
+                                            <div class="pizza-price-tag">
+                                                <span class="currency">R$</span>
+                                                <span class="price"><?= number_format($pizza->price, 2, ',', '.') ?></span>
+                                            </div>
+                                        </div>
+                                        <p class="pizza-description"><?= htmlspecialchars($pizza->description) ?></p>
+                                        <div class="pizza-footer">
+                                            <div class="pizza-category-badge">
+                                                <?= htmlspecialchars($category) ?>
+                                            </div>
+                                            <button class="add-to-cart-btn" onclick="addToCart(<?= $pizza->id ?>)">
+                                                <i class="bi bi-cart-plus"></i>
+                                                Adicionar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -160,12 +199,32 @@ abstract class PizzaView
                 <?php endforeach; ?>
 
                 <?php if (empty($pizzasByCategory)): ?>
-                    <div class="empty-state">
-                        <p>Nenhuma pizza disponível no momento.</p>
+                    <div class="empty-menu">
+                        <div class="empty-icon">🍕</div>
+                        <h3>Cardápio em construção</h3>
+                        <p>Estamos preparando pizzas incríveis para você!</p>
                     </div>
                 <?php endif; ?>
-            </section>
+            </div>
+
+            <div class="menu-footer">
+                <div class="contact-info">
+                    <h3>📞 Faça seu pedido</h3>
+                    <p>Entre em contato conosco para realizar seu pedido</p>
+                    <a href="?page=deliver" class="order-btn">
+                        <i class="bi bi-telephone"></i>
+                        Fazer Pedido
+                    </a>
+                </div>
+            </div>
         </main>
+
+        <script>
+            function addToCart(pizzaId) {
+                // Aqui você pode implementar a funcionalidade de adicionar ao carrinho
+                alert('Pizza adicionada ao carrinho! (ID: ' + pizzaId + ')');
+            }
+        </script>
 <?php
     }
 }

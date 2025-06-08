@@ -23,13 +23,18 @@ $page = $_GET['page'] ?? 'login';
     echo '<link rel="stylesheet" href="./assets/stylesheets/crud.css">';
   }
 
+  if ($page === 'menu') {
+    $_GET['page'] = 'pizzas';
+    $_GET['action'] = 'menu';
+    $page = 'pizzas';
+  }
+
   $pageStyles = [
     'login' => 'auth.css',
     'home' => 'home.css',
     'dashboard' => 'dashboard.css',
     'users' => 'users.css',
     'pizzas' => 'pizzas.css',
-    'menu' => 'menu.css',
     'deliver' => 'deliver.css'
   ];
 
@@ -75,7 +80,6 @@ $page = $_GET['page'] ?? 'login';
     'users'     => require './views/pages/users/index.php',
     'pizzas'    => require './views/pages/pizzas/index.php',
     'home'      => require './views/pages/home.php',
-    'menu'      => require './views/pages/menu.php',
     'deliver'   => require './views/pages/deliver.php',
     default     => require './views/pages/404.php',
   };
