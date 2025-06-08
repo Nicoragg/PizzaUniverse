@@ -45,24 +45,20 @@ abstract class PizzaView
                     <label for="name">Nome da Pizza:</label>
                     <input type="text" id="name" name="name"
                         value="<?= $nameValue ?>"
-                        placeholder="Digite o nome da pizza"
-                        class="<?= $fieldsWithErrors && in_array('name', $fieldsWithErrors) ? 'field-error' : '' ?>">
+                        placeholder="Digite o nome da pizza">
 
                     <label for="description">Descrição:</label>
                     <textarea id="description" name="description"
                         placeholder="Digite a descrição da pizza"
-                        rows="4"
-                        class="<?= $fieldsWithErrors && in_array('description', $fieldsWithErrors) ? 'field-error' : '' ?>"><?= $descriptionValue ?></textarea>
+                        rows="4"><?= $descriptionValue ?></textarea>
 
                     <label for="price">Preço (R$):</label>
                     <input type="number" id="price" name="price" step="0.01" min="0"
                         value="<?= $priceValue ?>"
-                        placeholder="Digite o preço"
-                        class="<?= $fieldsWithErrors && in_array('price', $fieldsWithErrors) ? 'field-error' : '' ?>">
+                        placeholder="Digite o preço">
 
                     <label for="category">Categoria:</label>
-                    <select id="category" name="category"
-                        class="<?= $fieldsWithErrors && in_array('category', $fieldsWithErrors) ? 'field-error' : '' ?>">
+                    <select id="category" name="category">
                         <option value="">Selecione uma categoria</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?= htmlspecialchars($category) ?>" <?= $categoryValue === $category ? 'selected' : '' ?>>

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const categorySelect = document.getElementById('category');
   const newCategoryField = document.getElementById('new-category-field');
   const newCategoryInput = document.getElementById('new_category');
@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const pizzaForm = document.querySelector('.pizza-form');
 
   if (pizzaForm) {
-    pizzaForm.addEventListener('submit', function (e) {
+    pizzaForm.addEventListener('submit', (e) => {
       const priceInput = document.getElementById('price');
       const categorySelect = document.getElementById('category');
       const newCategoryInput = document.getElementById('new_category');
@@ -58,47 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const deleteLinks = document.querySelectorAll('a[href*="confirm"]');
-
-  deleteLinks.forEach(link => {
-    link.addEventListener('click', function (e) {
-      const confirmed = confirm('Tem certeza que deseja excluir esta pizza?');
-      if (!confirmed) {
-        e.preventDefault();
-      }
-    });
-  });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-  const errorFields = document.querySelectorAll('.field-error');
-
-  errorFields.forEach(field => {
-    field.addEventListener('input', function () {
-      this.classList.remove('field-error');
-    });
-
-    if (errorFields[0] === field) {
-      field.focus();
-    }
-  });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-  const priceInput = document.getElementById('price');
-
-  if (priceInput) {
-    priceInput.addEventListener('blur', function () {
-      const value = parseFloat(this.value);
-      if (!isNaN(value) && value > 0) {
-        this.value = value.toFixed(2);
-      }
-    });
-  }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const descriptionTextarea = document.getElementById('description');
 
   if (descriptionTextarea) {
