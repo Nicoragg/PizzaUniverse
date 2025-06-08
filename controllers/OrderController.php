@@ -75,14 +75,15 @@ abstract class OrderController
                     $customer = CustomerDao::findById($customerId);
                     $deliveryAddress = null;
                     if ($customer) {
-                        $deliveryAddress = trim(sprintf(
-                            "%s\n%s\n%s - %s\nCEP: %s",
+                        // Criar endereço em uma linha separado por vírgulas
+                        $addressParts = array_filter([
                             $customer->street,
                             $customer->neighborhood,
                             $customer->city,
                             $customer->state,
-                            $customer->zipcode
-                        ));
+                            'CEP: ' . $customer->zipcode
+                        ]);
+                        $deliveryAddress = implode(', ', $addressParts);
                     }
 
                     $order = new Order(

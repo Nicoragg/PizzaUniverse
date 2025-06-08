@@ -359,17 +359,23 @@ class CustomerHandler {
    * Exibe as informações do cliente
    */
   displayCustomerInfo(customerData) {
+    // Criar endereço em uma linha separado por vírgulas
+    const addressParts = [
+      customerData.street,
+      customerData.neighborhood,
+      customerData.city + ' - ' + customerData.state,
+      'CEP: ' + this.formatter.formatZipcode(customerData.zipcode)
+    ].filter(part => part && part !== ' - ' && part !== 'CEP: -');
+
+    const fullAddress = addressParts.join(', ');
+
     const fields = {
       'customer-name': customerData.name,
       'customer-phone': this.formatter.formatPhone(customerData.phone),
-      'customer-cpf': this.formatter.formatCPF(customerData.cpf),
-      'customer-street': customerData.street,
-      'customer-neighborhood': customerData.neighborhood,
-      'customer-city': customerData.city,
-      'customer-state': customerData.state,
-      'customer-zipcode': this.formatter.formatZipcode(customerData.zipcode)
+      'customer-cpf': this.formatter.formatCPF(customerData.cpf)
     };
 
+    // Atualizar campos individuais
     Object.entries(fields).forEach(([id, value]) => {
       const element = document.getElementById(id);
       if (element) {
@@ -378,6 +384,13 @@ class CustomerHandler {
         this.addTypingAnimation(element, value);
       }
     });
+
+    // Atualizar endereço completo
+    const addressContainer = document.querySelector('.orders-address-details');
+    if (addressContainer) {
+      addressContainer.innerHTML = fullAddress;
+      this.addTypingAnimation(addressContainer, fullAddress);
+    }
   }
 
   /**

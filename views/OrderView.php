@@ -75,14 +75,10 @@ abstract class OrderView
                                         <div class="orders-customer-row">
                                             <span class="orders-customer-label">Endereço:</span>
                                             <div class="orders-address-details">
-                                                <div id="customer-street">-</div>
-                                                <div id="customer-neighborhood">-</div>
-                                                <div class="orders-city-state">
-                                                    <span id="customer-city">-</span> - <span id="customer-state">-</span>
-                                                </div>
-                                                <div class="orders-zipcode">
-                                                    CEP: <span id="customer-zipcode">-</span>
-                                                </div>
+                                                <span id="customer-street">-</span>,
+                                                <span id="customer-neighborhood">-</span>,
+                                                <span id="customer-city">-</span> - <span id="customer-state">-</span>,
+                                                CEP: <span id="customer-zipcode">-</span>
                                             </div>
                                         </div>
                                     </div>
@@ -305,7 +301,7 @@ abstract class OrderView
                         </p>
                         <?php if (!empty($order->delivery_address)): ?>
                             <p><strong>Endereço de Entrega:</strong><br>
-                                <?= nl2br(htmlspecialchars($order->delivery_address)) ?>
+                                <?= htmlspecialchars($order->delivery_address) ?>
                             </p>
                         <?php endif; ?>
                     </div>
