@@ -20,8 +20,12 @@ abstract class DashboardController
         $topPizzas = self::getTopPizzas();
         $monthlyRevenue = self::getMonthlyRevenue();
         $ordersByStatus = self::getOrdersByStatus();
+        $dailyAnalytics = self::getDailyAnalytics();
+        $weeklyComparison = self::getWeeklyComparison();
+        $customerAnalytics = self::getCustomerAnalytics();
+        $pizzaPerformance = self::getPizzaPerformance();
 
-        DashboardView::render($stats, $recentOrders, $topPizzas, $monthlyRevenue, $ordersByStatus);
+        DashboardView::render($stats, $recentOrders, $topPizzas, $monthlyRevenue, $ordersByStatus, $dailyAnalytics, $weeklyComparison, $customerAnalytics, $pizzaPerformance);
     }
 
     private static function getStatistics(): array
@@ -159,6 +163,132 @@ abstract class DashboardController
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new PDOException("Erro ao buscar pedidos por status: " . $e->getMessage());
+        }
+    }
+
+    private static function getDailyAnalytics(): array
+    {
+        try {
+            $pdo = Connection::getConnection();
+            $stmt = $pdo->prepare("
+                SELECT 
+                    DATE(created_at) as date,
+                    COUNT(*) as orders_count,
+                    SUM(total_amount) as revenue,
+                    AVG(total_amount) as avg_order_value,
+                    COUNT(DISTINCT customer_id) as unique_customers
+                FROM orders 
+                WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                    AND status != 'cancelled'
+                GROUP BY DATE(created_at)
+                ORDER BY date DESC
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new PDOException("Erro ao buscar análise diária: " . $e->getMessage());
+        }
+    }
+
+    private static function getWeeklyComparison(): array
+    {
+        try {
+            $pdo = Connection::getConnection();
+            $stmt = $pdo->prepare("
+                SELECT 
+                    'current_week' as period,
+                    COUNT(*) as orders_count,
+                    SUM(total_amount) as revenue,
+                    AVG(total_amount) as avg_order_value
+                FROM orders 
+                WHERE YEARWEEK(created_at, 1) = YEARWEEK(NOW(), 1)
+                    AND status != 'cancelled'
+                UNION ALL
+                SELECT 
+                    'previous_week' as period,
+                    COUNT(*) as orders_count,
+                    SUM(total_amount) as revenue,
+                    AVG(total_amount) as avg_order_value
+                FROM orders 
+                WHERE YEARWEEK(created_at, 1) = YEARWEEK(DATE_SUB(NOW(), INTERVAL 1 WEEK), 1)
+                    AND status != 'cancelled'
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new PDOException("Erro ao buscar comparação semanal: " . $e->getMessage());
+        }
+    }
+
+    private static function getCustomerAnalytics(): array
+    {
+        try {
+            $pdo = Connection::getConnection();
+
+            // Novos clientes por mês
+            $stmt = $pdo->prepare("
+                SELECT 
+                    DATE_FORMAT(created_at, '%Y-%m') as month,
+                    COUNT(*) as new_customers
+                FROM customers 
+                WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+                ORDER BY month
+            ");
+            $stmt->execute();
+            $newCustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Clientes recorrentes
+            $stmt = $pdo->prepare("
+                SELECT 
+                    c.id,
+                    c.name,
+                    COUNT(o.id) as total_orders,
+                    SUM(o.total_amount) as total_spent,
+                    MAX(o.created_at) as last_order
+                FROM customers c
+                INNER JOIN orders o ON c.id = o.customer_id
+                WHERE o.status != 'cancelled'
+                GROUP BY c.id, c.name
+                HAVING total_orders >= 3
+                ORDER BY total_spent DESC
+                LIMIT 10
+            ");
+            $stmt->execute();
+            $recurringCustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'newCustomers' => $newCustomers,
+                'recurringCustomers' => $recurringCustomers
+            ];
+        } catch (\PDOException $e) {
+            throw new PDOException("Erro ao buscar análise de clientes: " . $e->getMessage());
+        }
+    }
+
+    private static function getPizzaPerformance(): array
+    {
+        try {
+            $pdo = Connection::getConnection();
+            $stmt = $pdo->prepare("
+                SELECT 
+                    p.id,
+                    p.name,
+                    p.price,
+                    COALESCE(SUM(oi.quantity), 0) as total_sold,
+                    COALESCE(SUM(oi.subtotal), 0) as total_revenue,
+                    COALESCE(AVG(oi.quantity), 0) as avg_quantity_per_order,
+                    (SELECT COUNT(*) FROM order_items oi2 WHERE oi2.pizza_id = p.id) as order_frequency
+                FROM pizzas p
+                LEFT JOIN order_items oi ON p.id = oi.pizza_id
+                LEFT JOIN orders o ON oi.order_id = o.id AND o.status != 'cancelled'
+                GROUP BY p.id, p.name, p.price
+                ORDER BY total_revenue DESC
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new PDOException("Erro ao buscar performance das pizzas: " . $e->getMessage());
         }
     }
 }

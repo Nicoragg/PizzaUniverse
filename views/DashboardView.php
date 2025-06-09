@@ -4,8 +4,17 @@ namespace App\Views;
 
 abstract class DashboardView
 {
-    public static function render(array $stats, array $recentOrders, array $topPizzas, array $monthlyRevenue, array $ordersByStatus): void
-    {
+    public static function render(
+        array $stats,
+        array $recentOrders,
+        array $topPizzas,
+        array $monthlyRevenue,
+        array $ordersByStatus,
+        array $dailyAnalytics,
+        array $weeklyComparison,
+        array $customerAnalytics,
+        array $pizzaPerformance
+    ): void {
         $statusLabels = [
             'pending' => 'Pendente',
             'confirmed' => 'Confirmado',
@@ -203,110 +212,285 @@ abstract class DashboardView
                         <?php endif; ?>
                     </div>
                 </div>
+            </div>
 
-                <div class="dashboard-card monthly-revenue">
-                    <div class="card-header">
-                        <h3><i class="bi bi-graph-up"></i> Receita dos Últimos Meses</h3>
-                        <div class="revenue-summary">
-                            <?php if (!empty($monthlyRevenue)): ?>
-                                <span class="total-months"><?= count($monthlyRevenue) ?> meses</span>
+            <!-- Seção de Análise Avançada - 100% da largura -->
+            <div class="analytics-section">
+                <div class="analytics-header">
+                    <h2><i class="bi bi-graph-up-arrow"></i>Análise Avançada</h2>
+                    <p>Insights detalhados sobre performance e tendências do negócio</p>
+                </div>
+
+                <!-- Comparação Semanal -->
+                <div class="analytics-row">
+                    <div class="analytics-card weekly-comparison">
+                        <div class="card-header">
+                            <h3><i class="bi bi-calendar-week"></i> Comparação Semanal</h3>
+                            <span class="period-indicator">Esta semana vs. Semana anterior</span>
+                        </div>
+                        <div class="card-content">
+                            <?php
+                            $currentWeek = null;
+                            $previousWeek = null;
+                            foreach ($weeklyComparison as $week) {
+                                if ($week['period'] === 'current_week') {
+                                    $currentWeek = $week;
+                                } else {
+                                    $previousWeek = $week;
+                                }
+                            }
+                            ?>
+                            <div class="comparison-grid">
+                                <div class="comparison-metric">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-cart-check"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-values">
+                                            <span class="current-value"><?= $currentWeek['orders_count'] ?? 0 ?></span>
+                                            <span class="previous-value">vs. <?= $previousWeek['orders_count'] ?? 0 ?></span>
+                                        </div>
+                                        <div class="metric-label">Pedidos</div>
+                                        <?php
+                                        $ordersChange = 0;
+                                        if (($previousWeek['orders_count'] ?? 0) > 0) {
+                                            $ordersChange = ((($currentWeek['orders_count'] ?? 0) - ($previousWeek['orders_count'] ?? 0)) / ($previousWeek['orders_count'] ?? 1)) * 100;
+                                        }
+                                        ?>
+                                        <div class="metric-change <?= $ordersChange >= 0 ? 'positive' : 'negative' ?>">
+                                            <i class="bi bi-arrow-<?= $ordersChange >= 0 ? 'up' : 'down' ?>"></i>
+                                            <?= abs(number_format($ordersChange, 1)) ?>%
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comparison-metric">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-values">
+                                            <span class="current-value">R$ <?= number_format($currentWeek['revenue'] ?? 0, 0, ',', '.') ?></span>
+                                            <span class="previous-value">vs. R$ <?= number_format($previousWeek['revenue'] ?? 0, 0, ',', '.') ?></span>
+                                        </div>
+                                        <div class="metric-label">Receita</div>
+                                        <?php
+                                        $revenueChange = 0;
+                                        if (($previousWeek['revenue'] ?? 0) > 0) {
+                                            $revenueChange = ((($currentWeek['revenue'] ?? 0) - ($previousWeek['revenue'] ?? 0)) / ($previousWeek['revenue'] ?? 1)) * 100;
+                                        }
+                                        ?>
+                                        <div class="metric-change <?= $revenueChange >= 0 ? 'positive' : 'negative' ?>">
+                                            <i class="bi bi-arrow-<?= $revenueChange >= 0 ? 'up' : 'down' ?>"></i>
+                                            <?= abs(number_format($revenueChange, 1)) ?>%
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comparison-metric">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-receipt"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-values">
+                                            <span class="current-value">R$ <?= number_format($currentWeek['avg_order_value'] ?? 0, 2, ',', '.') ?></span>
+                                            <span class="previous-value">vs. R$ <?= number_format($previousWeek['avg_order_value'] ?? 0, 2, ',', '.') ?></span>
+                                        </div>
+                                        <div class="metric-label">Ticket Médio</div>
+                                        <?php
+                                        $avgChange = 0;
+                                        if (($previousWeek['avg_order_value'] ?? 0) > 0) {
+                                            $avgChange = ((($currentWeek['avg_order_value'] ?? 0) - ($previousWeek['avg_order_value'] ?? 0)) / ($previousWeek['avg_order_value'] ?? 1)) * 100;
+                                        }
+                                        ?>
+                                        <div class="metric-change <?= $avgChange >= 0 ? 'positive' : 'negative' ?>">
+                                            <i class="bi bi-arrow-<?= $avgChange >= 0 ? 'up' : 'down' ?>"></i>
+                                            <?= abs(number_format($avgChange, 1)) ?>%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análise Diária e Performance de Pizzas -->
+                <div class="analytics-row">
+                    <div class="analytics-card daily-trends">
+                        <div class="card-header">
+                            <h3><i class="bi bi-graph-up"></i> Tendência Diária (30 dias)</h3>
+                            <div class="chart-filters">
+                                <span class="filter-label">Últimos 30 dias</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <?php if (!empty($dailyAnalytics)): ?>
+                                <div class="daily-chart">
+                                    <?php
+                                    $maxDailyRevenue = max(array_column($dailyAnalytics, 'revenue'));
+                                    $dailyAnalytics = array_reverse($dailyAnalytics); // Mostrar do mais antigo para o mais recente
+                                    foreach (array_slice($dailyAnalytics, -14) as $day): // Últimos 14 dias para melhor visualização
+                                        $percentage = $maxDailyRevenue > 0 ? ($day['revenue'] / $maxDailyRevenue) * 100 : 0;
+                                        $dayName = date('d/m', strtotime($day['date']));
+                                    ?>
+                                        <div class="daily-bar" title="<?= $dayName ?>: R$ <?= number_format($day['revenue'], 2, ',', '.') ?> - <?= $day['orders_count'] ?> pedidos">
+                                            <div class="bar-fill" style="height: <?= max($percentage, 3) ?>%"></div>
+                                            <div class="bar-label">
+                                                <span class="day"><?= $dayName ?></span>
+                                                <span class="revenue">R$ <?= number_format($day['revenue'], 0, ',', '.') ?></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="daily-insights">
+                                    <?php
+                                    $avgDailyRevenue = array_sum(array_column($dailyAnalytics, 'revenue')) / count($dailyAnalytics);
+                                    $avgDailyOrders = array_sum(array_column($dailyAnalytics, 'orders_count')) / count($dailyAnalytics);
+                                    $avgOrderValue = $avgDailyOrders > 0 ? $avgDailyRevenue / $avgDailyOrders : 0;
+                                    ?>
+                                    <div class="insight-grid">
+                                        <div class="insight-item">
+                                            <span class="insight-value">R$ <?= number_format($avgDailyRevenue, 2, ',', '.') ?></span>
+                                            <span class="insight-label">Receita Média/Dia</span>
+                                        </div>
+                                        <div class="insight-item">
+                                            <span class="insight-value"><?= number_format($avgDailyOrders, 1) ?></span>
+                                            <span class="insight-label">Pedidos Média/Dia</span>
+                                        </div>
+                                        <div class="insight-item">
+                                            <span class="insight-value">R$ <?= number_format($avgOrderValue, 2, ',', '.') ?></span>
+                                            <span class="insight-label">Ticket Médio</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <div class="empty-state">
+                                    <i class="bi bi-calendar-x"></i>
+                                    <p>Nenhum dado diário disponível</p>
+                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="card-content">
-                        <?php if (!empty($monthlyRevenue)): ?>
-                            <div class="revenue-stats-header">
-                                <?php
-                                $totalRevenue = array_sum(array_column($monthlyRevenue, 'revenue'));
-                                $totalOrders = array_sum(array_column($monthlyRevenue, 'orders_count'));
-                                $avgRevenue = count($monthlyRevenue) > 0 ? $totalRevenue / count($monthlyRevenue) : 0;
-                                ?>
-                                <div class="revenue-metric">
-                                    <span class="metric-value">R$ <?= number_format($totalRevenue, 2, ',', '.') ?></span>
-                                    <span class="metric-label">Total do Período</span>
-                                </div>
-                                <div class="revenue-metric">
-                                    <span class="metric-value"><?= $totalOrders ?></span>
-                                    <span class="metric-label">Pedidos Totais</span>
-                                </div>
-                                <div class="revenue-metric">
-                                    <span class="metric-value">R$ <?= number_format($avgRevenue, 2, ',', '.') ?></span>
-                                    <span class="metric-label">Média Mensal</span>
-                                </div>
-                            </div>
 
-                            <div class="revenue-chart">
-                                <?php
-                                $maxRevenue = max(array_column($monthlyRevenue, 'revenue'));
-                                foreach ($monthlyRevenue as $index => $month):
-                                    $percentage = $maxRevenue > 0 ? ($month['revenue'] / $maxRevenue) * 100 : 0;
-                                    $monthName = [
-                                        '01' => 'Jan',
-                                        '02' => 'Fev',
-                                        '03' => 'Mar',
-                                        '04' => 'Abr',
-                                        '05' => 'Mai',
-                                        '06' => 'Jun',
-                                        '07' => 'Jul',
-                                        '08' => 'Ago',
-                                        '09' => 'Set',
-                                        '10' => 'Out',
-                                        '11' => 'Nov',
-                                        '12' => 'Dez'
-                                    ][date('m', strtotime($month['month'] . '-01'))];
-                                    $year = date('Y', strtotime($month['month'] . '-01'));
-                                ?>
-                                    <div class="revenue-bar" data-tooltip="<?= $monthName ?>/<?= $year ?>: R$ <?= number_format($month['revenue'], 2, ',', '.') ?> - <?= $month['orders_count'] ?> pedidos">
-                                        <div class="bar-fill" style="height: <?= max($percentage, 5) ?>%" data-value="<?= $month['revenue'] ?>"></div>
-                                        <div class="bar-label">
-                                            <span class="month"><?= $monthName ?>/<?= substr($year, 2) ?></span>
-                                            <span class="amount">R$ <?= number_format($month['revenue'], 0, ',', '.') ?></span>
-                                            <span class="orders"><?= $month['orders_count'] ?> pedidos</span>
+                    <div class="analytics-card pizza-performance">
+                        <div class="card-header">
+                            <h3><i class="bi bi-pie-chart-fill"></i> Performance Detalhada das Pizzas</h3>
+                            <a href="?page=pizzas" class="view-all">Gerenciar Cardápio</a>
+                        </div>
+                        <div class="card-content">
+                            <?php if (!empty($pizzaPerformance)): ?>
+                                <div class="performance-list">
+                                    <?php foreach (array_slice($pizzaPerformance, 0, 8) as $index => $pizza): ?>
+                                        <div class="performance-item">
+                                            <div class="pizza-rank"><?= $index + 1 ?>º</div>
+                                            <div class="pizza-details">
+                                                <div class="pizza-name"><?= htmlspecialchars($pizza['name']) ?></div>
+                                                <div class="pizza-metrics">
+                                                    <span class="metric">
+                                                        <i class="bi bi-cart"></i>
+                                                        <?= $pizza['total_sold'] ?> vendas
+                                                    </span>
+                                                    <span class="metric">
+                                                        <i class="bi bi-currency-dollar"></i>
+                                                        R$ <?= number_format($pizza['total_revenue'], 0, ',', '.') ?>
+                                                    </span>
+                                                    <span class="metric">
+                                                        <i class="bi bi-percent"></i>
+                                                        <?= number_format($pizza['avg_quantity_per_order'], 1) ?> média/pedido
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="performance-bar">
+                                                <?php
+                                                $maxRevenue = $pizzaPerformance[0]['total_revenue'] ?? 1;
+                                                $percentage = ($pizza['total_revenue'] / $maxRevenue) * 100;
+                                                ?>
+                                                <div class="bar-fill" style="width: <?= $percentage ?>%"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <div class="revenue-insights">
-                                <?php
-                                $lastMonth = end($monthlyRevenue);
-                                $previousMonth = count($monthlyRevenue) > 1 ? $monthlyRevenue[count($monthlyRevenue) - 2] : null;
-                                $growth = 0;
-                                if ($previousMonth && $previousMonth['revenue'] > 0) {
-                                    $growth = (($lastMonth['revenue'] - $previousMonth['revenue']) / $previousMonth['revenue']) * 100;
-                                }
-                                $bestMonth = array_reduce($monthlyRevenue, function ($carry, $month) {
-                                    return (!$carry || $month['revenue'] > $carry['revenue']) ? $month : $carry;
-                                });
-                                ?>
-                                <div class="insight-item">
-                                    <i class="bi bi-trending-<?= $growth >= 0 ? 'up' : 'down' ?>"></i>
-                                    <div class="insight-content">
-                                        <span class="insight-value <?= $growth >= 0 ? 'positive' : 'negative' ?>">
-                                            <?= $growth >= 0 ? '+' : '' ?><?= number_format($growth, 1) ?>%
-                                        </span>
-                                        <span class="insight-label">vs. mês anterior</span>
-                                    </div>
+                                    <?php endforeach; ?>
                                 </div>
-                                <?php if ($bestMonth): ?>
-                                    <div class="insight-item">
-                                        <i class="bi bi-star-fill"></i>
-                                        <div class="insight-content">
-                                            <span class="insight-value best-month">
-                                                <?= date('M/Y', strtotime($bestMonth['month'] . '-01')) ?>
-                                            </span>
-                                            <span class="insight-label">melhor mês</span>
+                            <?php else: ?>
+                                <div class="empty-state">
+                                    <i class="bi bi-pizza"></i>
+                                    <p>Nenhuma pizza vendida ainda</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análise de Clientes -->
+                <div class="analytics-row">
+                    <div class="analytics-card customer-insights">
+                        <div class="card-header">
+                            <h3><i class="bi bi-people-fill"></i> Insights de Clientes</h3>
+                            <a href="?page=customers" class="view-all">Ver Clientes</a>
+                        </div>
+                        <div class="card-content">
+                            <div class="customer-analytics-grid">
+                                <div class="customer-chart">
+                                    <h4>Novos Clientes por Mês</h4>
+                                    <?php if (!empty($customerAnalytics['newCustomers'])): ?>
+                                        <div class="customer-growth-chart">
+                                            <?php
+                                            $maxNewCustomers = max(array_column($customerAnalytics['newCustomers'], 'new_customers'));
+                                            foreach ($customerAnalytics['newCustomers'] as $month):
+                                                $percentage = $maxNewCustomers > 0 ? ($month['new_customers'] / $maxNewCustomers) * 100 : 0;
+                                                $monthName = date('M/y', strtotime($month['month'] . '-01'));
+                                            ?>
+                                                <div class="growth-bar">
+                                                    <div class="bar-fill" style="height: <?= max($percentage, 10) ?>%" title="<?= $monthName ?>: <?= $month['new_customers'] ?> novos clientes"></div>
+                                                    <div class="bar-label">
+                                                        <span class="month"><?= $monthName ?></span>
+                                                        <span class="count"><?= $month['new_customers'] ?></span>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
-                                    </div>
-                                <?php endif; ?>
+                                    <?php else: ?>
+                                        <div class="empty-state-small">
+                                            <i class="bi bi-person-plus"></i>
+                                            <p>Nenhum dado disponível</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="top-customers">
+                                    <h4>Clientes VIP</h4>
+                                    <?php if (!empty($customerAnalytics['recurringCustomers'])): ?>
+                                        <div class="vip-customers-list">
+                                            <?php foreach (array_slice($customerAnalytics['recurringCustomers'], 0, 5) as $index => $customer): ?>
+                                                <div class="vip-customer-item">
+                                                    <div class="customer-rank"><?= $index + 1 ?>º</div>
+                                                    <div class="customer-info">
+                                                        <div class="customer-name"><?= htmlspecialchars($customer['name']) ?></div>
+                                                        <div class="customer-stats">
+                                                            <span class="stat">
+                                                                <i class="bi bi-bag-check"></i>
+                                                                <?= $customer['total_orders'] ?> pedidos
+                                                            </span>
+                                                            <span class="stat">
+                                                                <i class="bi bi-currency-dollar"></i>
+                                                                R$ <?= number_format($customer['total_spent'], 2, ',', '.') ?>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="last-order">
+                                                        <?= date('d/m/Y', strtotime($customer['last_order'])) ?>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="empty-state-small">
+                                            <i class="bi bi-star"></i>
+                                            <p>Nenhum cliente VIP ainda</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        <?php else: ?>
-                            <div class="empty-state">
-                                <i class="bi bi-graph-up"></i>
-                                <p>Nenhum dado de receita disponível</p>
-                                <small>Comece fazendo alguns pedidos para ver os gráficos aqui!</small>
-                            </div>
-                        <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
