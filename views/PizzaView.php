@@ -92,6 +92,11 @@ abstract class PizzaView
 
     public static function renderList(array $pizzas, ?int $deleteId = null): void
     {
+        try {
+            $categories = \App\Dal\PizzaDao::getCategories();
+        } catch (\Exception $e) {
+            $categories = [];
+        }
     ?>
         <main>
             <h1>Gerenciar Pizzas</h1>
@@ -101,6 +106,36 @@ abstract class PizzaView
             </div>
 
             <?php if (!empty($pizzas)): ?>
+                <div class="pizza-filters">
+                    <h3><i class="bi bi-funnel"></i> Filtrar Pizzas</h3>
+
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="filter-search">Buscar por nome ou descrição:</label>
+                            <input type="text" id="filter-search" class="filter-search"
+                                placeholder="Digite para buscar pizzas..." />
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filter-category">Filtrar por categoria:</label>
+                            <select id="filter-category" class="filter-category">
+                                <option value="">Todas</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value="<?= htmlspecialchars($category) ?>">
+                                        <?= htmlspecialchars($category) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <button type="button" id="filter-clear" class="filter-clear">
+                            <i class="bi bi-x-circle"></i> Limpar
+                        </button>
+                    </div>
+
+                    <div id="filter-results" class="filter-results"></div>
+                </div>
+
                 <div class="pizza-grid">
                     <?php foreach ($pizzas as $pizza): ?>
                         <div class="pizza-card">

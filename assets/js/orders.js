@@ -4,6 +4,10 @@ class OrderManager {
     this.pizzaNames = {};
     this.tomSelectInstance = null;
     this.elements = {};
+    this.filteredResults = {
+      visible: 0,
+      total: 0
+    };
 
     this.init();
   }
@@ -21,7 +25,12 @@ class OrderManager {
       orderSummary: document.getElementById('order-summary'),
       submitBtn: document.getElementById('submit-order'),
       quantityInputs: document.querySelectorAll('.orders-quantity-input'),
-      pizzaCards: document.querySelectorAll('.orders-pizza-card')
+      pizzaCards: document.querySelectorAll('.orders-pizza-card'),
+      filterSearch: document.getElementById('orders-filter-search'),
+      filterCategory: document.getElementById('orders-filter-category'),
+      filterClear: document.getElementById('orders-filter-clear'),
+      filterResults: document.getElementById('orders-filter-results'),
+      pizzaCategories: document.querySelectorAll('.orders-category')
     };
   }
 
@@ -37,6 +46,7 @@ class OrderManager {
   onDOMContentLoaded() {
     this.initializeCustomerSelect();
     this.initializePizzaCards();
+    this.initializePizzaFilters();
 
     if (this.elements.customerSelect?.value) {
       this.handleCustomerSelection(this.elements.customerSelect.value);
@@ -204,6 +214,118 @@ class OrderManager {
         block: 'start'
       });
     }
+  }
+
+  initializePizzaFilters() {
+    const { filterSearch, filterCategory, filterClear } = this.elements;
+
+    if (!filterSearch || !filterCategory || !filterClear) return;
+
+    filterSearch.addEventListener('input', () => this.applyPizzaFilters());
+    filterCategory.addEventListener('change', () => this.applyPizzaFilters());
+    filterClear.addEventListener('click', () => this.clearPizzaFilters());
+
+    this.updatePizzaFilterResults();
+  }
+
+  applyPizzaFilters() {
+    const { filterSearch, filterCategory, pizzaCategories } = this.elements;
+
+    if (!pizzaCategories || pizzaCategories.length === 0) return;
+
+    const searchTerm = filterSearch.value.toLowerCase().trim();
+    const selectedCategory = filterCategory.value;
+
+    let visibleCategoriesCount = 0;
+    let totalPizzasVisible = 0;
+    let totalPizzasCount = 0;
+
+    pizzaCategories.forEach(categorySection => {
+      const categoryTitle = categorySection.querySelector('.orders-category-title')?.textContent || '';
+      const categoryName = categoryTitle.replace(/^[^a-zA-Z]*/, '').trim(); // Remove ícones
+
+      const pizzaCards = categorySection.querySelectorAll('.orders-pizza-card');
+      let visiblePizzasInCategory = 0;
+
+      const categoryMatches = !selectedCategory ||
+        selectedCategory === 'all' ||
+        categoryName.toLowerCase().includes(selectedCategory.toLowerCase());
+
+      pizzaCards.forEach(card => {
+        totalPizzasCount++;
+
+        const pizzaName = card.querySelector('.orders-pizza-name')?.textContent.toLowerCase() || '';
+        const pizzaDescription = card.querySelector('.orders-pizza-description')?.textContent.toLowerCase() || '';
+
+        const pizzaMatchesSearch = !searchTerm ||
+          pizzaName.includes(searchTerm) ||
+          pizzaDescription.includes(searchTerm);
+
+        const shouldShowPizza = pizzaMatchesSearch && categoryMatches;
+
+        if (shouldShowPizza) {
+          card.style.display = '';
+          visiblePizzasInCategory++;
+          totalPizzasVisible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const shouldShowCategory = visiblePizzasInCategory > 0 && categoryMatches;
+
+      if (shouldShowCategory) {
+        categorySection.classList.remove('hidden');
+        visibleCategoriesCount++;
+      } else {
+        categorySection.classList.add('hidden');
+      }
+    });
+
+    this.filteredResults.visible = totalPizzasVisible;
+    this.filteredResults.total = totalPizzasCount;
+    this.updatePizzaFilterResults();
+  }
+
+  clearPizzaFilters() {
+    const { filterSearch, filterCategory, pizzaCategories } = this.elements;
+
+    if (filterSearch) filterSearch.value = '';
+    if (filterCategory) filterCategory.value = '';
+
+    if (pizzaCategories) {
+      pizzaCategories.forEach(categorySection => {
+        categorySection.classList.remove('hidden');
+
+        const pizzaCards = categorySection.querySelectorAll('.orders-pizza-card');
+        pizzaCards.forEach(card => {
+          card.style.display = '';
+        });
+      });
+    }
+
+    const totalPizzas = this.elements.pizzaCards ? this.elements.pizzaCards.length : 0;
+    this.filteredResults.visible = totalPizzas;
+    this.filteredResults.total = totalPizzas;
+    this.updatePizzaFilterResults();
+
+    if (filterSearch) filterSearch.focus();
+  }
+
+  updatePizzaFilterResults() {
+    const { filterResults } = this.elements;
+    const { visible, total } = this.filteredResults;
+
+    if (!filterResults) return;
+
+    if (visible === total) {
+      filterResults.textContent = `Exibindo todas as ${total} pizzas disponíveis`;
+    } else {
+      filterResults.textContent = `Exibindo ${visible} de ${total} pizzas`;
+    }
+
+    const hasActiveFilters = visible !== total;
+    filterResults.classList.toggle('has-filters', hasActiveFilters);
   }
 }
 class CustomerHandler {

@@ -89,6 +89,36 @@ abstract class OrderView
                         <div class="orders-form-section">
                             <h3><i class="bi bi-grid-3x3-gap-fill"></i> Selecionar Pizzas</h3>
 
+                            <div class="orders-pizza-filters">
+                                <h4><i class="bi bi-funnel"></i> Filtrar Pizzas</h4>
+
+                                <div class="orders-filter-controls">
+                                    <div class="orders-filter-group">
+                                        <label for="orders-filter-search">Buscar por nome:</label>
+                                        <input type="text" id="orders-filter-search" class="orders-filter-search"
+                                            placeholder="Digite para buscar pizzas..." />
+                                    </div>
+
+                                    <div class="orders-filter-group">
+                                        <label for="orders-filter-category">Por categoria:</label>
+                                        <select id="orders-filter-category" class="orders-filter-category">
+                                            <option value="">Todas</option>
+                                            <?php foreach ($pizzasByCategory as $category => $pizzas): ?>
+                                                <option value="<?= htmlspecialchars($category) ?>">
+                                                    <?= htmlspecialchars($category) ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <button type="button" id="orders-filter-clear" class="orders-filter-clear">
+                                        <i class="bi bi-x"></i> Limpar
+                                    </button>
+                                </div>
+
+                                <div id="orders-filter-results" class="orders-filter-results"></div>
+                            </div>
+
                             <?php foreach ($pizzasByCategory as $category => $pizzas): ?>
                                 <div class="orders-category">
                                     <h4 class="orders-category-title"><i class="bi bi-grid-3x3-gap-fill"></i> <?= htmlspecialchars($category) ?></h4>
