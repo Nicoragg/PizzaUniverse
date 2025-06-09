@@ -33,42 +33,34 @@ abstract class DashboardController
         try {
             $pdo = Connection::getConnection();
 
-            // Total de pedidos
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders");
             $stmt->execute();
             $totalOrders = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-            // Total de clientes
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM customers");
             $stmt->execute();
             $totalCustomers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-            // Total de pizzas
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM pizzas");
             $stmt->execute();
             $totalPizzas = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-            // Total de usuários
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM users");
             $stmt->execute();
             $totalUsers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-            // Receita total
             $stmt = $pdo->prepare("SELECT SUM(total_amount) as total FROM orders WHERE status != 'cancelled'");
             $stmt->execute();
             $totalRevenue = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
-            // Pedidos hoje
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM orders WHERE DATE(created_at) = CURDATE()");
             $stmt->execute();
             $todayOrders = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-            // Receita hoje
             $stmt = $pdo->prepare("SELECT SUM(total_amount) as total FROM orders WHERE DATE(created_at) = CURDATE() AND status != 'cancelled'");
             $stmt->execute();
             $todayRevenue = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
-            // Clientes ativos
             $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM customers WHERE status = 'active'");
             $stmt->execute();
             $activeCustomers = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
@@ -225,7 +217,6 @@ abstract class DashboardController
         try {
             $pdo = Connection::getConnection();
 
-            // Novos clientes por mês
             $stmt = $pdo->prepare("
                 SELECT 
                     DATE_FORMAT(created_at, '%Y-%m') as month,
@@ -238,7 +229,6 @@ abstract class DashboardController
             $stmt->execute();
             $newCustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Clientes recorrentes
             $stmt = $pdo->prepare("
                 SELECT 
                     c.id,

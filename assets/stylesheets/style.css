@@ -159,7 +159,6 @@ body {
   box-shadow: 0 8px 25px rgba(44, 27, 27, 0.3);
 }
 
-/* Estilo específico para o botão de logout */
 .cta-button[href*="logout"] {
   background: linear-gradient(135deg, #dc3545, #c82333) !important;
   color: #ffffff !important;

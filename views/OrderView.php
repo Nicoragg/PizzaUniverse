@@ -190,7 +190,6 @@ abstract class OrderView
 
     public static function renderList(array $orders, ?string $message = null): void
     {
-        // Gerar o token CSRF uma única vez para toda a página
         $csrfToken = \App\Util\CsrfToken::generate();
         $csrfTokenName = \App\Util\CsrfToken::getTokenName();
     ?>
@@ -230,7 +229,6 @@ abstract class OrderView
                                         <td><?= date('d/m/Y H:i', strtotime($order->created_at)) ?></td>
                                         <td>
                                             <?php
-                                            // Obter transições válidas para este pedido
                                             $statusLabels = [
                                                 'pending' => 'Pendente',
                                                 'confirmed' => 'Confirmado',
@@ -240,7 +238,6 @@ abstract class OrderView
                                                 'cancelled' => 'Cancelado'
                                             ];
 
-                                            // Criar uma instância temporária para verificar transições válidas
                                             $tempOrder = new \App\Models\Order(
                                                 $order->id,
                                                 $order->customer_id ?? $order->customerId,

@@ -328,8 +328,8 @@ abstract class DashboardView
                                 <div class="daily-chart">
                                     <?php
                                     $maxDailyRevenue = max(array_column($dailyAnalytics, 'revenue'));
-                                    $dailyAnalytics = array_reverse($dailyAnalytics); // Mostrar do mais antigo para o mais recente
-                                    foreach (array_slice($dailyAnalytics, -14) as $day): // Últimos 14 dias para melhor visualização
+                                    $dailyAnalytics = array_reverse($dailyAnalytics);
+                                    foreach (array_slice($dailyAnalytics, -14) as $day):
                                         $percentage = $maxDailyRevenue > 0 ? ($day['revenue'] / $maxDailyRevenue) * 100 : 0;
                                         $dayName = date('d/m', strtotime($day['date']));
                                     ?>

@@ -85,7 +85,8 @@ CREATE INDEX idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX idx_order_items_pizza_id ON order_items(pizza_id);
 
 INSERT INTO users (username, email, password) VALUES 
-('admin', 'admin@admin.com', MD5('admin123'));
+('admin', 'admin@admin.com', MD5('admin123')),
+('teste', 'teste@teste.com', MD5('teste123'));
 
 INSERT INTO pizzas (name, description, price, category) VALUES 
 ('Calabresa', 'Pizza tradicional com calabresa, cebola e azeitonas', 35.90, 'Tradicionais'),
@@ -145,3 +146,122 @@ INSERT INTO customers (name, cpf, phone, status, zipcode, neighborhood, street, 
 ('Maria Silva Santos', '30536516022', '41998765432', 'active', '80020-100', 'Centro', 'Praça Tiradentes', 'Curitiba', 'Paraná'),
 ('João Carlos Oliveira', '40628454074', '41987654321', 'active', '80020-110', 'Centro', 'Rua do Rosário', 'Curitiba', 'Paraná'),
 ('Ana Paula Ferreira', '75395304053', '41976543210', 'active', '80020-010', 'Centro', 'Praça General Osório', 'Curitiba', 'Paraná');
+
+-- Inserindo pedidos de exemplo para popular o dashboard
+INSERT INTO orders (customer_id, order_number, status, total_amount, delivery_address, notes, created_at) VALUES 
+-- Pedidos de hoje
+(1, 'PU-2025-0001', 'delivered', 71.80, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', 'Entregar na portaria', NOW()),
+(2, 'PU-2025-0002', 'preparing', 84.80, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Sem cebola na pizza', NOW()),
+(3, 'PU-2025-0003', 'confirmed', 32.90, 'Praça General Osório, 789 - Centro, Curitiba/PR', '', NOW()),
+
+-- Pedidos de ontem
+(1, 'PU-2025-0004', 'delivered', 105.70, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', 'Troco para R$ 150', DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(2, 'PU-2025-0005', 'delivered', 78.80, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Apartamento 402', DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(3, 'PU-2025-0006', 'cancelled', 0.00, 'Praça General Osório, 789 - Centro, Curitiba/PR', 'Cliente cancelou por telefone', DATE_SUB(NOW(), INTERVAL 1 DAY)),
+
+-- Pedidos da semana passada
+(1, 'PU-2025-0007', 'delivered', 142.60, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', 'Festa de aniversário', DATE_SUB(NOW(), INTERVAL 7 DAY)),
+(2, 'PU-2025-0008', 'delivered', 89.80, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Massa fininha', DATE_SUB(NOW(), INTERVAL 6 DAY)),
+(3, 'PU-2025-0009', 'delivered', 65.80, 'Praça General Osório, 789 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(1, 'PU-2025-0010', 'delivered', 156.70, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', 'Pedido para o escritório', DATE_SUB(NOW(), INTERVAL 4 DAY)),
+
+-- Pedidos do mês passado
+(2, 'PU-2025-0011', 'delivered', 98.80, 'Rua do Rosário, 456 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 15 DAY)),
+(3, 'PU-2025-0012', 'delivered', 73.80, 'Praça General Osório, 789 - Centro, Curitiba/PR', 'Sem azeitonas', DATE_SUB(NOW(), INTERVAL 18 DAY)),
+(1, 'PU-2025-0013', 'delivered', 87.80, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 22 DAY)),
+(2, 'PU-2025-0014', 'delivered', 124.70, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Reunião de trabalho', DATE_SUB(NOW(), INTERVAL 25 DAY)),
+
+-- Pedidos de meses anteriores
+(1, 'PU-2025-0015', 'delivered', 67.80, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 45 DAY)),
+(3, 'PU-2025-0016', 'delivered', 95.80, 'Praça General Osório, 789 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 48 DAY)),
+(2, 'PU-2025-0017', 'delivered', 112.70, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Almoço de domingo', DATE_SUB(NOW(), INTERVAL 52 DAY)),
+(1, 'PU-2025-0018', 'delivered', 89.80, 'Praça Tiradentes, 123 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 65 DAY)),
+(3, 'PU-2025-0019', 'delivered', 76.80, 'Praça General Osório, 789 - Centro, Curitiba/PR', '', DATE_SUB(NOW(), INTERVAL 75 DAY)),
+(2, 'PU-2025-0020', 'delivered', 134.70, 'Rua do Rosário, 456 - Centro, Curitiba/PR', 'Jantar romântico', DATE_SUB(NOW(), INTERVAL 85 DAY));
+
+-- Inserindo itens dos pedidos
+INSERT INTO order_items (order_id, pizza_id, quantity, unit_price, subtotal, notes) VALUES 
+-- Pedido 1 (PU-2025-0001)
+(1, 1, 2, 35.90, 71.80, ''), -- 2x Calabresa
+
+-- Pedido 2 (PU-2025-0002)
+(2, 3, 1, 38.90, 38.90, 'Sem cebola'), -- 1x Frango com Catupiry
+(2, 5, 1, 45.90, 45.90, ''), -- 1x Quatro Queijos
+
+-- Pedido 3 (PU-2025-0003)
+(3, 2, 1, 32.90, 32.90, ''), -- 1x Margherita
+
+-- Pedido 4 (PU-2025-0004)
+(4, 4, 1, 42.90, 42.90, ''), -- 1x Portuguesa
+(4, 6, 1, 48.90, 48.90, ''), -- 1x Nasa
+(4, 29, 1, 13.90, 13.90, ''), -- 1x Bombom de Morango (assumindo que o ID da pizza doce é 29)
+
+-- Pedido 5 (PU-2025-0005)
+(5, 7, 1, 36.90, 36.90, ''), -- 1x Napolitana
+(5, 11, 1, 41.90, 41.90, ''), -- 1x Bacon da Lua
+
+-- Pedido 7 (PU-2025-0007)
+(7, 21, 1, 49.90, 49.90, ''), -- 1x Lombo com Catupiry
+(7, 25, 1, 52.90, 52.90, ''), -- 1x Pepperoni Especial
+(7, 30, 1, 39.90, 39.90, ''), -- 1x Dois Amores
+
+-- Pedido 8 (PU-2025-0008)
+(8, 8, 1, 29.90, 29.90, ''), -- 1x Mussarela
+(8, 24, 1, 48.90, 48.90, ''), -- 1x Tomate Seco com Rúcula
+(8, 12, 1, 37.90, 37.90, ''), -- 1x Palmito
+
+-- Pedido 9 (PU-2025-0009)
+(9, 9, 1, 39.90, 39.90, ''), -- 1x Peito de Peru
+(9, 27, 1, 25.90, 25.90, ''), -- 1x Romeu e Julieta
+
+-- Pedido 10 (PU-2025-0010)
+(10, 32, 1, 62.90, 62.90, ''), -- 1x Picanha Estelar
+(10, 5, 1, 45.90, 45.90, ''), -- 1x Quatro Queijos
+(10, 31, 1, 47.90, 47.90, ''), -- 1x Interplanetária
+
+-- Pedido 11 (PU-2025-0011)
+(11, 26, 1, 49.90, 49.90, ''), -- 1x Mexicana
+(11, 28, 1, 48.90, 48.90, ''), -- 1x Banana Nevada
+
+-- Pedido 12 (PU-2025-0012)
+(12, 13, 1, 38.90, 38.90, ''), -- 1x Milho com Bacon
+(12, 34, 1, 34.90, 34.90, ''), -- 1x Banana com Canela
+
+-- Pedido 13 (PU-2025-0013)
+(13, 22, 1, 46.90, 46.90, ''), -- 1x Brócolis com Bacon
+(13, 15, 1, 37.90, 37.90, ''), -- 1x Frango com Milho
+(13, 36, 1, 3.00, 3.00, ''), -- 1x Refrigerante (se houver)
+
+-- Pedido 14 (PU-2025-0014)
+(14, 33, 1, 56.90, 56.90, ''), -- 1x Costela ao Barbecue
+(14, 5, 1, 45.90, 45.90, ''), -- 1x Quatro Queijos
+(14, 23, 1, 44.90, 44.90, ''), -- 1x Escarola com Alho
+
+-- Pedido 15 (PU-2025-0015)
+(15, 14, 1, 36.90, 36.90, ''), -- 1x Calabresa com Cebola
+(15, 35, 1, 30.90, 30.90, ''), -- 1x Prestígio
+
+-- Pedido 16 (PU-2025-0016)
+(16, 19, 1, 47.90, 47.90, ''), -- 1x Quatro Estações
+(16, 3, 1, 38.90, 38.90, ''), -- 1x Frango com Catupiry
+(16, 37, 1, 9.00, 9.00, ''), -- 1x Sobremesa
+
+-- Pedido 17 (PU-2025-0017)
+(17, 18, 1, 54.90, 54.90, ''), -- 1x Lombo Canadense
+(17, 25, 1, 52.90, 52.90, ''), -- 1x Pepperoni Especial
+(17, 36, 1, 4.90, 4.90, ''), -- 1x Bebida
+
+-- Pedido 18 (PU-2025-0018)
+(18, 1, 1, 35.90, 35.90, ''), -- 1x Calabresa
+(18, 2, 1, 32.90, 32.90, ''), -- 1x Margherita
+(18, 30, 1, 21.00, 21.00, ''), -- 1x Sobremesa
+
+-- Pedido 19 (PU-2025-0019)
+(19, 16, 1, 31.90, 31.90, ''), -- 1x Alho e Óleo
+(19, 20, 1, 39.90, 39.90, ''), -- 1x Catubresa
+(19, 38, 1, 5.00, 5.00, ''), -- 1x Bebida
+
+-- Pedido 20 (PU-2025-0020)
+(20, 17, 1, 58.90, 58.90, ''), -- 1x Camarão com Catupiry
+(20, 5, 1, 45.90, 45.90, ''), -- 1x Quatro Queijos
+(20, 31, 1, 29.90, 29.90, ''); -- 1x Sobremesa especial

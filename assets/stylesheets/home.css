@@ -1,10 +1,8 @@
-/* Homepage Styles */
 .home-main {
   padding: 0;
   margin: 0;
 }
 
-/* Hero Section */
 .hero-section {
   min-height: 100vh;
   background: linear-gradient(135deg, #2c1b1b 0%, #444 50%, #2c1b1b 100%);
@@ -133,7 +131,6 @@
   }
 }
 
-/* Hero Decorations */
 .hero-decoration {
   position: absolute;
   top: 0;
@@ -186,7 +183,6 @@
   }
 }
 
-/* Section Styles */
 .section-header {
   text-align: center;
   margin-bottom: 4rem;
@@ -216,7 +212,6 @@
   margin: 0 auto;
 }
 
-/* About Section */
 .about-section {
   padding: 100px 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
@@ -329,7 +324,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Menu Highlights */
 .menu-highlights {
   padding: 100px 0;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -437,7 +431,6 @@
   display: inline-block;
 }
 
-/* Contact Section */
 .contact-section {
   padding: 100px 0;
   background: linear-gradient(135deg, #2c1b1b 0%, #444 100%);
@@ -556,7 +549,6 @@
   background: linear-gradient(135deg, #ffd700, #ffb400);
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .hero-content {
     grid-template-columns: 1fr;

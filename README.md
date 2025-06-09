@@ -52,31 +52,19 @@ git config --global user.name "Seu Nome"
 ### 6. Configuração do Banco de Dados
 
 #### 6.1 Importar Estrutura do Banco
-Primeiro, acesse o diretório do projeto:
+
+Depois :
 ```bash
-cd $HOME/PizzaUniverse
+cd $HOME/PizzaUniverse && mysql -u dev -padmin123 < universe_db.sql
 ```
 
-Depois conecte no MySQL:
-```bash
-sudo mysql -u dev -p
 ```
 
-No prompt do MySQL, execute:
-```sql
-source $HOME/PizzaUniverse/universe_db.sql
-EXIT;
-```
-
-**Nota:** Se o comando `source` não funcionar com variáveis de ambiente, use o caminho completo:
-```sql
-source /home/dev/PizzaUniverse/universe_db.sql
-```
 
 ### 7. Configuração do PHP
 Copie o arquivo de configuração do PHP:
 ```bash
-cp php.ini /etc/php/8.x/apache2/php.ini
+cp php.ini /etc/php/8.x/cli/php.ini
 ```
 *Substitua 8.x pela versão do PHP instalada*
 
