@@ -71,14 +71,15 @@ $page = $_GET['page'] ?? 'login';
   }
 
   match ($page) {
-    'login'     => require './views/pages/login.php',
-    'dashboard' => require './views/pages/dashboard.php',
-    'users'     => require './views/pages/users/index.php',
-    'pizzas'    => require './views/pages/pizzas/index.php',
-    'customers' => require './views/pages/customers/index.php',
-    'orders'    => require './views/pages/orders/index.php',
-    'home'      => require './views/pages/home.php',
-    default     => require './views/pages/404.php',
+    'login'     => \App\Controllers\UserController::login(),
+    'logout'    => \App\Controllers\UserController::logout(),
+    'dashboard' => \App\Controllers\DashboardController::index(),
+    'users'     => \App\Controllers\UserController::handleRoutes(),
+    'pizzas'    => \App\Controllers\PizzaController::handleRoutes(),
+    'customers' => \App\Controllers\CustomerController::handleRoutes(),
+    'orders'    => \App\Controllers\OrderController::handleRoutes(),
+    'home'      => \App\Controllers\HomeController::index(),
+    default     => \App\Controllers\PageController::notFound(),
   };
 
   if ($page !== 'login') {

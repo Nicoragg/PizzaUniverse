@@ -275,6 +275,19 @@ abstract class CustomerController
         CustomerView::renderList($customers, $deleteId);
     }
 
+    public static function handleRoutes(): void
+    {
+        $action = $_GET['action'] ?? 'list';
+
+        match ($action) {
+            'create' => self::create(),
+            'edit' => self::update(),
+            'delete' => self::delete(),
+            'status' => self::updateStatus(),
+            default => self::findAll()
+        };
+    }
+
     public static function getStates(): array
     {
         return CustomerDao::getStates();

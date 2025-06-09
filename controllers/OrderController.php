@@ -250,6 +250,19 @@ abstract class OrderController
         return OrderDao::findByStatus($status);
     }
 
+    public static function handleRoutes(): void
+    {
+        $action = $_GET['action'] ?? 'list';
+
+        match ($action) {
+            'create' => self::create(),
+            'view' => self::view(),
+            'update_status' => self::updateStatus(),
+            'delete' => self::delete(),
+            default => self::findAll()
+        };
+    }
+
     public static function getOrderItems(int $orderId): array
     {
         return OrderDao::getOrderItems($orderId);

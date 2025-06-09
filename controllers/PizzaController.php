@@ -201,6 +201,18 @@ abstract class PizzaController
         PizzaView::renderList($pizzas, $deleteId);
     }
 
+    public static function handleRoutes(): void
+    {
+        $action = $_GET['action'] ?? 'list';
+
+        match ($action) {
+            'create' => self::create(),
+            'edit' => self::update(),
+            'delete' => self::delete(),
+            default => self::findAll()
+        };
+    }
+
     public static function getCategories(): array
     {
         return PizzaDao::getCategories();

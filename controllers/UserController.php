@@ -228,6 +228,18 @@ abstract class UserController
         UserView::renderLogin(self::$msg, self::$fieldsWithErrors, self::$formData);
     }
 
+    public static function handleRoutes(): void
+    {
+        $action = $_GET['action'] ?? 'list';
+
+        match ($action) {
+            'create' => self::create(),
+            'edit' => self::update(),
+            'delete' => self::delete(),
+            default => self::findAll()
+        };
+    }
+
     public static function logout(): void
     {
         session_start();
