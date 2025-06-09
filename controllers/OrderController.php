@@ -134,7 +134,7 @@ abstract class OrderController
     public static function findAll(): void
     {
         $orders = OrderDao::findAll();
-        OrderView::renderList($orders);
+        OrderView::renderList($orders, self::$msg);
     }
 
     public static function view(): void
@@ -162,7 +162,7 @@ abstract class OrderController
             return;
         }
 
-        OrderView::renderDetails($order, $customer, $orderItems);
+        OrderView::renderDetails($order, $customer, $orderItems, self::$msg);
     }
 
     public static function updateStatus(): void

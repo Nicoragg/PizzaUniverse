@@ -188,8 +188,11 @@ abstract class OrderView
     <?php
     }
 
-    public static function renderList(array $orders): void
+    public static function renderList(array $orders, ?string $message = null): void
     {
+        // Gerar o token CSRF uma única vez para toda a página
+        $csrfToken = \App\Util\CsrfToken::generate();
+        $csrfTokenName = \App\Util\CsrfToken::getTokenName();
     ?>
         <main class="orders-container">
             <div class="orders-main">
@@ -198,6 +201,13 @@ abstract class OrderView
                 <div class="orders-navigation">
                     <a href="?page=orders&action=create" class="orders-btn-primary"><i class="bi bi-plus-lg"></i> Novo Pedido</a>
                 </div>
+
+                <?php if ($message): ?>
+                    <div class="orders-message error">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <?= htmlspecialchars($message) ?>
+                    </div>
+                <?php endif; ?>
 
                 <?php if (!empty($orders)): ?>
                     <div class="orders-table-container">
@@ -219,18 +229,46 @@ abstract class OrderView
                                         <td class="orders-customer-info"><?= htmlspecialchars($order->customer_name ?? 'Cliente não encontrado') ?></td>
                                         <td><?= date('d/m/Y H:i', strtotime($order->created_at)) ?></td>
                                         <td>
-                                            <form method="POST" action="?page=orders&action=update_status" style="display: inline;">
-                                                <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
-                                                <input type="hidden" name="order_id" value="<?= $order->id ?>">
-                                                <select name="status" class="orders-status-select" onchange="this.form.submit()">
-                                                    <option value="pending" <?= $order->status === 'pending' ? 'selected' : '' ?>>Pendente</option>
-                                                    <option value="confirmed" <?= $order->status === 'confirmed' ? 'selected' : '' ?>>Confirmado</option>
-                                                    <option value="preparing" <?= $order->status === 'preparing' ? 'selected' : '' ?>>Preparando</option>
-                                                    <option value="ready" <?= $order->status === 'ready' ? 'selected' : '' ?>>Pronto</option>
-                                                    <option value="delivered" <?= $order->status === 'delivered' ? 'selected' : '' ?>>Entregue</option>
-                                                    <option value="cancelled" <?= $order->status === 'cancelled' ? 'selected' : '' ?>>Cancelado</option>
-                                                </select>
-                                            </form>
+                                            <?php
+                                            // Obter transições válidas para este pedido
+                                            $statusLabels = [
+                                                'pending' => 'Pendente',
+                                                'confirmed' => 'Confirmado',
+                                                'preparing' => 'Preparando',
+                                                'ready' => 'Pronto',
+                                                'delivered' => 'Entregue',
+                                                'cancelled' => 'Cancelado'
+                                            ];
+
+                                            // Criar uma instância temporária para verificar transições válidas
+                                            $tempOrder = new \App\Models\Order(
+                                                $order->id,
+                                                $order->customer_id ?? $order->customerId,
+                                                $order->order_number,
+                                                $order->status,
+                                                $order->total_amount,
+                                                $order->delivery_address,
+                                                $order->notes
+                                            );
+                                            $availableTransitions = $tempOrder->getAvailableTransitions();
+                                            ?>
+
+                                            <?php if (!empty($availableTransitions) && !in_array($order->status, ['delivered', 'cancelled'])): ?>
+                                                <form method="POST" action="?page=orders&action=update_status" style="display: inline;">
+                                                    <input type="hidden" name="<?= $csrfTokenName ?>" value="<?= $csrfToken ?>">
+                                                    <input type="hidden" name="order_id" value="<?= $order->id ?>">
+                                                    <select name="status" class="orders-status-select" onchange="this.form.submit()">
+                                                        <option value="<?= $order->status ?>" selected><?= $statusLabels[$order->status] ?></option>
+                                                        <?php foreach ($availableTransitions as $statusValue): ?>
+                                                            <option value="<?= $statusValue ?>"><?= $statusLabels[$statusValue] ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </form>
+                                            <?php else: ?>
+                                                <span class="status-badge status-<?= $order->status ?>">
+                                                    <?= $statusLabels[$order->status] ?>
+                                                </span>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="orders-total-amount">R$ <?= number_format($order->total_amount, 2, ',', '.') ?></td>
                                         <td>
@@ -256,14 +294,21 @@ abstract class OrderView
     <?php
     }
 
-    public static function renderDetails(Order $order, Customer $customer, array $orderItems): void
+    public static function renderDetails(Order $order, Customer $customer, array $orderItems, ?string $message = null): void
     {
     ?>
         <main class="orders-container">
-            <div class="orders-details">
+            <div class="orders-details" style="margin-top: 20px;">
                 <div class="orders-navigation">
                     <a href="?page=orders" class="orders-btn-back"><i class="bi bi-arrow-left"></i> Voltar aos Pedidos</a>
                 </div>
+
+                <?php if ($message): ?>
+                    <div class="orders-message error">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <?= htmlspecialchars($message) ?>
+                    </div>
+                <?php endif; ?>
 
                 <div class="orders-header">
                     <div class="orders-info">
@@ -272,19 +317,36 @@ abstract class OrderView
                     </div>
                     <div class="orders-status">
                         <label for="status">Status:</label>
-                        <form method="POST" action="?page=orders&action=update_status" style="display: inline;">
-                            <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
-                            <input type="hidden" name="order_id" value="<?= $order->id ?>">
-                            <input type="hidden" name="redirect" value="view&id=<?= $order->id ?>">
-                            <select name="status" class="orders-status-select" onchange="this.form.submit()">
-                                <option value="pending" <?= $order->status === 'pending' ? 'selected' : '' ?>>Pendente</option>
-                                <option value="confirmed" <?= $order->status === 'confirmed' ? 'selected' : '' ?>>Confirmado</option>
-                                <option value="preparing" <?= $order->status === 'preparing' ? 'selected' : '' ?>>Preparando</option>
-                                <option value="ready" <?= $order->status === 'ready' ? 'selected' : '' ?>>Pronto</option>
-                                <option value="delivered" <?= $order->status === 'delivered' ? 'selected' : '' ?>>Entregue</option>
-                                <option value="cancelled" <?= $order->status === 'cancelled' ? 'selected' : '' ?>>Cancelado</option>
-                            </select>
-                        </form>
+                        <?php
+                        $statusLabels = [
+                            'pending' => 'Pendente',
+                            'confirmed' => 'Confirmado',
+                            'preparing' => 'Preparando',
+                            'ready' => 'Pronto',
+                            'delivered' => 'Entregue',
+                            'cancelled' => 'Cancelado'
+                        ];
+
+                        $availableTransitions = $order->getAvailableTransitions();
+                        ?>
+
+                        <?php if (!empty($availableTransitions) && !in_array($order->status, ['delivered', 'cancelled'])): ?>
+                            <form method="POST" action="?page=orders&action=update_status" style="display: inline;">
+                                <input type="hidden" name="<?= \App\Util\CsrfToken::getTokenName() ?>" value="<?= \App\Util\CsrfToken::generate() ?>">
+                                <input type="hidden" name="order_id" value="<?= $order->id ?>">
+                                <input type="hidden" name="redirect" value="view&id=<?= $order->id ?>">
+                                <select name="status" class="orders-status-select" onchange="this.form.submit()">
+                                    <option value="<?= $order->status ?>" selected><?= $statusLabels[$order->status] ?></option>
+                                    <?php foreach ($availableTransitions as $statusValue): ?>
+                                        <option value="<?= $statusValue ?>"><?= $statusLabels[$statusValue] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </form>
+                        <?php else: ?>
+                            <span class="status-badge status-<?= $order->status ?>">
+                                <?= $statusLabels[$order->status] ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
 
