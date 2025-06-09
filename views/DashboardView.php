@@ -214,14 +214,12 @@ abstract class DashboardView
                 </div>
             </div>
 
-            <!-- Seção de Análise Avançada - 100% da largura -->
             <div class="analytics-section">
                 <div class="analytics-header">
                     <h2><i class="bi bi-graph-up-arrow"></i>Análise Avançada</h2>
                     <p>Insights detalhados sobre performance e tendências do negócio</p>
                 </div>
 
-                <!-- Comparação Semanal -->
                 <div class="analytics-row">
                     <div class="analytics-card weekly-comparison">
                         <div class="card-header">
@@ -314,7 +312,6 @@ abstract class DashboardView
                     </div>
                 </div>
 
-                <!-- Análise Diária e Performance de Pizzas -->
                 <div class="analytics-row">
                     <div class="analytics-card daily-trends">
                         <div class="card-header">
@@ -420,7 +417,6 @@ abstract class DashboardView
                     </div>
                 </div>
 
-                <!-- Análise de Clientes -->
                 <div class="analytics-row">
                     <div class="analytics-card customer-insights">
                         <div class="card-header">

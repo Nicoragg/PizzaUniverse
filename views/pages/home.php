@@ -5,7 +5,6 @@ if (session_status() === PHP_SESSION_NONE) {
 ?>
 
 <main class="home-main">
-  <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
       <div class="hero-text">
@@ -48,7 +47,6 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </section>
 
-  <!-- About Section -->
   <section class="about-section">
     <div class="container">
       <div class="section-header">
@@ -115,7 +113,6 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </section>
 
-  <!-- Menu Highlights -->
   <section id="menu" class="menu-highlights">
     <div class="container">
       <div class="section-header">
@@ -187,7 +184,6 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
   </section>
 
-  <!-- Contact Section -->
   <section class="contact-section">
     <div class="container">
       <div class="section-header">
