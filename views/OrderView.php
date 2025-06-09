@@ -310,7 +310,7 @@ abstract class OrderView
                 <div class="orders-header">
                     <div class="orders-info">
                         <h2>Pedido <?= htmlspecialchars($order->order_number) ?></h2>
-                        <p class="orders-date">Criado em <?= date('d/m/Y às H:i', strtotime($order->created_at)) ?></p>
+                        <p class="orders-date">Criado em <?= date('d/m/Y \à\s H:i', strtotime($order->created_at)) ?></p>
                     </div>
                     <div class="orders-status">
                         <label for="status">Status:</label>
@@ -413,11 +413,10 @@ abstract class OrderView
                             <strong>Total: R$ <?= number_format($order->total_amount, 2, ',', '.') ?></strong>
                         </div>
                     </div>
-
-                    <?php if (!empty($order->notes)): ?>
+                    <?php if (!empty($order->__get('notes'))): ?>
                         <div class="orders-notes-section">
                             <h3>Observações</h3>
-                            <p><?= nl2br(htmlspecialchars($order->notes)) ?></p>
+                            <p><?= nl2br(htmlspecialchars($order->__get('notes'))) ?></p>
                         </div>
                     <?php endif; ?>
                 </div>
