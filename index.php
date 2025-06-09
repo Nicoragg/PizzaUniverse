@@ -1,5 +1,13 @@
 <?php
 
+/* 
+  Pedro Henrique Brugnolo - 34251154
+  Nicolas Gonçalves de Souza - 33710031
+  Carlos Eduardo Gonçalves Faria - 34249559
+  Mateus Ferreira Vinotti - 33850810
+  Felipe Akyel - ?
+*/
+
 namespace App;
 
 require_once './autoload.php';
