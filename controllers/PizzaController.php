@@ -162,16 +162,6 @@ abstract class PizzaController
         PizzaView::renderForm(self::$msg, $pizza, self::$fieldsWithErrors, self::$formData);
     }
 
-    public static function findById(int $id): ?Pizza
-    {
-        return PizzaDao::findById($id);
-    }
-
-    public static function findByCategory(string $category): array
-    {
-        return PizzaDao::findByCategory($category);
-    }
-
     public static function delete(): void
     {
         if (isset($_GET["confirm"])) {

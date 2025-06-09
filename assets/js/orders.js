@@ -99,7 +99,7 @@ class OrderManager {
             <div class="tom-select-option">
               <strong>${escape(data.text)}</strong>
               <div class="customer-details">
-                ${phone ? `📞 ${this.formatPhone(phone)}` : ''}
+                ${phone ? `📞 ${new DataFormatter().formatPhone(phone)}` : ''}
                 ${city && state ? ` • 📍 ${escape(city)} - ${escape(state)}` : ''}
               </div>
             </div>
@@ -157,17 +157,6 @@ class OrderManager {
     setTimeout(() => {
       control.style.transform = 'scale(1)';
     }, 150);
-  }
-
-  formatPhone(phone) {
-    if (!phone) return '';
-    const cleaned = phone.replace(/\D/g, '');
-    if (cleaned.length === 11) {
-      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
-    } else if (cleaned.length === 10) {
-      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
-    }
-    return phone;
   }
 
   handleCustomerSelection(customerId) {
@@ -337,7 +326,7 @@ class PizzaHandler {
       const quantityInput = document.getElementById(`qty_${pizzaId}`);
 
       if (quantityInput) {
-        this.updateCardAppearance(card, parseInt(quantityInput.value));
+        this.updatePizzaCardState(pizzaId, parseInt(quantityInput.value));
       }
 
       this.attachCardEventListeners(card, pizzaId);
@@ -483,11 +472,6 @@ class PizzaHandler {
       card.style.transform = '';
     }, 200);
   }
-
-  updateCardAppearance(card, quantity) {
-    card.setAttribute('data-quantity', quantity);
-    card.classList.toggle('selected', quantity > 0);
-  }
 }
 
 class OrderSummaryHandler {
@@ -551,16 +535,17 @@ class OrderSummaryHandler {
   }
 
   getItemsSummaryHTML(items, total) {
+    const formatter = new DataFormatter();
     const itemsHTML = items.map(item => `
       <div class="orders-summary-item">
         <span>
           <strong>${item.quantity}x</strong> ${item.name}
           <small style="display: block; color: var(--orders-text-muted); font-size: 0.85rem;">
-            R$ ${this.formatPrice(item.price)} cada
+            R$ ${formatter.formatPrice(item.price)} cada
           </small>
         </span>
         <span class="item-subtotal" style="color: var(--orders-success); font-weight: 600;">
-          R$ ${this.formatPrice(item.subtotal)}
+          R$ ${formatter.formatPrice(item.subtotal)}
         </span>
       </div>
     `).join('');
@@ -571,7 +556,7 @@ class OrderSummaryHandler {
       <div class="summary-items">${itemsHTML}</div>
       <div class="orders-summary-item orders-summary-total">
         <span><i class="bi bi-receipt"></i> <strong>Total (${items.length} ${totalText})</strong></span>
-        <span><strong>R$ ${this.formatPrice(total)}</strong></span>
+        <span><strong>R$ ${formatter.formatPrice(total)}</strong></span>
       </div>
     `;
   }
@@ -662,10 +647,6 @@ class OrderSummaryHandler {
     }, 700);
   }
 
-  formatPrice(price) {
-    return price.toFixed(2).replace('.', ',');
-  }
-
   addSmoothAnimation() {
     const summaryDiv = this.orderManager.elements.orderSummary;
     summaryDiv.style.opacity = '0.7';
@@ -737,19 +718,3 @@ window.initializePizzaData = (prices, names) => orderManager.initializePizzaData
 window.increaseQuantity = (pizzaId) => orderManager.increaseQuantity(pizzaId);
 window.decreaseQuantity = (pizzaId) => orderManager.decreaseQuantity(pizzaId);
 window.scrollToSection = (sectionId) => orderManager.scrollToSection(sectionId);
-
-function initializePizzaData(prices, names) {
-  orderManager.initializePizzaData(prices, names);
-}
-
-function increaseQuantity(pizzaId) {
-  orderManager.increaseQuantity(pizzaId);
-}
-
-function decreaseQuantity(pizzaId) {
-  orderManager.decreaseQuantity(pizzaId);
-}
-
-function scrollToSection(sectionId) {
-  orderManager.scrollToSection(sectionId);
-}
